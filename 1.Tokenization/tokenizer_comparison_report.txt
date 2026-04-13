@@ -1,0 +1,210 @@
+====================================================================================================
+TOKENIZER COMPARISON REPORT: 32K Custom Tokenizers vs. Production LLM Tokenizers
+====================================================================================================
+
+TEST DATA SUMMARY
+----------------------------------------------------------------------------------------------------
+Test file: /Users/crisp/Desktop/code_field/python/Chinese_Latinization_NLP/1.Tokenization/corpora/chinese_origin_中国_test10.txt
+Number of test sentences: 133751
+Total characters: 76799271
+Average sentence length: 574.20 chars
+Sample sentences:
+  1. 2016年赞比亚羽毛球国际赛为2016年度的赞比亚羽毛球国际赛,属世界羽联国际系列赛级别.本届赛事于2016年11月24日至11月27日在赞比亚路沙卡内的Olympic Youth Development Centre Hall 举行,总奖金为6,000美元.
+  2. 娜希德·厄赫特尔(,)是一位巴基斯坦歌手.她被称为“巴基斯坦的南丁格尔”.她是洛莱坞70-80年代最火爆的回放歌手和演员.她在2007年3次获得尼加尔奖和一个业绩自豪奖. 早年生活. 娜希德·厄赫特尔出生于1956年9月26日,是旁遮普省木尔坦人,她的家庭有3个姊妹和4个兄弟.她的一个妹妹哈密达·厄赫特尔也是一名歌手. 职业生涯. 娜希德的职业生涯始于1970年,当时她与卡立·阿斯哈尔在位于木尔坦的巴基斯坦广播公司的电影《Raga malhar》合唱.她录制了多种风格的歌曲,包括巴基斯坦电影音乐、流行音乐、加扎勒、古典音乐、民歌、卡瓦力等.20世纪70年代中期,资深音乐导演莫哈末·阿斯拉夫首次相中她出演电影,并邀请她在电影中唱歌.没有一个知名的“老师”来训练她的音乐,但音乐总监阿斯拉夫导演在培养她的才华方面发挥了关键作用.她的处女作《南哈·法里什塔》于1974年上映,同年她在电影《哈马》(1974)中演唱歌曲.起初,电影界说,她是为了填补移民到孟加拉国的露娜·莱依拉的真空而被介绍的.但后来人们意识到她有自己独创的演唱风格.20世纪80年代,她一直活跃在巴基斯坦电影行业. 作为一名回放歌手,娜希德在436部乌尔都语和旁遮普语电影中演唱了590首歌曲. 家庭. 娜希德于1986年离开了演艺圈.后来,她在1994年嫁给了一位名叫阿西夫·阿里·波塔的记者.两人育有一女一子.波塔于2017年死于心脏骤停. 再次登台. 2013年,在一个电视节目的管理层多次提出要求后,娜希德·厄赫特尔出现在舞台上,她受到了两位晚辈歌手用她的歌曲带来的欢迎.当时,她忙于相夫教子,没有继续她的歌唱事业.
+  3. 迈赫迪·霍达巴赫希(,),伊朗、塞尔维亚跆拳道运动员,2014年亚洲运动会男子80公斤级金牌得主、2015年世界跆拳道锦标赛男子80公斤级金牌得主、2022年世界跆拳道锦标赛男子87公斤级金牌得主.
+
+====================================================================================================
+4A. FERTILITY ANALYSIS (Tokens-per-sentence & Tokens-per-character)
+====================================================================================================
+
+CUSTOM_CHINESE_ORIGIN
+--------------------------------------------------
+  avg_tokens_per_sentence: 371.8836
+  std_tokens_per_sentence: 948.4386
+  avg_tokens_per_char: 0.6117
+  total_tokens: 49739805
+  total_chars: 76799271
+  compression_ratio: 1.544
+
+CUSTOM_PINYIN_DIACRITIC
+--------------------------------------------------
+  avg_tokens_per_sentence: 85.8912
+  std_tokens_per_sentence: 214.3301
+  avg_tokens_per_char: 0.1688
+  total_tokens: 11488032
+  total_chars: 76799271
+  compression_ratio: 6.6852
+
+CUSTOM_PINYIN_TONED
+--------------------------------------------------
+  avg_tokens_per_sentence: 85.9104
+  std_tokens_per_sentence: 214.4064
+  avg_tokens_per_char: 0.1688
+  total_tokens: 11490605
+  total_chars: 76799271
+  compression_ratio: 6.6837
+
+CUSTOM_PINYIN_TONELESS
+--------------------------------------------------
+  avg_tokens_per_sentence: 85.4343
+  std_tokens_per_sentence: 212.7076
+  avg_tokens_per_char: 0.168
+  total_tokens: 11426926
+  total_chars: 76799271
+  compression_ratio: 6.7209
+
+GPT4_CL100K
+--------------------------------------------------
+  avg_tokens_per_sentence: 672.7221
+  std_tokens_per_sentence: 1729.617
+  avg_tokens_per_char: 1.1683
+  total_tokens: 89977254
+  total_chars: 76799271
+  compression_ratio: 0.8535
+
+LLAMA
+--------------------------------------------------
+  avg_tokens_per_sentence: 638.6189
+  std_tokens_per_sentence: 1619.8998
+  avg_tokens_per_char: 1.1243
+  total_tokens: 85415922
+  total_chars: 76799271
+  compression_ratio: 0.8991
+
+QWEN
+--------------------------------------------------
+  avg_tokens_per_sentence: 414.6874
+  std_tokens_per_sentence: 1018.5537
+  avg_tokens_per_char: 0.7455
+  total_tokens: 55464861
+  total_chars: 76799271
+  compression_ratio: 1.3846
+
+====================================================================================================
+4B. MORPHOLOGICAL COHERENCE ANALYSIS
+====================================================================================================
+
+CUSTOM_CHINESE_ORIGIN
+--------------------------------------------------
+  total_tokens: 32000
+  multi_char_tokens: 9312
+  meaningful_tokens: 5389
+  coherence_ratio: 0.5787
+  sample_meaningful_tokens:
+    ['决定', '石油', '货物', '含量', '下午', '列表', '黑龙江省', '国家级', '国民党', '内阁']
+
+CUSTOM_PINYIN_DIACRITIC
+--------------------------------------------------
+  total_tokens: 32000
+  multi_char_tokens: 24247
+  meaningful_tokens: 17
+  coherence_ratio: 0.0007
+  sample_meaningful_tokens:
+    ['BM', '120', 'IP', 'NG', 'MV', 'TA', 'ins', 'OS', '88', 'MC']
+
+CUSTOM_PINYIN_TONED
+--------------------------------------------------
+  total_tokens: 32000
+  multi_char_tokens: 24236
+  meaningful_tokens: 18
+  coherence_ratio: 0.0007
+  sample_meaningful_tokens:
+    ['NG', '110', '120', 'MV', 'IP', 'BM', '119', 'PO', '88', 'OS']
+
+CUSTOM_PINYIN_TONELESS
+--------------------------------------------------
+  total_tokens: 32000
+  multi_char_tokens: 24249
+  meaningful_tokens: 17
+  coherence_ratio: 0.0007
+  sample_meaningful_tokens:
+    ['TA', 'MV', 'IP', 'PO', 'MC', 'ky', 'CP', 'NG', 'OS', 'PA']
+
+====================================================================================================
+4C. COMPRESSION EFFICIENCY ANALYSIS
+====================================================================================================
+
+CUSTOM_CHINESE_ORIGIN
+--------------------------------------------------
+  total_tokens: 49739805
+  total_chars: 76799271
+  vocab_size: 32768
+  bits_per_token: 15.0
+  bits_per_char: 9.7149
+  bytes_per_token: 1.88
+  avg_token_id: 14538.48
+
+CUSTOM_PINYIN_DIACRITIC
+--------------------------------------------------
+  total_tokens: 11488032
+  total_chars: 76799271
+  vocab_size: 32768
+  bits_per_token: 15.0
+  bits_per_char: 2.2438
+  bytes_per_token: 1.88
+  avg_token_id: 3491.66
+
+CUSTOM_PINYIN_TONED
+--------------------------------------------------
+  total_tokens: 11490605
+  total_chars: 76799271
+  vocab_size: 32768
+  bits_per_token: 15.0
+  bits_per_char: 2.2443
+  bytes_per_token: 1.88
+  avg_token_id: 3493.43
+
+CUSTOM_PINYIN_TONELESS
+--------------------------------------------------
+  total_tokens: 11426926
+  total_chars: 76799271
+  vocab_size: 32768
+  bits_per_token: 15.0
+  bits_per_char: 2.2318
+  bytes_per_token: 1.88
+  avg_token_id: 3419.09
+
+GPT4_CL100K
+--------------------------------------------------
+  total_tokens: 89977254
+  total_chars: 76799271
+  vocab_size: 32768
+  bits_per_token: 15.0
+  bits_per_char: 17.5738
+  bytes_per_token: 1.88
+  avg_token_id: 24158.16
+
+LLAMA
+--------------------------------------------------
+  total_tokens: 85415922
+  total_chars: 76799271
+  vocab_size: 32768
+  bits_per_token: 15.0
+  bits_per_char: 16.683
+  bytes_per_token: 1.88
+  avg_token_id: 23077.84
+
+QWEN
+--------------------------------------------------
+  total_tokens: 55464861
+  total_chars: 76799271
+  vocab_size: 32768
+  bits_per_token: 15.0
+  bits_per_char: 10.8331
+  bytes_per_token: 1.88
+  avg_token_id: 59066.5
+
+====================================================================================================
+SUMMARY & FINDINGS
+====================================================================================================
+
+Best compression ratio: custom_pinyin_toneless
+  Compression ratio (chars/token): 6.7209
+
+Best morphological coherence: custom_chinese_origin
+  Coherence ratio: 0.5787
+
+
+====================================================================================================
+END OF REPORT
+====================================================================================================
