@@ -236,22 +236,22 @@ def analyze():
         f.write(f"  • No pinyin result: {empty_pinyin_indep:,} ({100*empty_pinyin_indep/len(independent):.1f}%)\n")
         f.write(f"  • Pinyin not in B: {has_pinyin_notin_b:,} ({100*has_pinyin_notin_b/len(independent):.1f}%)\n\n")
         
-        f.write("TOP 100 INDEPENDENT TOKENS\n")
+        f.write("TOP 1000 INDEPENDENT TOKENS\n")
         f.write("-" * 100 + "\n")
         f.write(f"{'#':<5} {'Token':<20} {'Converted Pinyin':<30} {'Length':<8}\n")
         f.write("-" * 100 + "\n")
         
-        for i, (token, pinyin) in enumerate(independent[:100], 1):
+        for i, (token, pinyin) in enumerate(independent[:1000], 1):
             f.write(f"{i:<5} {token:<20} {pinyin:<30} {len(token):<8}\n")
         
-        if len(independent) > 100:
-            f.write(f"\n... and {len(independent) - 100} more independent tokens\n")
+        if len(independent) > 1000:
+            f.write(f"\n... and {len(independent) - 1000} more independent tokens\n")
     
     print(f"\n✓ Report saved to {OUTPUT_FILE}")
     
     # 示例输出
-    print(f"\n【独立词语示例】(前20个)")
-    for i, (token, pinyin) in enumerate(independent[:20], 1):
+    print(f"\n【独立词语示例】(前50个)")
+    for i, (token, pinyin) in enumerate(independent[:50], 1):
         print(f"  {i}. {token:<20} → {pinyin:<30}")
     
     return len(independent), 100*len(independent)/len(chinese_tokens)

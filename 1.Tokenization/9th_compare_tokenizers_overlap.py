@@ -27,7 +27,7 @@ import unicodedata
 
 # 新增：pypinyin用于fallback
 try:
-    from pypinyin import lazy_pinyin, Style
+    from pypinyin import pinyin, lazy_pinyin, Style
     HAS_PYPINYIN = True
 except ImportError:
     HAS_PYPINYIN = False
@@ -208,132 +208,26 @@ class PinyinConverter:
     def text_to_pinyin_toneless(self, text: str) -> str:
         """
         将中文文本转换为无声调拼音
-        优先级（三层方案）：词级别 → 字级别CEDICT → 合并字典(Unihan+CEDICT) → pypinyin fallback
+        使用pypinyin直接转换（Style.NORMAL）
         """
-        # 1️⃣ 优先词级别CEDICT查询
-        if text in self.word_to_pinyin:
-            pinyin_list = self.word_to_pinyin[text]
-            converted = "".join(pinyin_list)
-            return self._pinyin_to_toneless(converted)
-        
-        # 2️⃣ 降级到字级别查询
-        result = []
-        for char in text:
-            py_found = None
-            
-            # 优先2.1：CEDICT
-            if char in self.char_to_pinyin and self.char_to_pinyin[char]:
-                py = self.char_to_pinyin[char][0]
-                py_found = self._pinyin_to_toneless(py)
-            
-            # 优先2.2：合并字典（Unihan + CEDICT）
-            elif char in self.char_to_pinyin_merged:
-                py = self.char_to_pinyin_merged[char]
-                if py:
-                    py_found = self._pinyin_to_toneless(str(py))
-            
-            # 优先2.3：pypinyin fallback
-            elif HAS_PYPINYIN:
-                try:
-                    py_candidates = lazy_pinyin(
-                        char,
-                        style=Style.NORMAL,
-                        errors='default'
-                    )
-                    if py_candidates and py_candidates[0]:
-                        py_found = py_candidates[0].lower()
-                except:
-                    pass
-            
-            if py_found:
-                result.append(py_found)
-            else:
-                result.append(char)
-        
-        return "".join(result)
+        py_result = pinyin(text, style=Style.NORMAL, strict=False)
+        return "".join([p[0] for p in py_result])
     
     def text_to_pinyin_toned(self, text: str) -> str:
         """
         将中文文本转换为带数字声调的拼音
-        使用混合方案：词级别 → 字级别CEDICT → 合并字典 → pypinyin
+        使用pypinyin直接转换（Style.TONE3）
         """
-        # 1️⃣ 词级别
-        if text in self.word_to_pinyin:
-            return "".join(self.word_to_pinyin[text])
-        
-        # 2️⃣ 字级别
-        result = []
-        for char in text:
-            py_found = None
-            
-            # 2.1：CEDICT
-            if char in self.char_to_pinyin and self.char_to_pinyin[char]:
-                py_found = self.char_to_pinyin[char][0]
-            
-            # 2.2：合并字典（Unihan + CEDICT）
-            elif char in self.char_to_pinyin_merged:
-                py = self.char_to_pinyin_merged[char]
-                if py:
-                    py_found = str(py)
-            
-            # 2.3：pypinyin fallback
-            elif HAS_PYPINYIN:
-                try:
-                    py_candidates = lazy_pinyin(char, style=Style.TONE, errors='default')
-                    if py_candidates and py_candidates[0]:
-                        py_found = py_candidates[0]
-                except:
-                    pass
-            
-            if py_found:
-                result.append(py_found)
-            else:
-                result.append(char)
-        
-        return "".join(result)
+        py_result = pinyin(text, style=Style.TONE3, strict=False)
+        return "".join([p[0] for p in py_result])
     
     def text_to_pinyin_diacritic(self, text: str) -> str:
         """
         将中文文本转换为带声调符号的拼音
-        使用混合方案：词级别 → 字级别CEDICT → 合并字典 → pypinyin
+        使用pypinyin直接转换（Style.TONE）
         """
-        # 1️⃣ 词级别
-        if text in self.word_to_pinyin:
-            pinyin_list = self.word_to_pinyin[text]
-            # 将数字声调转换为符号
-            return "".join([self._tone_numbers_to_marks(py) for py in pinyin_list])
-        
-        # 2️⃣ 字级别
-        result = []
-        for char in text:
-            py_found = None
-            
-            # 2.1：CEDICT
-            if char in self.char_to_pinyin and self.char_to_pinyin[char]:
-                pinyin = self.char_to_pinyin[char][0]
-                py_found = self._tone_numbers_to_marks(pinyin)
-            
-            # 2.2：合并字典（Unihan + CEDICT）
-            elif char in self.char_to_pinyin_merged:
-                py = self.char_to_pinyin_merged[char]
-                if py:
-                    py_found = self._tone_numbers_to_marks(str(py))
-            
-            # 2.3：pypinyin fallback
-            elif HAS_PYPINYIN:
-                try:
-                    py_candidates = lazy_pinyin(char, style=Style.TONE, errors='default')
-                    if py_candidates and py_candidates[0]:
-                        py_found = self._tone_numbers_to_marks(py_candidates[0])
-                except:
-                    pass
-            
-            if py_found:
-                result.append(py_found)
-            else:
-                result.append(char)
-        
-        return "".join(result)
+        py_result = pinyin(text, style=Style.TONE, strict=False)
+        return "".join([p[0] for p in py_result])
     
     def remove_tone_numbers(self, pinyin: str) -> str:
         """移除拼音中的数字声调 (e.g., "zhong1guo2" -> "zhongguo")"""
@@ -854,12 +748,6 @@ def compare_tokenizer_pair(vocab_a: dict, vocab_b: dict, vocab_c: dict, vocab_d:
         'N对1': 0,
         '独立': 0,
     }
-    
-    # 检查token是否为中文
-    def is_chinese_token(token: str) -> bool:
-        """检查token是否包含汉字"""
-        import re
-        return bool(re.search(r'[\u4e00-\u9fff]', token))
     
     # 建立反向映射：vocab2中的token <- [vocab1中的tokens]
     reverse_mappings = {}  # token2 -> [tokens1, ...]

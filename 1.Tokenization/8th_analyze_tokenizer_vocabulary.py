@@ -13,15 +13,30 @@ from pathlib import Path
 
 # ===== 配置 =====
 TOKENIZERS_DIR = "./tokenizers"
-OUTPUT_FILE = "tokenizer_vocabulary_analysis.txt"
 
-# Chinese origin tokenizers
-TOKENIZERS_TO_ANALYZE = [
-    "chinese_origin_8k_train90.json",
-    "chinese_origin_16k_train90.json",
-    "chinese_origin_32k_train90.json",
-    "chinese_origin_64k_train90.json",
-]
+# 配置：分别分析 Chinese Origin 和 Pinyin Toneless
+CONFIGS = {
+    "chinese_origin": {
+        "tokenizers": [
+            "chinese_origin_8k_train90.json",
+            "chinese_origin_16k_train90.json",
+            "chinese_origin_32k_train90.json",
+            "chinese_origin_64k_train90.json",
+        ],
+        "output_file": "tokenizer_vocabulary_analysis_chinese_origin.txt",
+        "title": "CHINESE ORIGIN TOKENIZERS - VOCABULARY COMPOSITION ANALYSIS",
+    },
+    "pinyin_toneless": {
+        "tokenizers": [
+            "pinyin_toneless_8k_train90.json",
+            "pinyin_toneless_16k_train90.json",
+            "pinyin_toneless_32k_train90.json",
+            "pinyin_toneless_64k_train90.json",
+        ],
+        "output_file": "tokenizer_vocabulary_analysis_pinyin_toneless.txt",
+        "title": "PINYIN TONELESS TOKENIZERS - VOCABULARY COMPOSITION ANALYSIS",
+    },
+}
 
 
 # ===== 分类函数 =====
@@ -225,17 +240,18 @@ def extract_vocab_size_from_name(name):
     return 0
 
 
-def format_results(results_dict: dict) -> str:
+def format_results(results_dict: dict, title: str = "") -> str:
     """
     将分析结果格式化为表格
     """
     report = []
     report.append("=" * 100)
-    report.append("CHINESE ORIGIN TOKENIZERS - VOCABULARY COMPOSITION ANALYSIS")
+    report.append(title or "TOKENIZERS - VOCABULARY COMPOSITION ANALYSIS")
     report.append("=" * 100)
     report.append("")
     report.append("Analyzing: Chinese characters, Latin letters, punctuation, and other languages (Japanese, Korean)")
     report.append("Special focus: UTF-8 byte fragments (represented as 'half characters')")
+    report.append("Note: Pinyin tokens like 'zhishao', 'jinwang' are correct (correspond to Chinese words like '至少', '金王')")
     report.append("")
     
     # 提取所有可能的类型（按顺序排列）
@@ -427,15 +443,19 @@ def generate_detailed_report(results_dict: dict) -> str:
 
 # ===== 主流程 =====
 
-def main():
-    print("=" * 100)
-    print("TOKENIZER VOCABULARY ANALYSIS")
-    print("=" * 100)
+def analyze_config(config_name: str, config: dict):
+    """
+    分析单个配置（中文或拼音）的所有tokenizer
+    """
+    print(f"\n{'='*100}")
+    print(f"ANALYZING: {config_name.upper()}")
+    print(f"{'='*100}")
     
     results_dict = {}
+    tokenizers_to_analyze = config["tokenizers"]
     
     # 分析每个tokenizer
-    for tokenizer_name in TOKENIZERS_TO_ANALYZE:
+    for tokenizer_name in tokenizers_to_analyze:
         tokenizer_path = os.path.join(TOKENIZERS_DIR, tokenizer_name)
         
         if not os.path.exists(tokenizer_path):
@@ -446,18 +466,18 @@ def main():
         results_dict[tokenizer_name] = results
     
     if not results_dict:
-        print("✗ No tokenizers analyzed. Exiting.")
+        print(f"✗ No tokenizers analyzed for {config_name}. Skipping.")
         return
     
     # 生成报告
-    summary_report = format_results(results_dict)
+    summary_report = format_results(results_dict, title=config["title"])
     detailed_report = generate_detailed_report(results_dict)
     
     # 完整报告
     full_report = summary_report + detailed_report
     
     # 保存到文件
-    output_path = os.path.join(TOKENIZERS_DIR, OUTPUT_FILE)
+    output_path = os.path.join(TOKENIZERS_DIR, config["output_file"])
     try:
         with open(output_path, "w", encoding="utf-8") as f:
             f.write(full_report)
@@ -465,9 +485,28 @@ def main():
     except Exception as e:
         print(f"✗ Error saving report: {e}")
     
-    # 打印到控制台
+    # 打印到控制台（摘要部分）
     print("\n" + summary_report)
-    print("\n" + detailed_report)
+
+
+def main():
+    print("=" * 100)
+    print("TOKENIZER VOCABULARY ANALYSIS - DUAL ANALYSIS")
+    print("=" * 100)
+    print("\nThis analysis will compare both Chinese Origin and Pinyin Toneless tokenizers")
+    print("and save results to separate files for easy comparison.\n")
+    
+    # 处理每个配置
+    for config_name, config in CONFIGS.items():
+        analyze_config(config_name, config)
+    
+    print(f"\n{'='*100}")
+    print("ALL ANALYSES COMPLETE!")
+    print(f"{'='*100}")
+    print("\nReports saved to:")
+    for config_name, config in CONFIGS.items():
+        output_path = os.path.join(TOKENIZERS_DIR, config["output_file"])
+        print(f"  • {config_name}: {output_path}")
 
 
 if __name__ == "__main__":

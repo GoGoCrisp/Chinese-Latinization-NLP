@@ -1,0 +1,266 @@
+====================================================================================================
+CHINESE ORIGIN TOKENIZERS - VOCABULARY COMPOSITION ANALYSIS
+====================================================================================================
+
+Analyzing: Chinese characters, Latin letters, punctuation, and other languages (Japanese, Korean)
+Special focus: UTF-8 byte fragments (represented as 'half characters')
+Note: Pinyin tokens like 'zhishao', 'jinwang' are correct (correspond to Chinese words like '至少', '金王')
+
+Token Type                          | chinese_origi | chinese_origi | chinese_origi | chinese_origi | TOTAL
+===========================================================================================================
+LATIN_LETTER                        |            52 |            52 |           706 |          2802 |  3612
+LATIN_DIGIT                         |            10 |            10 |           239 |           542 |   801
+DIGIT                               |           114 |           114 |           114 |           114 |   456
+PUNCTUATION                         |          1662 |          1662 |          1777 |          1993 |  7094
+CHINESE_1CHAR                       |         13288 |         13288 |         13288 |         13288 | 53152
+CHINESE_2CHAR                       |             0 |             0 |          6077 |         21308 | 27385
+CHINESE_3CHAR                       |             0 |             0 |          1368 |          9040 | 10408
+CHINESE_4CHAR                       |             0 |             0 |           290 |          3436 |  3726
+CHINESE_5CHAR                       |             0 |             0 |            61 |           777 |   838
+CHINESE_6CHAR                       |             0 |             0 |            36 |           329 |   365
+MIXED_WITH_CHINESE                  |             0 |             0 |           421 |          2297 |  2718
+OTHER_JAPANESE                      |           171 |           171 |           171 |           171 |   684
+OTHER_KOREAN                        |          1046 |          1046 |          1046 |          1046 |  4184
+OTHER_RARE_CHINESE_UTF8             |          3367 |          3367 |          3367 |          3367 | 13468
+OTHER_UNKNOWN                       |          2981 |          2981 |          2988 |          3033 | 11983
+EMPTY                               |             1 |             1 |             1 |             1 |     4
+CHINESE_10CHAR                      |             0 |             0 |             5 |            54 |    59
+CHINESE_11CHAR                      |             0 |             0 |             8 |            26 |    34
+CHINESE_12CHAR                      |             0 |             0 |             0 |            22 |    22
+CHINESE_13CHAR                      |             0 |             0 |             2 |            14 |    16
+CHINESE_14CHAR                      |             0 |             0 |             0 |             2 |     2
+CHINESE_16CHAR                      |             0 |             0 |             0 |             2 |     2
+CHINESE_17CHAR                      |             0 |             0 |             0 |             1 |     1
+CHINESE_21CHAR                      |             0 |             0 |             0 |             1 |     1
+CHINESE_7CHAR                       |             0 |             0 |            16 |           159 |   175
+CHINESE_8CHAR                       |             0 |             0 |            10 |           105 |   115
+CHINESE_9CHAR                       |             0 |             0 |             9 |            70 |    79
+-----------------------------------------------------------------------------------------------------------
+TOTAL                               |         22692 |         22692 |         32000 |         64000 | 141384
+
+====================================================================================================
+CATEGORY EXPLANATIONS
+====================================================================================================
+
+LATIN_LETTER       - Pure Latin letters (a-zA-Z)
+LATIN_DIGIT        - Latin letters and digits combined
+DIGIT              - Pure digits (0-9)
+PUNCTUATION        - Punctuation marks and symbols
+
+CHINESE_NCHAR      - N pure Chinese characters (Standard CJK: U+4E00-U+9FFF)
+MIXED_WITH_CHINESE - Tokens containing Chinese chars mixed with other content
+
+OTHER_JAPANESE     - Japanese characters (Hiragana/Katakana)
+OTHER_KOREAN       - Korean characters (Hangul: U+AC00-U+D7AF)
+OTHER_RARE_CHINESE_UTF8 - Rare Chinese chars or UTF-8 byte fragments
+                     (CJK Extension: U+3400-U+4DBF, or byte notation <0xXX>)
+OTHER_UNKNOWN      - Other unclassified tokens
+
+====================================================================================================
+DETAILED BREAKDOWN BY TOKENIZER
+====================================================================================================
+
+
+====================================================================================================
+TOKENIZER: chinese_origin_8k_train90.json
+====================================================================================================
+Total Vocabulary Size: 22692
+
+Type                                               Count   Percentage
+----------------------------------------------------------------------
+CHINESE_1CHAR                                      13288       58.56%
+OTHER_RARE_CHINESE_UTF8                             3367       14.84%
+OTHER_UNKNOWN                                       2981       13.14%
+PUNCTUATION                                         1662        7.32%
+OTHER_KOREAN                                        1046        4.61%
+OTHER_JAPANESE                                       171        0.75%
+DIGIT                                                114        0.50%
+LATIN_LETTER                                          52        0.23%
+LATIN_DIGIT                                           10        0.04%
+EMPTY                                                  1        0.00%
+
+Sample tokens by type:
+----------------------------------------------------------------------
+  CHINESE_1CHAR                           : '一', '丁', '丂', '鿭', '鿳', '挦', '庸', '髑'
+  OTHER_RARE_CHINESE_UTF8                 : '㐀', '㐂', '㐆', '𱉼', '𱊊', '𢟬', '𫓨', '䡍'
+  OTHER_UNKNOWN                           : '[UNK]', '[PAD]', '[CLS]', 'ꯔ', 'ꯕ', 'ش', 'य', 'ᦞ'
+  PUNCTUATION                             : '!', '"', '#', '\U000f0855', '\U0010fc02', '♿', '.', 'ూ'
+  OTHER_KOREAN                            : '가', '각', '간', '힘', '힙', '의', '눌', '널'
+  OTHER_JAPANESE                          : 'ぁ', 'あ', 'ぃ', 'ヹ', 'ー', 'グ', 'め', 'ヴ'
+  DIGIT                                   : '²', '³', '¹', '９', '𝟮', '⁶', '۷', '۲'
+  LATIN_LETTER                            : 'A', 'B', 'C', 'y', 'z', 'm', 'H', 'j'
+  LATIN_DIGIT                             : '0', '1', '2', '8', '9'
+  EMPTY                                   : 'Ġ'
+
+
+====================================================================================================
+TOKENIZER: chinese_origin_16k_train90.json
+====================================================================================================
+Total Vocabulary Size: 22692
+
+Type                                               Count   Percentage
+----------------------------------------------------------------------
+CHINESE_1CHAR                                      13288       58.56%
+OTHER_RARE_CHINESE_UTF8                             3367       14.84%
+OTHER_UNKNOWN                                       2981       13.14%
+PUNCTUATION                                         1662        7.32%
+OTHER_KOREAN                                        1046        4.61%
+OTHER_JAPANESE                                       171        0.75%
+DIGIT                                                114        0.50%
+LATIN_LETTER                                          52        0.23%
+LATIN_DIGIT                                           10        0.04%
+EMPTY                                                  1        0.00%
+
+Sample tokens by type:
+----------------------------------------------------------------------
+  CHINESE_1CHAR                           : '一', '丁', '丂', '鿭', '鿳', '邙', '嬛', '扇'
+  OTHER_RARE_CHINESE_UTF8                 : '㐀', '㐂', '㐆', '𱉼', '𱊊', '𠤩', 'ﾔ', '𨳒'
+  OTHER_UNKNOWN                           : '[UNK]', '[PAD]', '[CLS]', 'ꯔ', 'ꯕ', 'ث', 'ʌ', 'ᵵ'
+  PUNCTUATION                             : '!', '"', '#', '\U000f0855', '\U0010fc02', '∃', '⺕', '┗'
+  OTHER_KOREAN                            : '가', '각', '간', '힘', '힙', '엣', '츄', '손'
+  OTHER_JAPANESE                          : 'ぁ', 'あ', 'ぃ', 'ヹ', 'ー', 'ズ', 'び', 'ヲ'
+  DIGIT                                   : '²', '³', '¹', '９', '𝟮', '⁸', '۱', '⑷'
+  LATIN_LETTER                            : 'A', 'B', 'C', 'y', 'z', 'N', 'V', 'm'
+  LATIN_DIGIT                             : '0', '1', '2', '8', '9'
+  EMPTY                                   : 'Ġ'
+
+
+====================================================================================================
+TOKENIZER: chinese_origin_32k_train90.json
+====================================================================================================
+Total Vocabulary Size: 32000
+
+Type                                               Count   Percentage
+----------------------------------------------------------------------
+CHINESE_1CHAR                                      13288       41.52%
+CHINESE_2CHAR                                       6077       18.99%
+OTHER_RARE_CHINESE_UTF8                             3367       10.52%
+OTHER_UNKNOWN                                       2988        9.34%
+PUNCTUATION                                         1777        5.55%
+CHINESE_3CHAR                                       1368        4.28%
+OTHER_KOREAN                                        1046        3.27%
+LATIN_LETTER                                         706        2.21%
+MIXED_WITH_CHINESE                                   421        1.32%
+CHINESE_4CHAR                                        290        0.91%
+LATIN_DIGIT                                          239        0.75%
+OTHER_JAPANESE                                       171        0.53%
+DIGIT                                                114        0.36%
+CHINESE_5CHAR                                         61        0.19%
+CHINESE_6CHAR                                         36        0.11%
+CHINESE_7CHAR                                         16        0.05%
+CHINESE_8CHAR                                         10        0.03%
+CHINESE_9CHAR                                          9        0.03%
+CHINESE_11CHAR                                         8        0.03%
+CHINESE_10CHAR                                         5        0.02%
+CHINESE_13CHAR                                         2        0.01%
+EMPTY                                                  1        0.00%
+
+Sample tokens by type:
+----------------------------------------------------------------------
+  CHINESE_1CHAR                           : '一', '丁', '丂', '鿭', '鿳', '瘕', '桥', '逬'
+  CHINESE_2CHAR                           : '一个', '中国', '美国', '皆有', '警备', '妻子', '沉积', '唐朝'
+  OTHER_RARE_CHINESE_UTF8                 : '㐀', '㐂', '㐆', '𱉼', '𱊊', '𥟨', '𞤭', '𪂹'
+  OTHER_UNKNOWN                           : '[UNK]', '[PAD]', '[CLS]', 'formula_3', 'formula_4', 'ꀋ', 'ہ', 'ල'
+  PUNCTUATION                             : '!', '"', '#', '%)', '?」', '💜', '⊆', '\ue000'
+  CHINESE_3CHAR                           : '的一个', '委员会', '共和国', '利比亚', '在全国', '联盟的', '支持者', '在欧洲'
+  OTHER_KOREAN                            : '가', '각', '간', '힘', '힙', '술', '젠', '챌'
+  LATIN_LETTER                            : 'A', 'B', 'C', 'Mark', 'Dis', 'HO', 'Jo', 'EE'
+  MIXED_WITH_CHINESE                      : '0年', '1年', '5年', '的1', '第14', '海拔高度2', '比2', '30分'
+  CHINESE_4CHAR                           : '平方公里', '平方千米', '人口密度', '这是一个', '密西西比', '另一方面', '本届赛事', '日治时期'
+  LATIN_DIGIT                             : '0', '1', '2', '2024', '2005', '65', '2006', '192'
+  OTHER_JAPANESE                          : 'ぁ', 'あ', 'ぃ', 'ヹ', 'ー', 'そ', 'ガ', 'ぉ'
+  DIGIT                                   : '²', '³', '¹', '９', '𝟮', '④', '１', '೩'
+  CHINESE_5CHAR                           : '人民共和国', '的一个市镇', '是位于美国', '加利福尼亚', '巡回演唱会', '阿尔及利亚', '高于海平面', '伊利诺伊州'
+  CHINESE_6CHAR                           : '美国人口普查', '省的一个市镇', '文物保护单位', '内蒙古自治区', '区的负责管辖', '清朝政治人物', '明朝政治人物', '无症状感染者'
+  CHINESE_7CHAR                           : '中华人民共和国', '奥林匹克运动会', '当中陆地面积为', '即北美中部时区', '以及中国大陆的', '是一个位于美国', '由人工引种栽培', '第一次世界大战'
+  CHINESE_8CHAR                           : '时的人口数量为人', '所属的省级选区为', '是中华人民共和国', '是一颗围绕太阳公', '这颗小行星的绝对'
+  CHINESE_9CHAR                           : '人口密度每平方公里', '美国人口普查的数据', '于时的人口数量为人', '冬季奥林匹克运动会', '第二次世界大战期间'
+  CHINESE_11CHAR                          : '而人口密度为每平方千米', '中华人民共和国政治人物', '所处的海拔为高于海平面', '现时由南极条约体系管理', '这颗小行星的绝对星等为'
+  CHINESE_10CHAR                          : '人口密度为每平方千米', '同时该地设有夏令时间', '而该地的平均海拔高度'
+  CHINESE_13CHAR                          : '是一颗围绕太阳公转的小行星', '是下辖的一个乡镇级行政单位'
+  EMPTY                                   : 'Ġ'
+
+
+====================================================================================================
+TOKENIZER: chinese_origin_64k_train90.json
+====================================================================================================
+Total Vocabulary Size: 64000
+
+Type                                               Count   Percentage
+----------------------------------------------------------------------
+CHINESE_2CHAR                                      21308       33.29%
+CHINESE_1CHAR                                      13288       20.76%
+CHINESE_3CHAR                                       9040       14.12%
+CHINESE_4CHAR                                       3436        5.37%
+OTHER_RARE_CHINESE_UTF8                             3367        5.26%
+OTHER_UNKNOWN                                       3033        4.74%
+LATIN_LETTER                                        2802        4.38%
+MIXED_WITH_CHINESE                                  2297        3.59%
+PUNCTUATION                                         1993        3.11%
+OTHER_KOREAN                                        1046        1.63%
+CHINESE_5CHAR                                        777        1.21%
+LATIN_DIGIT                                          542        0.85%
+CHINESE_6CHAR                                        329        0.51%
+OTHER_JAPANESE                                       171        0.27%
+CHINESE_7CHAR                                        159        0.25%
+DIGIT                                                114        0.18%
+CHINESE_8CHAR                                        105        0.16%
+CHINESE_9CHAR                                         70        0.11%
+CHINESE_10CHAR                                        54        0.08%
+CHINESE_11CHAR                                        26        0.04%
+CHINESE_12CHAR                                        22        0.03%
+CHINESE_13CHAR                                        14        0.02%
+CHINESE_16CHAR                                         2        0.00%
+CHINESE_14CHAR                                         2        0.00%
+EMPTY                                                  1        0.00%
+CHINESE_21CHAR                                         1        0.00%
+CHINESE_17CHAR                                         1        0.00%
+
+Sample tokens by type:
+----------------------------------------------------------------------
+  CHINESE_2CHAR                           : '一个', '中国', '美国', '蒙自', '要去', '杜布', '关系', '验收'
+  CHINESE_1CHAR                           : '一', '丁', '丂', '鿭', '鿳', '又', '栀', '樖'
+  CHINESE_3CHAR                           : '的一个', '委员会', '共和国', '的细胞', '日本队', '检察官', '劳动力', '存放在'
+  CHINESE_4CHAR                           : '平方公里', '平方千米', '人口密度', '中将军衔', '则被称为', '新闻报道', '调查结果', '今四川省'
+  OTHER_RARE_CHINESE_UTF8                 : '㐀', '㐂', '㐆', '𱉼', '𱊊', '𫍚', '𫭢', '㮒'
+  OTHER_UNKNOWN                           : '[UNK]', '[PAD]', '[CLS]', 'formula_35', '____', 'ề', 'ז', 'ع'
+  LATIN_LETTER                            : 'A', 'B', 'C', 'Sor', 'TM', 'umb', 'Bill', 'iro'
+  MIXED_WITH_CHINESE                      : '0年', '1年', '5年', '6月底', '自2001年', '30分钟', '2014年5月', '1609年'
+  PUNCTUATION                             : '!', '"', '#', '.」《', '“(', '.〈', '≦', '《》('
+  OTHER_KOREAN                            : '가', '각', '간', '힘', '힙', '럭', '선', '심'
+  CHINESE_5CHAR                           : '人民共和国', '的一个市镇', '是位于美国', '华盛顿大学', '埃马纽埃尔', '菲律宾大气', '滨海塞纳省', '世界各地的'
+  LATIN_DIGIT                             : '0', '1', '2', '302', '252', '325', '2012', '326'
+  CHINESE_6CHAR                           : '美国人口普查', '省的一个市镇', '文物保护单位', '主要经济活动', '计划的一部分', '州的一个市镇', '普林斯顿大学', '是俄罗斯联邦'
+  OTHER_JAPANESE                          : 'ぁ', 'あ', 'ぃ', 'ヹ', 'ー', 'ァ', 'き', 'れ'
+  CHINESE_7CHAR                           : '中华人民共和国', '奥林匹克运动会', '当中陆地面积为', '俄罗斯总统普京', '隶属利维夫州的', '随着时间的推移', '国际足联世界杯', '西日本旅客铁道'
+  DIGIT                                   : '²', '³', '¹', '９', '𝟮', '❺', '⑼', '၈'
+  CHINESE_8CHAR                           : '时的人口数量为人', '所属的省级选区为', '是中华人民共和国', '俄罗斯国防部表示', '他曾代表美国参加', '为辐鳍鱼纲鲉形目', '该省份为法国北部', '县的一个行政镇区'
+  CHINESE_9CHAR                           : '人口密度每平方公里', '美国人口普查的数据', '于时的人口数量为人', '奥运会获得一枚铜牌', '严重特殊传染性肺炎', '山西省文物保护单位', '为主小行星带小行星', '该省份为法国西北部'
+  CHINESE_10CHAR                          : '人口密度为每平方千米', '同时该地设有夏令时间', '而该地的平均海拔高度', '中共中央总书记习近平', '是位于美国密西西比州', '人口密度为每平方公里', '联合各级政府协调负责', '境内共有各类实体商铺'
+  CHINESE_11CHAR                          : '而人口密度为每平方千米', '中华人民共和国政治人物', '所处的海拔为高于海平面', '是位于美国内布拉斯加州', '是一个位于美国俄亥俄州', '是下辖的一个街道办事处', '目前尚未由人工引种栽培', '而该地的平均海拔高度为'
+  CHINESE_12CHAR                          : '而人口密度为每平方千米人', '是一颗绕太阳运转的小行星', '该省份为法国北部内陆省份', '冬季残疾人奥林匹克运动会', '是位于乌克兰西南部的村庄', '县的一个人口普查指定地区', '该省份为法国北部沿海省份', '位于法国卢瓦尔河地区大区'
+  CHINESE_13CHAR                          : '是一颗围绕太阳公转的小行星', '是下辖的一个乡镇级行政单位', '该省份为法国东北部内陆省份', '夏季奥林匹克运动会田径比赛', '第六批全国重点文物保护单位', '该省份为法国西北部沿海省份', '第七批全国重点文物保护单位', '夏季奥林匹克运动会赛艇比赛'
+  CHINESE_16CHAR                          : '只列出曾进入准决赛的国际赛事成绩', '在日治期初期的官方地图上已有记载'
+  CHINESE_14CHAR                          : '为辐鳍鱼纲鲈形目隆头鱼亚目慈', '境内共有在校中等教育阶段学生'
+  EMPTY                                   : 'Ġ'
+  CHINESE_21CHAR                          : '为辐鳍鱼纲鲈形目隆头鱼亚目慈鲷科的其中一种'
+  CHINESE_17CHAR                          : '事务由其所属的联合各级政府协调负责'
+
+
+====================================================================================================
+CATEGORY EXPLANATIONS
+====================================================================================================
+
+LATIN_LETTER       - Pure Latin letters (a-zA-Z)
+LATIN_DIGIT        - Latin letters and digits combined
+DIGIT              - Pure digits (0-9)
+PUNCTUATION        - Punctuation marks and symbols
+
+CHINESE_NCHAR      - N pure Chinese characters (Standard CJK: U+4E00-U+9FFF)
+MIXED_WITH_CHINESE - Tokens containing Chinese chars mixed with other content
+
+OTHER_JAPANESE     - Japanese characters (Hiragana/Katakana)
+OTHER_KOREAN       - Korean characters (Hangul: U+AC00-U+D7AF)
+OTHER_RARE_CHINESE_UTF8 - Rare Chinese chars or UTF-8 byte fragments
+                     (CJK Extension: U+3400-U+4DBF, or byte notation <0xXX>)
+OTHER_UNKNOWN      - Other unclassified tokens

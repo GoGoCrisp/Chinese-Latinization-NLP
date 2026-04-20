@@ -33,10 +33,10 @@ def train_bpe(corpus_path, vocab_size, output_path):
 # ===== corpus（只用 train90） =====
 
 corpora = {
-    "chinese_origin": f"{CORPUS_DIR}/chinese_origin_中国_train90.txt",
-    # "pinyin_toned": f"{CORPUS_DIR}/pinyin_toned_zhong1guo2_train90.txt",
-    # "pinyin_toneless": f"{CORPUS_DIR}/pinyin_toneless_zhongguo_train90.txt",
-    # "pinyin_diacritic": f"{CORPUS_DIR}/pinyin_diacritic_zhōngguó_train90.txt"
+     "chinese_origin": f"{CORPUS_DIR}/chinese_origin_中国_train90.txt",
+     "pinyin_toned": f"{CORPUS_DIR}/pinyin_toned_zhong1guo2_train90.txt",
+     "pinyin_toneless": f"{CORPUS_DIR}/pinyin_toneless_zhongguo_train90.txt",
+     "pinyin_diacritic": f"{CORPUS_DIR}/pinyin_diacritic_zhōngguó_train90.txt"
 }
 
 vocab_sizes = [8000, 16000, 32000, 64000]

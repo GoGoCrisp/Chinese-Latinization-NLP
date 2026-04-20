@@ -1,0 +1,312 @@
+====================================================================================================
+CHINESE ORIGIN TOKENIZERS (superBPE) - VOCABULARY COMPOSITION ANALYSIS
+====================================================================================================
+
+Analyzing: Chinese characters, Latin letters, punctuation, and other languages (Japanese, Korean)
+Special focus: UTF-8 byte fragments (represented as 'half characters')
+Note: Pinyin tokens like 'zhishao', 'jinwang' are correct (correspond to Chinese words like '至少', '金王')
+
+Token Type                          | chinese_origi | chinese_origi | chinese_origi | chinese_origi | TOTAL
+===========================================================================================================
+LATIN_LETTER                        |           404 |           897 |          1882 |          3926 |  7109
+LATIN_DIGIT                         |           185 |           294 |           414 |           799 |  1692
+DIGIT                               |             0 |             0 |             1 |             2 |     3
+PUNCTUATION                         |           132 |           204 |           311 |           475 |  1122
+CHINESE_1CHAR                       |          2410 |          3180 |          4022 |          4933 | 14545
+CHINESE_2CHAR                       |          3468 |          7717 |         15279 |         27911 | 54375
+CHINESE_3CHAR                       |           550 |          1933 |          5372 |         13282 | 21137
+CHINESE_4CHAR                       |           101 |           446 |          1698 |          5767 |  8012
+CHINESE_5CHAR                       |            22 |           103 |           401 |          1396 |  1922
+CHINESE_6CHAR                       |            20 |            54 |           165 |           607 |   846
+MIXED_WITH_CHINESE                  |           268 |           647 |          1651 |          3353 |  5919
+OTHER_JAPANESE                      |             0 |             8 |            47 |           103 |   158
+OTHER_KOREAN                        |             0 |             0 |             0 |             1 |     1
+OTHER_RARE_CHINESE_UTF8             |             0 |             0 |             3 |             9 |    12
+OTHER_UNKNOWN                       |             3 |            17 |            53 |           129 |   202
+EMPTY                               |             1 |             1 |             1 |             1 |     4
+CHINESE_10CHAR                      |             3 |             6 |            25 |            82 |   116
+CHINESE_11CHAR                      |             3 |            10 |            18 |            52 |    83
+CHINESE_12CHAR                      |             0 |             0 |            10 |            37 |    47
+CHINESE_13CHAR                      |             0 |             2 |             6 |            24 |    32
+CHINESE_14CHAR                      |             0 |             0 |             1 |             3 |     4
+CHINESE_15CHAR                      |             0 |             0 |             1 |             7 |     8
+CHINESE_16CHAR                      |             0 |             0 |             1 |             4 |     5
+CHINESE_17CHAR                      |             0 |             0 |             0 |             1 |     1
+CHINESE_18CHAR                      |             0 |             0 |             0 |             1 |     1
+CHINESE_21CHAR                      |             0 |             0 |             1 |             2 |     3
+CHINESE_7CHAR                       |             7 |            26 |           102 |           300 |   435
+CHINESE_8CHAR                       |             3 |            14 |            46 |           162 |   225
+CHINESE_9CHAR                       |             8 |            14 |            36 |           133 |   191
+-----------------------------------------------------------------------------------------------------------
+TOTAL                               |          7588 |         15573 |         31547 |         63502 | 118210
+
+====================================================================================================
+CATEGORY EXPLANATIONS
+====================================================================================================
+
+LATIN_LETTER       - Pure Latin letters (a-zA-Z)
+LATIN_DIGIT        - Latin letters and digits combined
+DIGIT              - Pure digits (0-9)
+PUNCTUATION        - Punctuation marks and symbols
+
+CHINESE_NCHAR      - N pure Chinese characters (Standard CJK: U+4E00-U+9FFF)
+MIXED_WITH_CHINESE - Tokens containing Chinese chars mixed with other content
+
+OTHER_JAPANESE     - Japanese characters (Hiragana/Katakana)
+OTHER_KOREAN       - Korean characters (Hangul: U+AC00-U+D7AF)
+OTHER_RARE_CHINESE_UTF8 - Rare Chinese chars or UTF-8 byte fragments
+                     (CJK Extension: U+3400-U+4DBF, or byte notation <0xXX>)
+OTHER_UNKNOWN      - Other unclassified tokens
+
+====================================================================================================
+DETAILED BREAKDOWN BY TOKENIZER
+====================================================================================================
+
+
+====================================================================================================
+TOKENIZER: chinese_origin_subset100k_superbpe_8000_decoded.json
+====================================================================================================
+Total Vocabulary Size: 7588
+
+Type                                               Count   Percentage
+----------------------------------------------------------------------
+CHINESE_2CHAR                                       3468       45.70%
+CHINESE_1CHAR                                       2410       31.76%
+CHINESE_3CHAR                                        550        7.25%
+LATIN_LETTER                                         404        5.32%
+MIXED_WITH_CHINESE                                   268        3.53%
+LATIN_DIGIT                                          185        2.44%
+PUNCTUATION                                          132        1.74%
+CHINESE_4CHAR                                        101        1.33%
+CHINESE_5CHAR                                         22        0.29%
+CHINESE_6CHAR                                         20        0.26%
+CHINESE_9CHAR                                          8        0.11%
+CHINESE_7CHAR                                          7        0.09%
+OTHER_UNKNOWN                                          3        0.04%
+CHINESE_10CHAR                                         3        0.04%
+CHINESE_11CHAR                                         3        0.04%
+CHINESE_8CHAR                                          3        0.04%
+EMPTY                                                  1        0.01%
+
+Sample tokens by type:
+----------------------------------------------------------------------
+  CHINESE_2CHAR                           : '一个', '中国', '美国', '优先', '印象', '图像', '尤其', '走向'
+  CHINESE_1CHAR                           : '的', '年', '在', '聂', '橙', '座', '电', '许'
+  CHINESE_3CHAR                           : '的一个', '委员会', '共和国', '由人工', '早期的', '叙利亚', '面积为', '系统的'
+  LATIN_LETTER                            : 'A', 'B', 'C', 'ark', ' h', 'ing ', 'sp', 'AS'
+  MIXED_WITH_CHINESE                      : '0年', '1年', '月2', '000名', '1971年', '30日', '在196', '1986年'
+  LATIN_DIGIT                             : '0', '1', '2', ' 11', '175', '56', ' 12', '183'
+  PUNCTUATION                             : '!', '"', '#', '.)', '.「', '”、', '」(', '》('
+  CHINESE_4CHAR                           : '平方公里', '人口密度', '平方千米', '硕士学位', '足球联赛', '中华民国', '其中一个', '或旧市镇'
+  CHINESE_5CHAR                           : '人民共和国', '的一个市镇', '人口数量为', '中国国民党', '转的小行星', '接壤的市镇', '为辐鳍鱼纲', '高于海平面'
+  CHINESE_6CHAR                           : '省的一个市镇', '美国人口普查', '文物保护单位', '明朝政治人物', '加利福尼亚州', '无症状感染者', '当地共有人口', '所处的海拔为'
+  CHINESE_9CHAR                           : '人口密度每平方公里', '夏季奥林匹克运动会', '该地所采用的时区为', '位于中华人民共和国', '县的一个非建制地区'
+  CHINESE_7CHAR                           : '中华人民共和国', '奥林匹克运动会', '所属的省级选区', '第二次世界大战', '第一次世界大战'
+  OTHER_UNKNOWN                           : '_', '\n', 'é'
+  CHINESE_10CHAR                          : '人口密度为每平方千米', '同时该地设有夏令时间', '而该地所采用的时区为'
+  CHINESE_11CHAR                          : '所处的海拔为高于海平面', '而人口密度为每平方千米', '中华人民共和国政治人物'
+  CHINESE_8CHAR                           : '所属的省级选区为', ' 所属的省级选区为', '是中华人民共和国'
+  EMPTY                                   : ' '
+
+
+====================================================================================================
+TOKENIZER: chinese_origin_subset100k_superbpe_16000_decoded.json
+====================================================================================================
+Total Vocabulary Size: 15573
+
+Type                                               Count   Percentage
+----------------------------------------------------------------------
+CHINESE_2CHAR                                       7717       49.55%
+CHINESE_1CHAR                                       3180       20.42%
+CHINESE_3CHAR                                       1933       12.41%
+LATIN_LETTER                                         897        5.76%
+MIXED_WITH_CHINESE                                   647        4.15%
+CHINESE_4CHAR                                        446        2.86%
+LATIN_DIGIT                                          294        1.89%
+PUNCTUATION                                          204        1.31%
+CHINESE_5CHAR                                        103        0.66%
+CHINESE_6CHAR                                         54        0.35%
+CHINESE_7CHAR                                         26        0.17%
+OTHER_UNKNOWN                                         17        0.11%
+CHINESE_9CHAR                                         14        0.09%
+CHINESE_8CHAR                                         14        0.09%
+CHINESE_11CHAR                                        10        0.06%
+OTHER_JAPANESE                                         8        0.05%
+CHINESE_10CHAR                                         6        0.04%
+CHINESE_13CHAR                                         2        0.01%
+EMPTY                                                  1        0.01%
+
+Sample tokens by type:
+----------------------------------------------------------------------
+  CHINESE_2CHAR                           : '一个', '中国', '美国', '急性', '潜力', '的同', '该片', '通知'
+  CHINESE_1CHAR                           : '的', '年', '在', '烛', '媛', '弊', '洼', '良'
+  CHINESE_3CHAR                           : '的一个', '委员会', '共和国', '爱丁堡', '蛋白酶', '女演员', '台北市', '是基于'
+  LATIN_LETTER                            : 'A', 'B', 'C', 'ave', 'el ', 'ount', 'ritic', 'one'
+  MIXED_WITH_CHINESE                      : '0年', '1年', '月2', '10月17日', '11月15日', ' 1983年', '4月', '第3'
+  CHINESE_4CHAR                           : '平方公里', '人口密度', '平方千米', '布鲁克林', '他的儿子', '平方英里', '冠状病毒', '该物种的'
+  LATIN_DIGIT                             : '0', '1', '2', '2500', '2025', '7', ' 4', '197'
+  PUNCTUATION                             : '!', '"', '#', '://', '」().', '《》', '“"', ',“'
+  CHINESE_5CHAR                           : '人民共和国', '的一个市镇', '人口数量为', '有机化合物', '型柴油机车', '行政中心为', '文化大革命', '常务委员会'
+  CHINESE_6CHAR                           : '省的一个市镇', '美国人口普查', '文物保护单位', '委员会副主任', '足球超级联赛', '位于该国中部', '该省份为法国', '包括以下物种'
+  CHINESE_7CHAR                           : '中华人民共和国', '奥林匹克运动会', '所属的省级选区', '鱼科的其中一种', '社会主义共和国', '和无症状感染者', '第二次世界大战', '由人工引种栽培'
+  OTHER_UNKNOWN                           : '_', '\n', 'é', 'ö', 'р', 'á', 'о', 'е'
+  CHINESE_9CHAR                           : '人口密度每平方公里', '夏季奥林匹克运动会', '该地所采用的时区为', '位于法国大东部大区', '该物种的模式产地在', '于时的人口数量为人', '冬季奥林匹克运动会', '是位于美国密苏里州'
+  CHINESE_8CHAR                           : '新冠肺炎确诊病例', '是中华人民共和国', '新疆维吾尔自治区', '联合国教科文组织', '中华人民共和国驻', '为辐鳍鱼纲鲈形目', '联合台风警报中心', '该省份为法国北部'
+  CHINESE_11CHAR                          : '所处的海拔为高于海平面', '这颗小行星的绝对星等为', '而人口密度为每平方千米', ' 这颗小行星的绝对星等为', '批全国重点文物保护单位'
+  OTHER_JAPANESE                          : 'ー', 'ン', 'の', 'イ', 'ト'
+  CHINESE_10CHAR                          : '人口密度为每平方千米', '同时该地设有夏令时间', '围绕太阳公转的小行星', '全国重点文物保护单位', '残疾人奥林匹克运动会'
+  CHINESE_13CHAR                          : '是下辖的一个乡镇级行政单位', '是一颗围绕太阳公转的小行星'
+  EMPTY                                   : ' '
+
+
+====================================================================================================
+TOKENIZER: chinese_origin_subset100k_superbpe_32000_decoded.json
+====================================================================================================
+Total Vocabulary Size: 31547
+
+Type                                               Count   Percentage
+----------------------------------------------------------------------
+CHINESE_2CHAR                                      15279       48.43%
+CHINESE_3CHAR                                       5372       17.03%
+CHINESE_1CHAR                                       4022       12.75%
+LATIN_LETTER                                        1882        5.97%
+CHINESE_4CHAR                                       1698        5.38%
+MIXED_WITH_CHINESE                                  1651        5.23%
+LATIN_DIGIT                                          414        1.31%
+CHINESE_5CHAR                                        401        1.27%
+PUNCTUATION                                          311        0.99%
+CHINESE_6CHAR                                        165        0.52%
+CHINESE_7CHAR                                        102        0.32%
+OTHER_UNKNOWN                                         53        0.17%
+OTHER_JAPANESE                                        47        0.15%
+CHINESE_8CHAR                                         46        0.15%
+CHINESE_9CHAR                                         36        0.11%
+CHINESE_10CHAR                                        25        0.08%
+CHINESE_11CHAR                                        18        0.06%
+CHINESE_12CHAR                                        10        0.03%
+CHINESE_13CHAR                                         6        0.02%
+OTHER_RARE_CHINESE_UTF8                                3        0.01%
+EMPTY                                                  1        0.00%
+CHINESE_15CHAR                                         1        0.00%
+DIGIT                                                  1        0.00%
+CHINESE_16CHAR                                         1        0.00%
+CHINESE_14CHAR                                         1        0.00%
+CHINESE_21CHAR                                         1        0.00%
+
+Sample tokens by type:
+----------------------------------------------------------------------
+  CHINESE_2CHAR                           : '一个', '中国', '美国', '这块', '可让', '二郎', '立为', '但她'
+  CHINESE_3CHAR                           : '的一个', '委员会', '共和国', '而未能', '来解决', '足球赛', '千叶县', '布鲁诺'
+  CHINESE_1CHAR                           : '的', '年', '在', '牒', '闺', '祐', '诊', '挑'
+  LATIN_LETTER                            : 'A', 'B', 'C', ' sh', ' Part', 'ene', 'oot', 'aut'
+  CHINESE_4CHAR                           : '平方公里', '人口密度', '平方千米', '耕地面积', '逃犯条例', '电影学院', '发表声明', '车站大楼'
+  MIXED_WITH_CHINESE                      : '0年', '1年', '月2', '第39', '长0', '2月8日', '4月16日', '2月26日'
+  LATIN_DIGIT                             : '0', '1', '2', ' 2013', '501', '2O', '280', '106'
+  CHINESE_5CHAR                           : '人民共和国', '的一个市镇', '人口数量为', '体育俱乐部', '的人口普查', '届全国政协', '是南极洲的', '殿试登进士'
+  PUNCTUATION                             : '!', '"', '#', '"》', '》“', '”;', ';"', '℃,'
+  CHINESE_6CHAR                           : '省的一个市镇', '美国人口普查', '文物保护单位', '南京国民政府', '为底栖性鱼类', '布拉迪斯拉发', '友好城市关系', '明治三十四年'
+  CHINESE_7CHAR                           : '中华人民共和国', '奥林匹克运动会', '所属的省级选区', ' 第一次世界大战', '人民政府副省长', '大西洋比利牛斯', '位于该国西北部', '是乌克兰的村落'
+  OTHER_UNKNOWN                           : '_', '\n', 'é', 'λ', 'ω', 'с', 'н', 'ν'
+  OTHER_JAPANESE                          : 'ー', 'ン', 'の', 'ミ', 'イ�', 'ク', 'ち', 'た'
+  CHINESE_8CHAR                           : '新冠肺炎确诊病例', '是中华人民共和国', '新疆维吾尔自治区', '该省份为法国西部', '在隔离管控中发现', '鲈形目隆头鱼亚目', '在第二次世界大战', '日治明治三十四年'
+  CHINESE_9CHAR                           : '人口密度每平方公里', '夏季奥林匹克运动会', '该地所采用的时区为', '是乌克兰北部的村庄', '是位于美国密歇根州', '山东省文物保护单位', '冬季奥林匹克运动会', '县的一个非建制地区'
+  CHINESE_10CHAR                          : '人口密度为每平方千米', '同时该地设有夏令时间', '围绕太阳公转的小行星', '联合各级政府协调负责', '该省份为法国中部省份', '第十一届全国政协委员', '新增本土无症状感染者', '残疾人奥林匹克运动会'
+  CHINESE_11CHAR                          : '所处的海拔为高于海平面', '这颗小行星的绝对星等为', '朝鲜民主主义人民共和国', '为辐鳍鱼纲鲈形目鲈亚目', '是位于美国北卡罗莱纳州', '现时由南极条约体系管理', '而人口密度为每平方千米', '目前尚未由人工引种栽培'
+  CHINESE_12CHAR                          : '新增本土新冠肺炎确诊病例', '夏季残疾人奥林匹克运动会', '第十三届全国人民代表大会', '该省份为法国北部沿海省份', '为辐鳍鱼纲脂鲤目脂鲤亚目'
+  CHINESE_13CHAR                          : '是下辖的一个乡镇级行政单位', '是一颗围绕太阳公转的小行星', '该省份为法国东北部内陆省份', '为辐鳍鱼纲鲈形目隆头鱼亚目', '该省份为法国西北部沿海省份'
+  OTHER_RARE_CHINESE_UTF8                 : '𫛭', '䜣', '𫚥'
+  EMPTY                                   : ' '
+  CHINESE_15CHAR                          : '新增境外输入性新冠肺炎确诊病例'
+  DIGIT                                   : '²'
+  CHINESE_16CHAR                          : ' 只列出曾进入准决赛的国际赛事成绩'
+  CHINESE_14CHAR                          : '为辐鳍鱼纲鲈形目隆头鱼亚目慈'
+  CHINESE_21CHAR                          : '为辐鳍鱼纲鲈形目隆头鱼亚目慈鲷科的其中一种'
+
+
+====================================================================================================
+TOKENIZER: chinese_origin_subset100k_superbpe_64000_decoded.json
+====================================================================================================
+Total Vocabulary Size: 63502
+
+Type                                               Count   Percentage
+----------------------------------------------------------------------
+CHINESE_2CHAR                                      27911       43.95%
+CHINESE_3CHAR                                      13282       20.92%
+CHINESE_4CHAR                                       5767        9.08%
+CHINESE_1CHAR                                       4933        7.77%
+LATIN_LETTER                                        3926        6.18%
+MIXED_WITH_CHINESE                                  3353        5.28%
+CHINESE_5CHAR                                       1396        2.20%
+LATIN_DIGIT                                          799        1.26%
+CHINESE_6CHAR                                        607        0.96%
+PUNCTUATION                                          475        0.75%
+CHINESE_7CHAR                                        300        0.47%
+CHINESE_8CHAR                                        162        0.26%
+CHINESE_9CHAR                                        133        0.21%
+OTHER_UNKNOWN                                        129        0.20%
+OTHER_JAPANESE                                       103        0.16%
+CHINESE_10CHAR                                        82        0.13%
+CHINESE_11CHAR                                        52        0.08%
+CHINESE_12CHAR                                        37        0.06%
+CHINESE_13CHAR                                        24        0.04%
+OTHER_RARE_CHINESE_UTF8                                9        0.01%
+CHINESE_15CHAR                                         7        0.01%
+CHINESE_16CHAR                                         4        0.01%
+CHINESE_14CHAR                                         3        0.00%
+DIGIT                                                  2        0.00%
+CHINESE_21CHAR                                         2        0.00%
+EMPTY                                                  1        0.00%
+OTHER_KOREAN                                           1        0.00%
+CHINESE_17CHAR                                         1        0.00%
+CHINESE_18CHAR                                         1        0.00%
+
+Sample tokens by type:
+----------------------------------------------------------------------
+  CHINESE_2CHAR                           : '一个', '中国', '美国', '不雅', '发配', '选择', '排气', '刘义'
+  CHINESE_3CHAR                           : '的一个', '委员会', '共和国', '与以下', '不等的', '布里斯', '以来的', '至凌晨'
+  CHINESE_4CHAR                           : '平方公里', '人口密度', '平方千米', '和以色列', '他出生于', '市长选举', '巡回赛的', '表示反对'
+  CHINESE_1CHAR                           : '的', '年', '在', '奂', '镯', '察', '揽', '锚'
+  LATIN_LETTER                            : 'A', 'B', 'C', ' while', ' PAGASA', 'two ', 'ici', ' width'
+  MIXED_WITH_CHINESE                      : '0年', '1年', '月2', '和1996年', '20毫米', '2010年12月', ' 1987年', '600人'
+  CHINESE_5CHAR                           : '人民共和国', '的一个市镇', '人口数量为', '东临北部省', '酮症酸中毒', '狭义相对论', '的地理位置', '的一座车站'
+  LATIN_DIGIT                             : '0', '1', '2', 'L1', '2030', ' 26', '2D', '973'
+  CHINESE_6CHAR                           : '省的一个市镇', '美国人口普查', '文物保护单位', '是巴西的城镇', '阿舍韦克新城', '地区为一街庄', '中华民国大陆', ' 与接壤的市镇'
+  PUNCTUATION                             : '!', '"', '#', ':$', ':、', '?', '』、『', ';“'
+  CHINESE_7CHAR                           : '中华人民共和国', '奥林匹克运动会', '所属的省级选区', '拉沙佩勒当日隆', '讷维圣塞皮尔克', '澳门特别行政区', '而该地最高点为', '竞技体操运动员'
+  CHINESE_8CHAR                           : '新冠肺炎确诊病例', '是中华人民共和国', '新疆维吾尔自治区', '拉图尔德萨尔瓦尼', '为中华人民共和国', '当年的债务总额为', '俄军对乌克兰各地', '羽毛球国际挑战赛'
+  CHINESE_9CHAR                           : '人口密度每平方公里', '夏季奥林匹克运动会', '该地所采用的时区为', '中共中央政治局委员', '民政厅批复同意撤销', '中华人民共和国国家', '是位于美国爱荷华州', '是乌克兰西部的村庄'
+  OTHER_UNKNOWN                           : '_', '\n', 'é', 'و', 'س', 'ö', 'â', 'ρ'
+  OTHER_JAPANESE                          : 'ー', 'ン', 'の', 'ぎ', 'ソ', 'た', 'ャ', 'ト'
+  CHINESE_10CHAR                          : '人口密度为每平方千米', '同时该地设有夏令时间', '围绕太阳公转的小行星', '市镇中心地势较为平坦', ' 香港时间逢星期一至五', '中华人民共和国国务院', '上普罗旺斯阿尔卑斯省', '是位于美国密西西比州'
+  CHINESE_11CHAR                          : '所处的海拔为高于海平面', '这颗小行星的绝对星等为', '朝鲜民主主义人民共和国', '拍摄的空中照片绘入地图', '为一个省级文物保护单位', '夏季奥林匹克运动会田径', ' 这颗小行星的绝对星等为', '批全国重点文物保护单位'
+  CHINESE_12CHAR                          : '新增本土新冠肺炎确诊病例', '夏季残疾人奥林匹克运动会', '第十三届全国人民代表大会', '是位于乌克兰东北部的村庄', '分布于中国大陆的云南等地', '该省份为法国北部沿海省份', '该省份为法国南部沿海省份', '规模最大的公立综合性医院'
+  CHINESE_13CHAR                          : '是下辖的一个乡镇级行政单位', '是一颗围绕太阳公转的小行星', '该省份为法国东北部内陆省份', '维尔所处的海拔为高于海平面', '是一个位于美国奥克拉荷马州', '当选为第十三届全国人大代表', '该省份为法国西北部沿海省份', '事务由其所属的公共社区负责'
+  OTHER_RARE_CHINESE_UTF8                 : '𫛭', '䜣', '𫚥', '𩽾', '𬘭'
+  CHINESE_15CHAR                          : '新增境外输入性新冠肺炎确诊病例', '为辐鳍鱼纲鲈形目隆头鱼亚目慈鲷', '例无症状感染者在隔离管控中发现', '在乌克兰各地击落或因电子战措施', '位于法国上法兰西大区加来海峡省'
+  CHINESE_16CHAR                          : ' 只列出曾进入准决赛的国际赛事成绩', '在日治期初期的官方地图上已有记载', '黑龙江省新增新冠肺炎本土确诊病例'
+  CHINESE_14CHAR                          : '境内共有在校中等教育阶段学生', '在日治期初期的官方地图上已有', '第十三届全国人民代表大会代表'
+  DIGIT                                   : '²', '³'
+  CHINESE_21CHAR                          : '为辐鳍鱼纲鲈形目隆头鱼亚目慈鲷科的其中一种', '为辐鳍鱼纲脂鲤目脂鲤亚目脂鲤科的其中一个种'
+  EMPTY                                   : ' '
+  OTHER_KOREAN                            : '이'
+  CHINESE_17CHAR                          : '事务由其所属的联合各级政府协调负责'
+  CHINESE_18CHAR                          : '在柯本气候分类法中属于温带海洋性气候'
+
+
+====================================================================================================
+CATEGORY EXPLANATIONS
+====================================================================================================
+
+LATIN_LETTER       - Pure Latin letters (a-zA-Z)
+LATIN_DIGIT        - Latin letters and digits combined
+DIGIT              - Pure digits (0-9)
+PUNCTUATION        - Punctuation marks and symbols
+
+CHINESE_NCHAR      - N pure Chinese characters (Standard CJK: U+4E00-U+9FFF)
+MIXED_WITH_CHINESE - Tokens containing Chinese chars mixed with other content
+
+OTHER_JAPANESE     - Japanese characters (Hiragana/Katakana)
+OTHER_KOREAN       - Korean characters (Hangul: U+AC00-U+D7AF)
+OTHER_RARE_CHINESE_UTF8 - Rare Chinese chars or UTF-8 byte fragments
+                     (CJK Extension: U+3400-U+4DBF, or byte notation <0xXX>)
+OTHER_UNKNOWN      - Other unclassified tokens

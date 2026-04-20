@@ -1,0 +1,182 @@
+====================================================================================================
+PINYIN TONELESS TOKENIZERS (superBPE) - VOCABULARY COMPOSITION ANALYSIS
+====================================================================================================
+
+Analyzing: Chinese characters, Latin letters, punctuation, and other languages (Japanese, Korean)
+Special focus: UTF-8 byte fragments (represented as 'half characters')
+Note: Pinyin tokens like 'zhishao', 'jinwang' are correct (correspond to Chinese words like '至少', '金王')
+
+Token Type                          | pinyin_tonele | pinyin_tonele | pinyin_tonele | pinyin_tonele | TOTAL
+===========================================================================================================
+LATIN_LETTER                        |          5684 |         12330 |         26302 |         53303 | 97619
+LATIN_DIGIT                         |          1789 |          2824 |          4363 |          8688 | 17664
+DIGIT                               |             3 |            15 |            26 |            36 |    80
+PUNCTUATION                         |           101 |           160 |           237 |           344 |   842
+OTHER_JAPANESE                      |           114 |           139 |           153 |           162 |   568
+OTHER_KOREAN                        |             2 |            22 |           104 |           237 |   365
+OTHER_RARE_CHINESE_UTF8             |             1 |            10 |            42 |           126 |   179
+OTHER_UNKNOWN                       |           137 |           254 |           453 |           689 |  1533
+EMPTY                               |             3 |             3 |             4 |             4 |    14
+-----------------------------------------------------------------------------------------------------------
+TOTAL                               |          7834 |         15757 |         31684 |         63589 | 118864
+
+====================================================================================================
+CATEGORY EXPLANATIONS
+====================================================================================================
+
+LATIN_LETTER       - Pure Latin letters (a-zA-Z)
+LATIN_DIGIT        - Latin letters and digits combined
+DIGIT              - Pure digits (0-9)
+PUNCTUATION        - Punctuation marks and symbols
+
+CHINESE_NCHAR      - N pure Chinese characters (Standard CJK: U+4E00-U+9FFF)
+MIXED_WITH_CHINESE - Tokens containing Chinese chars mixed with other content
+
+OTHER_JAPANESE     - Japanese characters (Hiragana/Katakana)
+OTHER_KOREAN       - Korean characters (Hangul: U+AC00-U+D7AF)
+OTHER_RARE_CHINESE_UTF8 - Rare Chinese chars or UTF-8 byte fragments
+                     (CJK Extension: U+3400-U+4DBF, or byte notation <0xXX>)
+OTHER_UNKNOWN      - Other unclassified tokens
+
+====================================================================================================
+DETAILED BREAKDOWN BY TOKENIZER
+====================================================================================================
+
+
+====================================================================================================
+TOKENIZER: pinyin_toneless_subset100k_superbpe_8000_decoded.json
+====================================================================================================
+Total Vocabulary Size: 7834
+
+Type                                               Count   Percentage
+----------------------------------------------------------------------
+LATIN_LETTER                                        5684       72.56%
+LATIN_DIGIT                                         1789       22.84%
+OTHER_UNKNOWN                                        137        1.75%
+OTHER_JAPANESE                                       114        1.46%
+PUNCTUATION                                          101        1.29%
+EMPTY                                                  3        0.04%
+DIGIT                                                  3        0.04%
+OTHER_KOREAN                                           2        0.03%
+OTHER_RARE_CHINESE_UTF8                                1        0.01%
+
+Sample tokens by type:
+----------------------------------------------------------------------
+  LATIN_LETTER                            : 'A', 'B', 'C', 'shou ci ', 'ruo ', 'Name', 'sui ', 'array'
+  LATIN_DIGIT                             : '0', '1', '2', ' 000', '2010 nian ', '523', '446', '703'
+  OTHER_UNKNOWN                           : '_', '\n', 'é', 'û', 'Г', 'λ', 'о', 'र'
+  OTHER_JAPANESE                          : 'ー', 'ン', 'の', 'ェ', 'ゅ', 'す', 'キ', 'え'
+  PUNCTUATION                             : '!', '"', '#', '��', '●', '`', '∈', ')'
+  EMPTY                                   : ' ', '  ', '   '
+  DIGIT                                   : '²', '³', '１'
+  OTHER_KOREAN                            : '이', '아'
+  OTHER_RARE_CHINESE_UTF8                 : '𪸩'
+
+
+====================================================================================================
+TOKENIZER: pinyin_toneless_subset100k_superbpe_16000_decoded.json
+====================================================================================================
+Total Vocabulary Size: 15757
+
+Type                                               Count   Percentage
+----------------------------------------------------------------------
+LATIN_LETTER                                       12330       78.25%
+LATIN_DIGIT                                         2824       17.92%
+OTHER_UNKNOWN                                        254        1.61%
+PUNCTUATION                                          160        1.02%
+OTHER_JAPANESE                                       139        0.88%
+OTHER_KOREAN                                          22        0.14%
+DIGIT                                                 15        0.10%
+OTHER_RARE_CHINESE_UTF8                               10        0.06%
+EMPTY                                                  3        0.02%
+
+Sample tokens by type:
+----------------------------------------------------------------------
+  LATIN_LETTER                            : 'A', 'B', 'C', 'za ', 'zhan hou ', ' gong li ', 'hn', 'Gym'
+  LATIN_DIGIT                             : '0', '1', '2', ' 4', ' 00', '1510', 'DD53', '20000'
+  OTHER_UNKNOWN                           : '_', '\n', 'é', 'ห', 'क', 'ύ', 'ė', 'Б'
+  PUNCTUATION                             : '!', '"', '#', '\ufeff', '™', '∈', 'ि', '↔'
+  OTHER_JAPANESE                          : 'ー', 'ン', 'の', 'ぼ', 'ぜ', 'げ', 'く', 'ジ'
+  OTHER_KOREAN                            : '이', '아', '한', '성', '국', '대', '스', '야'
+  DIGIT                                   : '²', '³', '１', '¹', '８', '０', '５', '③'
+  OTHER_RARE_CHINESE_UTF8                 : '𪸩', 'Ａ', '𬓋', 'Ｃ', 'Ｏ'
+  EMPTY                                   : ' ', '  ', '   '
+
+
+====================================================================================================
+TOKENIZER: pinyin_toneless_subset100k_superbpe_32000_decoded.json
+====================================================================================================
+Total Vocabulary Size: 31684
+
+Type                                               Count   Percentage
+----------------------------------------------------------------------
+LATIN_LETTER                                       26302       83.01%
+LATIN_DIGIT                                         4363       13.77%
+OTHER_UNKNOWN                                        453        1.43%
+PUNCTUATION                                          237        0.75%
+OTHER_JAPANESE                                       153        0.48%
+OTHER_KOREAN                                         104        0.33%
+OTHER_RARE_CHINESE_UTF8                               42        0.13%
+DIGIT                                                 26        0.08%
+EMPTY                                                  4        0.01%
+
+Sample tokens by type:
+----------------------------------------------------------------------
+  LATIN_LETTER                            : 'A', 'B', 'C', ' de yi xie ', 'se lie', 'court', 'nge', ' jiang'
+  LATIN_DIGIT                             : '0', '1', '2', '1990 nian dai ', ' 2002 nian ', '2590', '1075', '2390'
+  OTHER_UNKNOWN                           : '_', '\n', 'é', 'ᵝ', ' é', 'Φ', 'ʂ', 'ê'
+  PUNCTUATION                             : '!', '"', '#', 'ّ', '‒', '---', '•', '♡'
+  OTHER_JAPANESE                          : 'ー', 'ン', 'の', 'ぱ', 'ぞ', 'ぼ', 'エ', 'う'
+  OTHER_KOREAN                            : '이', '아', '한', '거', '먼', '일', '전', '여'
+  OTHER_RARE_CHINESE_UTF8                 : '𪸩', 'Ａ', '𬓋', '𫄬', '䭏', 'Ｄ', 'Ｘ', '𫊻'
+  DIGIT                                   : '²', '³', '１', '⒈', '⒉', '⁵', '⑨', '２'
+  EMPTY                                   : ' ', '  ', '   '
+
+
+====================================================================================================
+TOKENIZER: pinyin_toneless_subset100k_superbpe_64000_decoded.json
+====================================================================================================
+Total Vocabulary Size: 63589
+
+Type                                               Count   Percentage
+----------------------------------------------------------------------
+LATIN_LETTER                                       53303       83.82%
+LATIN_DIGIT                                         8688       13.66%
+OTHER_UNKNOWN                                        689        1.08%
+PUNCTUATION                                          344        0.54%
+OTHER_KOREAN                                         237        0.37%
+OTHER_JAPANESE                                       162        0.25%
+OTHER_RARE_CHINESE_UTF8                              126        0.20%
+DIGIT                                                 36        0.06%
+EMPTY                                                  4        0.01%
+
+Sample tokens by type:
+----------------------------------------------------------------------
+  LATIN_LETTER                            : 'A', 'B', 'C', 'zhuan xing ', ' bu shao', 'Clid', 'zeng ', 'brough'
+  LATIN_DIGIT                             : '0', '1', '2', 'lv wei 0', '18 shi ji ', '2992', '38D8', '2138'
+  OTHER_UNKNOWN                           : '_', '\n', 'é', 'β ', ' и', 'ꜣ', 'Х', 'ม'
+  PUNCTUATION                             : '!', '"', '#', '⌋', '-...-', '⇋', 'ّ', '....'
+  OTHER_KOREAN                            : '이', '아', '한', '쉬', '키', '면', '람', '울'
+  OTHER_JAPANESE                          : 'ー', 'ン', 'の', ' ン ', ' ん', 'ょ', 'ヌ', 'う'
+  OTHER_RARE_CHINESE_UTF8                 : '𪸩', 'Ａ', '𬓋', '㗎', '𭎂', 'Ｉ', '𐭊', 'Ｇ'
+  DIGIT                                   : '²', '³', '１', '⒋', '⒌', '９', '０', '２'
+  EMPTY                                   : ' ', '  ', '   '
+
+
+====================================================================================================
+CATEGORY EXPLANATIONS
+====================================================================================================
+
+LATIN_LETTER       - Pure Latin letters (a-zA-Z)
+LATIN_DIGIT        - Latin letters and digits combined
+DIGIT              - Pure digits (0-9)
+PUNCTUATION        - Punctuation marks and symbols
+
+CHINESE_NCHAR      - N pure Chinese characters (Standard CJK: U+4E00-U+9FFF)
+MIXED_WITH_CHINESE - Tokens containing Chinese chars mixed with other content
+
+OTHER_JAPANESE     - Japanese characters (Hiragana/Katakana)
+OTHER_KOREAN       - Korean characters (Hangul: U+AC00-U+D7AF)
+OTHER_RARE_CHINESE_UTF8 - Rare Chinese chars or UTF-8 byte fragments
+                     (CJK Extension: U+3400-U+4DBF, or byte notation <0xXX>)
+OTHER_UNKNOWN      - Other unclassified tokens

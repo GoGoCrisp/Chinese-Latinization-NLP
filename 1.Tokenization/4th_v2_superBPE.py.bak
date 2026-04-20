@@ -1,0 +1,113 @@
+import os
+import shutil
+import subprocess
+
+# ===== Paths Configuration =====
+BASE_DIR = os.path.abspath(os.path.dirname(__file__))
+CORPUS_DIR = os.path.join(BASE_DIR, "corpora")
+OUTPUT_DIR = os.path.join(BASE_DIR, "superTokenizers_BPE")
+SUPERBPE_VENV_PYTHON = os.path.abspath(os.path.join(BASE_DIR, "..", "superbpe", "superbpe_venv", "bin", "python"))
+TRAIN_TOKENIZER_SCRIPT = os.path.abspath(os.path.join(BASE_DIR, "..", "superbpe", "train_tokenizer.py"))
+
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+# We use the regex from the SuperBPE paper.
+# Stage 1 regex: Strict word boundaries (don't cross spaces)
+# For Pinyin (letters + tone numbers or diacritics), we can use a general word extraction regex.
+# A regex that matches sequences of non-whitespace or sequences of whitespace:
+STAGE1_REGEX = r"\S+|\s+"
+
+# Stage 2 SuperBPE regex from their extend_tokenizer.sh
+# Allows crossing space boundaries when extracting high-frequency sequences:
+STAGE2_REGEX = r"\p{N}{1,3}| ?[^\s\p{L}\p{N}]{2,}[\r\n/]*| +(?!\S)"
+
+def ensure_corpus_dir(txt_file_path):
+    """
+    train_tokenizer.py requires a directory of txt files.
+    This creates a temp dir and symlinks our txt file there.
+    """
+    parent_dir = os.path.dirname(txt_file_path)
+    base_name = os.path.basename(txt_file_path)
+    stem = os.path.splitext(base_name)[0]
+    
+    tmp_dir = os.path.join(parent_dir, f"{stem}_dir")
+    os.makedirs(tmp_dir, exist_ok=True)
+    
+    symlink_path = os.path.join(tmp_dir, base_name)
+    if not os.path.exists(symlink_path):
+        os.symlink(os.path.abspath(txt_file_path), symlink_path)
+        
+    return tmp_dir
+
+def run_superbpe_pipeline(corpus_path, total_vocab_size, name):
+    t_point = int(total_vocab_size * 0.90)
+    print(f"\n{'='*50}\nStarting SuperBPE Pipeline for {name} ({total_vocab_size//1000}k)\n{'='*50}")
+    
+    # 1. Setup corpus dir
+    corpus_dir = ensure_corpus_dir(corpus_path)
+    
+    # 2. Stage 1 Output Dir
+    stage1_out = os.path.join(OUTPUT_DIR, f"{name}_stage1_{total_vocab_size}")
+    
+    print(f"\n[Stage 1] Training base BPE to {total_vocab_size} (will truncate later)...")
+    if not os.path.exists(os.path.join(stage1_out, "tokenizer.json")):
+        cmd1 = [
+            SUPERBPE_VENV_PYTHON, TRAIN_TOKENIZER_SCRIPT,
+            "--output_dir", stage1_out,
+            "--corpus_dir", corpus_dir,
+            "--vocab_size", str(total_vocab_size), # We train to full size, but will truncate merges for stage 2
+            "--regex_string", STAGE1_REGEX
+        ]
+        subprocess.run(cmd1, check=True)
+    else:
+        print("Stage 1 completed previously. Skipping.")
+
+    # 3. Stage 2 prep: Truncate merges.txt to transit point
+    stage2_out = os.path.join(OUTPUT_DIR, f"{name}_superbpe_{total_vocab_size}")
+    os.makedirs(stage2_out, exist_ok=True)
+    
+    merges_txt = os.path.join(stage1_out, "merges.txt")
+    meta_json = os.path.join(stage1_out, "meta.json")
+    
+    stage2_merges = os.path.join(stage2_out, "merges.txt")
+    stage2_meta = os.path.join(stage2_out, "meta.json")
+    
+    print(f"\n[Stage 2 Prep] Inheriting top {t_point} merges from Stage 1...")
+    # head -n (t_point + 1) merges.txt > stage2/merges.txt
+    # (+1 because the first line is the #version header tag)
+    with open(merges_txt, "r", encoding="utf-8") as f_in:
+        lines = f_in.readlines()
+        
+    with open(stage2_merges, "w", encoding="utf-8") as f_out:
+        f_out.writelines(lines[:t_point + 1])
+        
+    shutil.copy(meta_json, stage2_meta)
+    
+    # 4. Stage 2 Output Dir (Extending)
+    print(f"\n[Stage 2] Extending tokenizer to {total_vocab_size} with SuperBPE regex...")
+    cmd2 = [
+        SUPERBPE_VENV_PYTHON, TRAIN_TOKENIZER_SCRIPT,
+        "--output_dir", stage2_out,
+        "--vocab_size", str(total_vocab_size),
+        "--regex_string", STAGE2_REGEX
+    ]
+    subprocess.run(cmd2, check=True)
+    
+    print(f"\n✅ Finished Pipeline for {name} ({total_vocab_size//1000}k). Saved to {stage2_out}")
+
+if __name__ == "__main__":
+    corpora = {
+        "pinyin_toned": os.path.join(CORPUS_DIR, "pinyin_toned_spaced_train90.txt"),
+        "pinyin_toneless": os.path.join(CORPUS_DIR, "pinyin_toneless_spaced_train90.txt"),
+        "pinyin_diacritic": os.path.join(CORPUS_DIR, "pinyin_diacritic_spaced_train90.txt")
+    }
+
+    vocab_sizes = [8000, 16000, 32000, 64000]
+
+    for v_size in vocab_sizes:
+        for name, path in corpora.items():
+            if not os.path.exists(path):
+                print(f"⚠️ Missing file: {path}")
+                continue
+            run_superbpe_pipeline(path, v_size, name)
+
