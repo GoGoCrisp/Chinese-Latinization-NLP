@@ -1,0 +1,200 @@
+TABLE 2 VOCABULARY COMPOSITION ANALYSIS - SUPERBPE
+====================================================================================================
+
+Counts are mutually exclusive at the leaf-category level.
+The SUB-SYLLABLE FRAGMENTS row is a subtotal of initials, finals, and other partial sequences.
+SINGLE CJK CHARACTERS consumes 1-character Chinese tokens, so 1-SYLLABLE / 1-CHAR does not recount them.
+CROSS-WORD MERGES for pinyin-toned tokenizers are valid multi-syllable pinyin tokens whose syllable sequence is not found among same-size Chinese-origin vocabulary tokens converted to numbered-tone pinyin.
+
+Token Category                          | Chinese 8K | Chinese 16K | Chinese 32K | Chinese 64K | Pinyin-Toned 8K | Pinyin-Toned 16K | Pinyin-Toned 32K | Pinyin-Toned 64K
+----------------------------------------+------------+-------------+-------------+-------------+-----------------+------------------+------------------+-----------------
+Base inventory                          |            |             |             |             |                 |                  |                  |                 
+SINGLE LETTERS (A-Z)                    | 93         | 104         | 115         | 137         | 181             | 235              | 302              | 347             
+SINGLE CJK CHARACTERS                   | 2415       | 3181        | 4021        | 4938        | 0               | 0                | 0                | 0               
+DIGITS                                  | 185        | 294         | 391         | 694         | 252             | 552              | 971              | 2077            
+PUNCTUATION                             | 131        | 202         | 309         | 472         | 54              | 66               | 73               | 94              
+Sub-syllable / sub-character units      |            |             |             |             |                 |                  |                  |                 
+SUB-SYLLABLE FRAGMENTS                  | 260        | 703         | 1560        | 3425        | 215             | 568              | 1697             | 4326            
+(initials: zh, ch, sh, ...)             | 7          | 10          | 12          | 14          | 13              | 15               | 21               | 25              
+(finals: ong, ang, ian, ...)            | 13         | 20          | 27          | 35          | 11              | 23               | 38               | 50              
+(other partial sequences)               | 240        | 673         | 1521        | 3376        | 191             | 530              | 1638             | 4251            
+Syllable-level / character-level tokens |            |             |             |             |                 |                  |                  |                 
+1-SYLLABLE / 1-CHAR TOKENS              | 0          | 0           | 0           | 0           | 104             | 161              | 232              | 355             
+1-SYLLABLE + TONE NUMBER                | 0          | 0           | 0           | 0           | 2481            | 3123             | 3746             | 4366            
+Multi-syllable / multi-character tokens |            |             |             |             |                 |                  |                  |                 
+2-SYLLABLE / 2-CHAR                     | 3481       | 7721        | 15322       | 28038       | 3460            | 7887             | 15805            | 29606           
+3-SYLLABLE / 3-CHAR                     | 552        | 1952        | 5374        | 13309       | 331             | 1254             | 3634             | 9274            
+4-SYLLABLE / 4-CHAR                     | 97         | 446         | 1701        | 5753        | 54              | 261              | 928              | 3257            
+5-SYLLABLE / 5-CHAR                     | 23         | 100         | 389         | 1344        | 19              | 49               | 203              | 732             
+6+-SYLLABLE / 6+-CHAR                   | 42         | 125         | 395         | 1349        | 33              | 90               | 262              | 826             
+Cross-boundary and mixed tokens         |            |             |             |             |                 |                  |                  |                 
+CROSS-WORD MERGES                       | 0          | 0           | 0           | 0           | 374             | 908              | 2120             | 4918            
+MIXED (LATIN + CJK)                     | 5          | 12          | 51          | 164         | 0               | 0                | 0                | 0               
+Other                                   |            |             |             |             |                 |                  |                  |                 
+JAPANESE / KOREAN / RARE CJK            | 1          | 9           | 51          | 123         | 1               | 8                | 51               | 172             
+OTHER / UNKNOWN                         | 303        | 724         | 1867        | 3753        | 318             | 702              | 1791             | 3413            
+Total                                   | 7588       | 15573       | 31546       | 63499       | 7877            | 15864            | 31815            | 63763           
+
+SANITY CHECKS
+====================================================================================================
+CEDICT pinyin sequences loaded: 101811
+Merged char pinyin entries loaded: 44376
+chinese        8000: leaf_total=7588   vocab_size=7588   OK
+chinese       16000: leaf_total=15573  vocab_size=15573  OK
+chinese       32000: leaf_total=31546  vocab_size=31546  OK
+chinese       64000: leaf_total=63499  vocab_size=63499  OK
+pinyin_toned   8000: leaf_total=7877   vocab_size=7877   OK
+pinyin_toned  16000: leaf_total=15864  vocab_size=15864  OK
+pinyin_toned  32000: leaf_total=31815  vocab_size=31815  OK
+pinyin_toned  64000: leaf_total=63763  vocab_size=63763  OK
+
+SAMPLE TOKENS BY LEAF CATEGORY
+====================================================================================================
+
+chinese 8000
+--------------------------------------------------------------------------------
+SINGLE LETTERS (A-Z)                   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
+SINGLE CJK CHARACTERS                  '的', '年', '在', '为', '一', '中', '国', '人'
+DIGITS                                 '0', '1', '2', '3', '4', '5', '6', '7'
+PUNCTUATION                            '!', '"', '#', '$', '%', '&', "'", '('
+(initials: zh, ch, sh, ...)            'ch', 'zh', 'Ch', ' zh', 'sh', ' Ch', 'Sh'
+(finals: ong, ang, ian, ...)           'in', 'ing', 'un', 'IN', 'In', 'ia', 'ong', 'ian'
+(other partial sequences)              'or', 'on', 'ar', 'al', 'at', 'st', 'for', 'ic'
+2-SYLLABLE / 2-CHAR                    '一个', '中国', '美国', '人口', '位于', '政府', '大学', '使用'
+3-SYLLABLE / 3-CHAR                    '的一个', '委员会', '共和国', '俄罗斯', '乌克兰', '是一个', '面积为', '是位于'
+4-SYLLABLE / 4-CHAR                    '平方公里', '平方千米', '人口密度', '中华民国', '中国大陆', '政治人物', '海拔高度', '人口普查'
+5-SYLLABLE / 5-CHAR                    '人民共和国', '的一个市镇', '是位于美国', '中国共产党', '接壤的市镇', '每平方公里', '邮政编码为', '市镇编码为'
+6+-SYLLABLE / 6+-CHAR                  '中华人民共和国', '美国人口普查', '省的一个市镇', '文物保护单位', '奥林匹克运动会', '人口密度为每', '人口数量为人', '人口密度每平方公里'
+MIXED (LATIN + CJK)                    'INSEE市镇编码为', '为UTC', '即UTC', '的时区为UTC', '而该地所采用的时区为UTC'
+JAPANESE / KOREAN / RARE CJK           '・'
+OTHER / UNKNOWN                        '\n', ' ', '\x7f', '0年', '1年', '月2', '5年', '4年'
+
+chinese 16000
+--------------------------------------------------------------------------------
+SINGLE LETTERS (A-Z)                   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
+SINGLE CJK CHARACTERS                  '的', '年', '在', '为', '一', '中', '国', '人'
+DIGITS                                 '0', '1', '2', '3', '4', '5', '6', '7'
+PUNCTUATION                            '!', '"', '#', '$', '%', '&', "'", '('
+(initials: zh, ch, sh, ...)            'zh', 'ch', 'Ch', ' zh', ' Ch', 'sh', 'Sh', 'CH'
+(finals: ong, ang, ian, ...)           'in', 'ing', 'un', 'IN', 'In', 'ia', 'ong', ' in'
+(other partial sequences)              'or', 'on', 'ar', 'al', 'at', 'es', 'for', 'ic'
+2-SYLLABLE / 2-CHAR                    '一个', '中国', '美国', '人口', '位于', '政府', '大学', '使用'
+3-SYLLABLE / 3-CHAR                    '的一个', '委员会', '共和国', '俄罗斯', '平方千', '乌克兰', '是一个', '面积为'
+4-SYLLABLE / 4-CHAR                    '平方公里', '平方千米', '人口密度', '中华民国', '中国大陆', '政治人物', '海拔高度', '人口普查'
+5-SYLLABLE / 5-CHAR                    '人民共和国', '的一个市镇', '是位于美国', '中国共产党', '接壤的市镇', '每平方公里', '邮政编码为', '市镇编码为'
+6+-SYLLABLE / 6+-CHAR                  '中华人民共和国', '美国人口普查', '省的一个市镇', '文物保护单位', '奥林匹克运动会', '人口密度为每', '人口数量为人', '人口密度每平方公里'
+MIXED (LATIN + CJK)                    'INSEE市镇编码为', '为UTC', '即UTC', '的时区为UTC', '而该地所采用的时区为UTC', '其B1900', '的M', '又名BD'
+JAPANESE / KOREAN / RARE CJK           '・', 'ー', 'ン', 'の', 'い', 'ス', 'ん', 'イ'
+OTHER / UNKNOWN                        '\n', ' ', '\x7f', '0年', '1年', '月2', '5年', '4年'
+
+chinese 32000
+--------------------------------------------------------------------------------
+SINGLE LETTERS (A-Z)                   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
+SINGLE CJK CHARACTERS                  '的', '年', '在', '为', '一', '中', '国', '人'
+DIGITS                                 '0', '1', '2', '3', '4', '5', '6', '7'
+PUNCTUATION                            '!', '"', '#', '$', '%', '&', "'", '('
+(initials: zh, ch, sh, ...)            'ch', 'Ch', 'zh', ' zh', ' Ch', 'sh', 'Sh', 'CH'
+(finals: ong, ang, ian, ...)           'in', 'ing', 'un', 'IN', 'In', 've', 'ia', ' in'
+(other partial sequences)              'or', 'on', 'ar', 'al', 'at', 'es', 'for', 'ic'
+2-SYLLABLE / 2-CHAR                    '一个', '中国', '美国', '人口', '位于', '政府', '大学', '使用'
+3-SYLLABLE / 3-CHAR                    '的一个', '委员会', '共和国', '俄罗斯', '平方千', '乌克兰', '面积为', '自己的'
+4-SYLLABLE / 4-CHAR                    '平方公里', '人口密度', '平方千米', '中华民国', '中国大陆', '政治人物', '海拔高度', '人口普查'
+5-SYLLABLE / 5-CHAR                    '人民共和国', '的一个市镇', '是位于美国', '中国共产党', '接壤的市镇', '每平方公里', '邮政编码为', '市镇编码为'
+6+-SYLLABLE / 6+-CHAR                  '中华人民共和国', '省的一个市镇', '美国人口普查', '文物保护单位', '奥林匹克运动会', '人口密度为每', '人口数量为人', '人口密度每平方公里'
+MIXED (LATIN + CJK)                    'INSEE市镇编码为', '为UTC', '即UTC', '的时区为UTC', '而该地所采用的时区为UTC', '其B1900', '的M', '又名BD'
+JAPANESE / KOREAN / RARE CJK           '・', 'ー', 'ン', 'の', 'い', 'ス', 'ん', 'イ'
+OTHER / UNKNOWN                        '\n', ' ', '\x7f', '0年', '1年', '月2', '5年', '4年'
+
+chinese 64000
+--------------------------------------------------------------------------------
+SINGLE LETTERS (A-Z)                   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
+SINGLE CJK CHARACTERS                  '的', '年', '在', '为', '一', '中', '国', '人'
+DIGITS                                 '0', '1', '2', '3', '4', '5', '6', '7'
+PUNCTUATION                            '!', '"', '#', '$', '%', '&', "'", '('
+(initials: zh, ch, sh, ...)            'ch', 'Ch', 'Sh', 'sh', 'zh', ' Ch', ' zh', 'CH'
+(finals: ong, ang, ian, ...)           'in', 'ing', 'un', 'IN', 'In', 've', 'ia', 'ie'
+(other partial sequences)              'or', 'on', 'ar', 'al', 'at', 'es', 'for', 'ic'
+2-SYLLABLE / 2-CHAR                    '一个', '中国', '美国', '人口', '位于', '政府', '大学', '使用'
+3-SYLLABLE / 3-CHAR                    '的一个', '委员会', '共和国', '俄罗斯', '平方千', '乌克兰', '面积为', '自己的'
+4-SYLLABLE / 4-CHAR                    '平方公里', '人口密度', '平方千米', '中华民国', '中国大陆', '政治人物', '海拔高度', '人口普查'
+5-SYLLABLE / 5-CHAR                    '人民共和国', '的一个市镇', '人口数量为', '中国共产党', '接壤的市镇', '每平方公里', '陆地面积为', '水域面积为'
+6+-SYLLABLE / 6+-CHAR                  '中华人民共和国', '省的一个市镇', '美国人口普查', '文物保护单位', '奥林匹克运动会', '人口密度为每', '人口密度每平方公里', '人口密度为每平方千米'
+MIXED (LATIN + CJK)                    'INSEE市镇编码', 'INSEE市镇编码为', '为UTC', '即UTC', '的时区为UTC', '所采用的时区为UTC', '而该地所采用的时区为UTC', '其B1900'
+JAPANESE / KOREAN / RARE CJK           '・', 'ー', 'ン', 'の', 'い', 'ス', 'ん', 'イ'
+OTHER / UNKNOWN                        '\n', ' ', '\x7f', '0年', '1年', '月2', '5年', '4年'
+
+pinyin_toned 8000
+--------------------------------------------------------------------------------
+SINGLE LETTERS (A-Z)                   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
+DIGITS                                 '0', '1', '2', '3', '4', '5', '6', '7'
+PUNCTUATION                            '!', '"', '#', '$', '%', '&', "'", '('
+(initials: zh, ch, sh, ...)            'sh', 'zh', 'ch', ' zh', ' ch', ' zh ', ' sh', '   zh'
+(finals: ong, ang, ian, ...)           'uo', 'in', 'un', 'ing', 'in ', 'IN', '   in', 'In'
+(other partial sequences)              'we', 'or', 'on', 'ar', 'for', 'al', 'st', 'mula'
+1-SYLLABLE / 1-CHAR TOKENS             'ng', 'an', 'ji', 'ao', 'xi', 'de', 'en', 'yu'
+1-SYLLABLE + TONE NUMBER               'ng1', 'ng2', 'ng4', 'an2', 'an4', 'e4', 'ng3', 'an1'
+2-SYLLABLE / 2-CHAR                    'yi2 ge4 ', 'mei3 guo2 ', ' zhong1 guo2 ', ' wei4 yu2 ', 'bao1 kuo4', ' ta1 men', ' gong1 li3 ', 'yan2 jiu1'
+3-SYLLABLE / 3-CHAR                    'gong4 he2 guo2 ', 'wei3 yuan2 hui4 ', 'e2 luo2 si1 ', ' de yi2 ge4 ', 'mian4 ji1 wei4 ', ' shi4 wei4 yu2 ', 'yun4 dong4 yuan2 ', ' de yi2 ge4'
+4-SYLLABLE / 4-CHAR                    ' ping2 fang1 gong1 li3 ', ' ping2 fang1 qian1 mi3 ', 'zheng4 zhi4 ren2 wu4 ', ' ren2 kou3 mi4 du4 ', ' zhong1 hua2 min2 guo2 ', ' hai3 ba2 gao1 du4 ', ' you3 xian4 gong1 si1 ', 'ao4 lin2 pi3 ke4 '
+5-SYLLABLE / 5-CHAR                    ' de yi2 ge4 shi4 zhen4 ', ' shi4 wei4 yu2 mei3 guo2 ', 'mei3 ping2 fang1 gong1 li3 ', 'jie1 rang3 de shi4 zhen4 ', 'you2 zheng4 bian1 ma3 wei4 ', ' shi4 zhen4 bian1 ma3 wei4 ', 'sheng3 ji2 xuan3 qu1 wei4 ', 'lu4 di4 mian4 ji1 wei4 '
+6+-SYLLABLE / 6+-CHAR                  ' zhong1 hua2 ren2 min2 gong4 he2 guo2 ', 'sheng3 de yi2 ge4 shi4 zhen4 ', 'wen2 wu4 bao3 hu4 dan1 wei4 ', 'ren2 kou3 shu4 liang4 wei4 ren2 ', 'ao4 lin2 pi3 ke4 yun4 dong4 hui4 ', ' ren2 kou3 mi4 du4 mei3 ping2 fang1 gong1 li3 ', ' ren2 kou3 mi4 du4 wei4 mei3', 'mei3 guo2 ren2 kou3 pu3 cha2 de shu4 ju4 '
+CROSS-WORD MERGES                      ' he2 guo2 ', 'hua2 ren2 min2 ', ' de gong1 ', 'wu1 ke4 ', 'hua2 ren2 min2 gong4 he2 guo2 ', ' de cheng2 ', 'yuan2 de ', 'yi4 de '
+JAPANESE / KOREAN / RARE CJK           '・'
+OTHER / UNKNOWN                        '\n', ' ', '\x7f', 'i4', 'u4', '  ', 'i2', 'i3'
+
+pinyin_toned 16000
+--------------------------------------------------------------------------------
+SINGLE LETTERS (A-Z)                   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
+DIGITS                                 '0', '1', '2', '3', '4', '5', '6', '7'
+PUNCTUATION                            '!', '"', '#', '$', '%', '&', "'", '('
+(initials: zh, ch, sh, ...)            'sh', 'zh', 'ch', 'Ch', 'Sh', 'zh ', ' zh ', '   zh '
+(finals: ong, ang, ian, ...)           'uo', 'in', 'IN', 've', 'In', 'ing', 'un', 'ia'
+(other partial sequences)              'we', 'or', 'on', 'ar', 'for', 'al', 'st', 'mula'
+1-SYLLABLE / 1-CHAR TOKENS             'ng', 'an', 'ji', 'ao', 'xi', 'de', 'en', 'yu'
+1-SYLLABLE + TONE NUMBER               'ng1', 'ng2', 'ng4', 'an2', 'an4', 'e4', 'ng3', 'an1'
+2-SYLLABLE / 2-CHAR                    'yi2 ge4 ', 'mei3 guo2 ', ' zhong1 guo2 ', ' wei4 yu2 ', 'bao1 kuo4', ' ta1 men', ' gong1 li3 ', 'yan2 jiu1'
+3-SYLLABLE / 3-CHAR                    'gong4 he2 guo2 ', 'wei3 yuan2 hui4 ', 'e2 luo2 si1 ', ' de yi2 ge4 ', 'mian4 ji1 wei4 ', ' shi4 wei4 yu2 ', 'yun4 dong4 yuan2 ', ' de yi2 ge4'
+4-SYLLABLE / 4-CHAR                    ' ping2 fang1 gong1 li3 ', ' ping2 fang1 qian1 mi3 ', 'zheng4 zhi4 ren2 wu4 ', ' ren2 kou3 mi4 du4 ', ' hai3 ba2 gao1 du4 ', ' zhong1 hua2 min2 guo2 ', ' you3 xian4 gong1 si1 ', 'ao4 lin2 pi3 ke4 '
+5-SYLLABLE / 5-CHAR                    ' de yi2 ge4 shi4 zhen4 ', ' shi4 wei4 yu2 mei3 guo2 ', 'mei3 ping2 fang1 gong1 li3 ', 'you2 zheng4 bian1 ma3 wei4 ', ' shi4 zhen4 bian1 ma3 wei4 ', 'jie1 rang3 de shi4 zhen4 ', 'sheng3 ji2 xuan3 qu1 wei4 ', 'lu4 di4 mian4 ji1 wei4 '
+6+-SYLLABLE / 6+-CHAR                  ' zhong1 hua2 ren2 min2 gong4 he2 guo2 ', 'sheng3 de yi2 ge4 shi4 zhen4 ', 'wen2 wu4 bao3 hu4 dan1 wei4 ', 'ren2 kou3 shu4 liang4 wei4 ren2 ', 'ao4 lin2 pi3 ke4 yun4 dong4 hui4 ', ' ren2 kou3 mi4 du4 mei3 ping2 fang1 gong1 li3 ', ' ren2 kou3 mi4 du4 wei4 mei3', 'mei3 guo2 ren2 kou3 pu3 cha2 de shu4 ju4 '
+CROSS-WORD MERGES                      ' he2 guo2 ', 'hua2 ren2 min2 ', ' de gong1 ', 'wu1 ke4 ', 'hua2 ren2 min2 gong4 he2 guo2 ', ' de cheng2 ', 'yi4 de ', ' ren2 kou3 mi4 '
+JAPANESE / KOREAN / RARE CJK           '・', ' ー', ' ン', ' ん', ' ス', ' イ', ' い', 'の'
+OTHER / UNKNOWN                        '\n', ' ', '\x7f', 'i4', 'u4', '  ', 'i2', 'i3'
+
+pinyin_toned 32000
+--------------------------------------------------------------------------------
+SINGLE LETTERS (A-Z)                   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
+DIGITS                                 '0', '1', '2', '3', '4', '5', '6', '7'
+PUNCTUATION                            '!', '"', '#', '$', '%', '&', "'", '('
+(initials: zh, ch, sh, ...)            'sh', 'zh', 'ch', 'Ch', 'Sh', 'CH', 'SH', 'zh '
+(finals: ong, ang, ian, ...)           'uo', 'in', 'IN', 've', 'In', 'ing', 'un', 'ia'
+(other partial sequences)              'we', 'or', 'on', 'ar', 'for', 'al', 'st', 'mula'
+1-SYLLABLE / 1-CHAR TOKENS             'ng', 'an', 'ji', 'ao', 'xi', 'de', 'en', 'yu'
+1-SYLLABLE + TONE NUMBER               'ng1', 'ng2', 'ng4', 'an2', 'an4', 'e4', 'ng3', 'an1'
+2-SYLLABLE / 2-CHAR                    'yi2 ge4 ', 'mei3 guo2 ', ' zhong1 guo2 ', ' wei4 yu2 ', 'bao1 kuo4', ' ta1 men', ' gong1 li3 ', 'yan2 jiu1'
+3-SYLLABLE / 3-CHAR                    'gong4 he2 guo2 ', 'wei3 yuan2 hui4 ', 'e2 luo2 si1 ', ' de yi2 ge4 ', 'mian4 ji1 wei4 ', ' shi4 wei4 yu2 ', 'yun4 dong4 yuan2 ', ' de yi2 ge4'
+4-SYLLABLE / 4-CHAR                    ' ping2 fang1 gong1 li3 ', ' ping2 fang1 qian1 mi3 ', 'zheng4 zhi4 ren2 wu4 ', ' ren2 kou3 mi4 du4 ', ' hai3 ba2 gao1 du4 ', ' zhong1 hua2 min2 guo2 ', ' you3 xian4 gong1 si1 ', 'ao4 lin2 pi3 ke4 '
+5-SYLLABLE / 5-CHAR                    ' de yi2 ge4 shi4 zhen4 ', ' shi4 wei4 yu2 mei3 guo2 ', ' ren2 kou3 mi4 du4 wei4 ', 'mei3 ping2 fang1 gong1 li3 ', 'you2 zheng4 bian1 ma3 wei4 ', ' shi4 zhen4 bian1 ma3 wei4 ', 'jie1 rang3 de shi4 zhen4 ', 'sheng3 ji2 xuan3 qu1 wei4 '
+6+-SYLLABLE / 6+-CHAR                  ' zhong1 hua2 ren2 min2 gong4 he2 guo2 ', 'sheng3 de yi2 ge4 shi4 zhen4 ', 'wen2 wu4 bao3 hu4 dan1 wei4 ', 'ren2 kou3 shu4 liang4 wei4 ren2 ', 'ao4 lin2 pi3 ke4 yun4 dong4 hui4 ', ' ren2 kou3 mi4 du4 mei3 ping2 fang1 gong1 li3 ', ' ren2 kou3 mi4 du4 wei4 mei3', 'mei3 guo2 ren2 kou3 pu3 cha2 de shu4 ju4 '
+CROSS-WORD MERGES                      ' he2 guo2 ', 'hua2 ren2 min2 ', 'wu1 ke4 ', 'hua2 ren2 min2 gong4 he2 guo2 ', ' de cheng2 ', ' ren2 kou3 mi4 ', ' shi4 di4 ', ' ri4 zai4 '
+JAPANESE / KOREAN / RARE CJK           '・', 'ー', 'ン', 'の', 'い', 'ス', 'ん', 'イ'
+OTHER / UNKNOWN                        '\n', ' ', '\x7f', 'i4', 'u4', '  ', 'i2', 'i3'
+
+pinyin_toned 64000
+--------------------------------------------------------------------------------
+SINGLE LETTERS (A-Z)                   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
+DIGITS                                 '0', '1', '2', '3', '4', '5', '6', '7'
+PUNCTUATION                            '!', '"', '#', '$', '%', '&', "'", '('
+(initials: zh, ch, sh, ...)            'sh', 'zh', 'ch', 'Ch', 'Sh', 'CH', 'SH', 'zh '
+(finals: ong, ang, ian, ...)           'uo', 'in', 'IN', 've', 'In', 'ing', 'un', 'ia'
+(other partial sequences)              'we', 'or', 'on', 'ar', 'for', 'al', 'st', 'mula'
+1-SYLLABLE / 1-CHAR TOKENS             'ng', 'an', 'ji', 'ao', 'xi', 'de', 'en', 'yu'
+1-SYLLABLE + TONE NUMBER               'ng1', 'ng2', 'ng4', 'an2', 'an4', 'e4', 'ng3', 'an1'
+2-SYLLABLE / 2-CHAR                    'M1A1', 'yi2 ge4 ', 'mei3 guo2 ', ' zhong1 guo2 ', ' wei4 yu2 ', 'bao1 kuo4', ' ta1 men', ' gong1 li3 '
+3-SYLLABLE / 3-CHAR                    'gong4 he2 guo2 ', 'wei3 yuan2 hui4 ', 'e2 luo2 si1 ', ' de yi2 ge4 ', 'mian4 ji1 wei4 ', ' shi4 wei4 yu2 ', 'yun4 dong4 yuan2 ', ' de yi2 ge4'
+4-SYLLABLE / 4-CHAR                    ' ping2 fang1 gong1 li3 ', ' ping2 fang1 qian1 mi3 ', 'zheng4 zhi4 ren2 wu4 ', ' ren2 kou3 mi4 du4 ', ' hai3 ba2 gao1 du4 ', ' zhong1 hua2 min2 guo2 ', ' you3 xian4 gong1 si1 ', 'ao4 lin2 pi3 ke4 '
+5-SYLLABLE / 5-CHAR                    ' de yi2 ge4 shi4 zhen4 ', ' shi4 wei4 yu2 mei3 guo2 ', ' ren2 kou3 mi4 du4 wei4 ', 'mei3 ping2 fang1 gong1 li3 ', 'you2 zheng4 bian1 ma3 wei4 ', 'jie1 rang3 de shi4 zhen4 ', 'lu4 di4 mian4 ji1 wei4 ', 'shui3 yu4 mian4 ji1 wei4 '
+6+-SYLLABLE / 6+-CHAR                  ' zhong1 hua2 ren2 min2 gong4 he2 guo2 ', 'sheng3 de yi2 ge4 shi4 zhen4 ', 'wen2 wu4 bao3 hu4 dan1 wei4 ', 'ren2 kou3 shu4 liang4 wei4 ren2 ', 'ao4 lin2 pi3 ke4 yun4 dong4 hui4 ', ' ren2 kou3 mi4 du4 mei3 ping2 fang1 gong1 li3 ', ' ren2 kou3 mi4 du4 wei4 mei3', 'mei3 guo2 ren2 kou3 pu3 cha2 de shu4 ju4 '
+CROSS-WORD MERGES                      ' he2 guo2 ', 'hua2 ren2 min2 ', 'wu1 ke4 ', 'hua2 ren2 min2 gong4 he2 guo2 ', ' ren2 kou3 mi4 ', ' de ji4 ', 'hua2 min2 guo2 ', ' nian2 zai4 '
+JAPANESE / KOREAN / RARE CJK           '・', 'ー', 'ン', 'の', 'い', 'ス', 'ん', 'イ'
+OTHER / UNKNOWN                        '\n', ' ', '\x7f', 'i4', 'u4', '  ', 'i2', 'i3'

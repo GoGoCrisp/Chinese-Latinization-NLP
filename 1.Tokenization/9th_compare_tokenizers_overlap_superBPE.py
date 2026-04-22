@@ -590,11 +590,13 @@ def compare_tokenizer_pair(vocab_a: dict, vocab_b: dict, vocab_c: dict, vocab_d:
                 candidates_in_vocab2.add(converted)
                 
             elif name1 == "B" and name2 == "C":
+                #pass
                 # B(无声调) → C(带数字)
                 # 直接保留token以备反向查找
                 candidates_in_vocab2.add(token1_clean)
                 
             elif name1 == "B" and name2 == "D":
+                #pass
                 # B(无声调) → D(带声调符号)
                 # 直接保留token以备反向查找
                 candidates_in_vocab2.add(token1_clean)
@@ -708,6 +710,14 @@ def compare_tokenizer_pair(vocab_a: dict, vocab_b: dict, vocab_c: dict, vocab_d:
                     mappings[converted] = [token2_clean]
                 elif token2_clean not in mappings[converted]:
                     mappings[converted].append(token2_clean)
+
+                # 修复N:1映射问题：当逆向映射成功时（确认为带有音调/符号的拼音），
+                # 应该删除原先由于直接前向字符串相等而产生的映射。
+                # 比如 C的 'yi1' 逆向映射到 B的 'yi'，则 B的 'yi1' 不应该映射到 C的 'yi1'
+                if token2_clean in mappings and token2_clean in mappings[token2_clean]:
+                    mappings[token2_clean].remove(token2_clean)
+                    if not mappings[token2_clean]:
+                        del mappings[token2_clean]
     
     # 对于CD，使用改进的精确音调匹配逻辑
     # 关键修复：D的不同声调符号对应不同的数字声调

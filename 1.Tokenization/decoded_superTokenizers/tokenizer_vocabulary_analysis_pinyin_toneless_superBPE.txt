@@ -8,17 +8,35 @@ Note: Pinyin tokens like 'zhishao', 'jinwang' are correct (correspond to Chinese
 
 Token Type                          | pinyin_tonele | pinyin_tonele | pinyin_tonele | pinyin_tonele | TOTAL
 ===========================================================================================================
-LATIN_LETTER                        |          5684 |         12330 |         26302 |         53303 | 97619
-LATIN_DIGIT                         |          1789 |          2824 |          4363 |          8688 | 17664
-DIGIT                               |             3 |            15 |            26 |            36 |    80
-PUNCTUATION                         |           101 |           160 |           237 |           344 |   842
-OTHER_JAPANESE                      |           114 |           139 |           153 |           162 |   568
-OTHER_KOREAN                        |             2 |            22 |           104 |           237 |   365
-OTHER_RARE_CHINESE_UTF8             |             1 |            10 |            42 |           126 |   179
-OTHER_UNKNOWN                       |           137 |           254 |           453 |           689 |  1533
-EMPTY                               |             3 |             3 |             4 |             4 |    14
+LATIN_LETTER                        |           476 |          1258 |          2819 |          5909 | 10462
+LATIN_DIGIT                         |           390 |           680 |          1224 |          2569 |  4863
+DIGIT                               |             0 |             0 |             2 |             4 |     6
+PUNCTUATION                         |            59 |            69 |            78 |           100 |   306
+PINYIN_1CHAR                        |          1360 |          1660 |          1885 |          2135 |  7040
+PINYIN_2CHAR                        |          4610 |          9214 |         16891 |         29385 | 60100
+PINYIN_3CHAR                        |           528 |          1742 |          5249 |         13795 | 21314
+PINYIN_4CHAR                        |            80 |           363 |          1323 |          4333 |  6099
+PINYIN_5CHAR                        |            37 |            92 |           321 |          1029 |  1479
+PINYIN_6CHAR                        |            21 |            51 |           141 |           445 |   658
+PINYIN_7CHAR                        |             6 |            25 |            85 |           271 |   387
+PINYIN_8CHAR                        |             7 |            17 |            51 |           140 |   215
+PINYIN_9CHAR                        |             7 |            15 |            38 |           114 |   174
+PINYIN_10CHAR                       |             1 |             2 |            23 |            79 |   105
+PINYIN_11CHAR                       |             6 |             9 |            17 |            38 |    70
+PINYIN_12CHAR                       |             0 |             3 |             9 |            36 |    48
+PINYIN_13CHAR                       |             0 |             2 |             6 |            22 |    30
+PINYIN_14CHAR                       |             0 |             0 |             1 |             6 |     7
+PINYIN_15CHAR                       |             0 |             0 |             1 |             5 |     6
+PINYIN_16CHAR                       |             0 |             0 |             1 |             5 |     6
+PINYIN_19CHAR                       |             0 |             0 |             0 |             1 |     1
+PINYIN_21CHAR                       |             0 |             0 |             1 |             2 |     3
+PINYIN_WITH_DIGIT                   |           279 |           619 |          1495 |          2969 |  5362
+OTHER_JAPANESE                      |             1 |            16 |            80 |           182 |   279
+OTHER_KOREAN                        |             0 |             0 |             0 |             2 |     2
+OTHER_UNKNOWN                       |             2 |            20 |            64 |           177 |   263
+EMPTY                               |             3 |             3 |             3 |             3 |    12
 -----------------------------------------------------------------------------------------------------------
-TOTAL                               |          7834 |         15757 |         31684 |         63589 | 118864
+TOTAL                               |          7873 |         15860 |         31808 |         63756 | 119297
 
 ====================================================================================================
 CATEGORY EXPLANATIONS
@@ -30,6 +48,8 @@ DIGIT              - Pure digits (0-9)
 PUNCTUATION        - Punctuation marks and symbols
 
 CHINESE_NCHAR      - N pure Chinese characters (Standard CJK: U+4E00-U+9FFF)
+PINYIN_NCHAR       - N valid pinyin syllables (Space separated in token)
+PINYIN_WITH_DIGIT  - Combination of valid pinyin syllables and digits
 MIXED_WITH_CHINESE - Tokens containing Chinese chars mixed with other content
 
 OTHER_JAPANESE     - Japanese characters (Hiragana/Katakana)
@@ -46,121 +66,229 @@ DETAILED BREAKDOWN BY TOKENIZER
 ====================================================================================================
 TOKENIZER: pinyin_toneless_subset100k_superbpe_8000_decoded.json
 ====================================================================================================
-Total Vocabulary Size: 7834
+Total Vocabulary Size: 7873
 
 Type                                               Count   Percentage
 ----------------------------------------------------------------------
-LATIN_LETTER                                        5684       72.56%
-LATIN_DIGIT                                         1789       22.84%
-OTHER_UNKNOWN                                        137        1.75%
-OTHER_JAPANESE                                       114        1.46%
-PUNCTUATION                                          101        1.29%
+PINYIN_2CHAR                                        4610       58.55%
+PINYIN_1CHAR                                        1360       17.27%
+PINYIN_3CHAR                                         528        6.71%
+LATIN_LETTER                                         476        6.05%
+LATIN_DIGIT                                          390        4.95%
+PINYIN_WITH_DIGIT                                    279        3.54%
+PINYIN_4CHAR                                          80        1.02%
+PUNCTUATION                                           59        0.75%
+PINYIN_5CHAR                                          37        0.47%
+PINYIN_6CHAR                                          21        0.27%
+PINYIN_9CHAR                                           7        0.09%
+PINYIN_8CHAR                                           7        0.09%
+PINYIN_7CHAR                                           6        0.08%
+PINYIN_11CHAR                                          6        0.08%
 EMPTY                                                  3        0.04%
-DIGIT                                                  3        0.04%
-OTHER_KOREAN                                           2        0.03%
-OTHER_RARE_CHINESE_UTF8                                1        0.01%
+OTHER_UNKNOWN                                          2        0.03%
+PINYIN_10CHAR                                          1        0.01%
+OTHER_JAPANESE                                         1        0.01%
 
 Sample tokens by type:
 ----------------------------------------------------------------------
-  LATIN_LETTER                            : 'A', 'B', 'C', 'shou ci ', 'ruo ', 'Name', 'sui ', 'array'
-  LATIN_DIGIT                             : '0', '1', '2', ' 000', '2010 nian ', '523', '446', '703'
-  OTHER_UNKNOWN                           : '_', '\n', 'é', 'û', 'Г', 'λ', 'о', 'र'
-  OTHER_JAPANESE                          : 'ー', 'ン', 'の', 'ェ', 'ゅ', 'す', 'キ', 'え'
-  PUNCTUATION                             : '!', '"', '#', '��', '●', '`', '∈', ')'
+  PINYIN_2CHAR                            : ' de yi ', ' shi yi ', 'cheng wei ', 'liu chuan ', ' jiang xi ', 'jian dui ', ' shi da ', 'ju min '
+  PINYIN_1CHAR                            : 'a', 'e', 'm', '   huo ', ' long', ' pa ', 'zhui ', 'neng'
+  PINYIN_3CHAR                            : ' de yi ge ', 'gong he guo ', ' wei yuan hui ', 'sheng jie rang ', 'qu shi hou ', 'dang shi de ', 'dang xuan wei ', 'da li ya '
+  LATIN_LETTER                            : 'A', 'B', 'C', ' M ', 'ssi', 'Se', 'lt ', ' Q'
+  LATIN_DIGIT                             : '0', '1', '2', ' 150', '27 ', '12', '100 ', '1942'
+  PINYIN_WITH_DIGIT                       : '10 yue ', '12 yue ', '7 yue ', '   gen ju 2010 nian mei guo ren kou pu cha de shu ju ', '   2012 nian ', ' 2009 nian ', '1953 nian ', '1951 nian '
+  PINYIN_4CHAR                            : ' ping fang gong li ', ' ping fang qian mi ', 'zheng zhi ren wu ', 'gong chan zhu yi ', 'wu xian dian shi ', 'ma lai xi ya ', ' huo jiu shi zhen ', ' wei yu gai guo '
+  PUNCTUATION                             : '!', '"', '#', ' �', '℃', '─', ']', '..'
+  PINYIN_5CHAR                            : ' de yi ge shi zhen ', ' shi wei yu mei guo ', 'mei guo ren kou pu ', 'mian ji he ren kou ', 'sheng ren min zheng fu ', ' zhong guo gong chan dang ', 'zhuan de xiao xing xing ', 'chao zheng zhi ren wu '
+  PINYIN_6CHAR                            : 'hua ren min gong he guo ', 'sheng de yi ge shi zhen ', 'wen wu bao hu dan wei ', 'xia xia de yi ge xiang ', 'jia li fu ni ya zhou ', ' er shui yu mian ji wei ', 'wu zheng zhuang gan ran zhe ', 'she you xia ling shi jian '
+  PINYIN_9CHAR                            : ' ren kou mi du mei ping fang gong li ', 'yu shi de ren kou shu liang wei ren ', 'mei guo ren kou pu cha de shu ju ', 'xia ji ao lin pi ke yun dong hui ', 'xian de yi ge fei jian zhi di qu '
+  PINYIN_8CHAR                            : ' ren kou mi du wei mei ping fang ', 'suo shu de sheng ji xuan qu wei ', '   suo shu de sheng ji xuan qu wei ', 'xian de yi ge xing zheng zhen qu ', ' gai di de mian ji he ren kou '
+  PINYIN_7CHAR                            : ' zhong hua ren min gong he guo ', 'ao lin pi ke yun dong hui ', 'zhong hua ren min gong he guo ', ' zhong guo ren min jie fang jun ', 'ping jun hai ba gao du wei '
+  PINYIN_11CHAR                           : ' er ren kou mi du wei mei ping fang qian mi ', ' zhong hua ren min gong he guo zheng zhi ren wu ', 'suo chu de hai ba wei gao yu hai ping mian ', ' mu qian shang wei you ren gong yin zhong zai pei ', ' gai di de mian ji he ren kou jie wei zhi '
   EMPTY                                   : ' ', '  ', '   '
-  DIGIT                                   : '²', '³', '１'
-  OTHER_KOREAN                            : '이', '아'
-  OTHER_RARE_CHINESE_UTF8                 : '𪸩'
+  OTHER_UNKNOWN                           : '_', '\n'
+  PINYIN_10CHAR                           : ' tong shi gai di she you xia ling shi jian '
+  OTHER_JAPANESE                          : ' ー'
 
 
 ====================================================================================================
 TOKENIZER: pinyin_toneless_subset100k_superbpe_16000_decoded.json
 ====================================================================================================
-Total Vocabulary Size: 15757
+Total Vocabulary Size: 15860
 
 Type                                               Count   Percentage
 ----------------------------------------------------------------------
-LATIN_LETTER                                       12330       78.25%
-LATIN_DIGIT                                         2824       17.92%
-OTHER_UNKNOWN                                        254        1.61%
-PUNCTUATION                                          160        1.02%
-OTHER_JAPANESE                                       139        0.88%
-OTHER_KOREAN                                          22        0.14%
-DIGIT                                                 15        0.10%
-OTHER_RARE_CHINESE_UTF8                               10        0.06%
+PINYIN_2CHAR                                        9214       58.10%
+PINYIN_3CHAR                                        1742       10.98%
+PINYIN_1CHAR                                        1660       10.47%
+LATIN_LETTER                                        1258        7.93%
+LATIN_DIGIT                                          680        4.29%
+PINYIN_WITH_DIGIT                                    619        3.90%
+PINYIN_4CHAR                                         363        2.29%
+PINYIN_5CHAR                                          92        0.58%
+PUNCTUATION                                           69        0.44%
+PINYIN_6CHAR                                          51        0.32%
+PINYIN_7CHAR                                          25        0.16%
+OTHER_UNKNOWN                                         20        0.13%
+PINYIN_8CHAR                                          17        0.11%
+OTHER_JAPANESE                                        16        0.10%
+PINYIN_9CHAR                                          15        0.09%
+PINYIN_11CHAR                                          9        0.06%
 EMPTY                                                  3        0.02%
+PINYIN_12CHAR                                          3        0.02%
+PINYIN_10CHAR                                          2        0.01%
+PINYIN_13CHAR                                          2        0.01%
 
 Sample tokens by type:
 ----------------------------------------------------------------------
-  LATIN_LETTER                            : 'A', 'B', 'C', 'za ', 'zhan hou ', ' gong li ', 'hn', 'Gym'
-  LATIN_DIGIT                             : '0', '1', '2', ' 4', ' 00', '1510', 'DD53', '20000'
-  OTHER_UNKNOWN                           : '_', '\n', 'é', 'ห', 'क', 'ύ', 'ė', 'Б'
-  PUNCTUATION                             : '!', '"', '#', '\ufeff', '™', '∈', 'ि', '↔'
-  OTHER_JAPANESE                          : 'ー', 'ン', 'の', 'ぼ', 'ぜ', 'げ', 'く', 'ジ'
-  OTHER_KOREAN                            : '이', '아', '한', '성', '국', '대', '스', '야'
-  DIGIT                                   : '²', '³', '１', '¹', '８', '０', '５', '③'
-  OTHER_RARE_CHINESE_UTF8                 : '𪸩', 'Ａ', '𬓋', 'Ｃ', 'Ｏ'
+  PINYIN_2CHAR                            : ' de yi ', ' shi yi ', 'cheng wei ', 'gu zhong ', 'xie yu ', ' bu dao ', 'you xian ', 'le dui '
+  PINYIN_3CHAR                            : ' de yi ge ', 'gong he guo ', ' wei yuan hui ', 'zhang dan qu ', 'bu li si ', 'qi yi zhi ', 'she li de ', ' de yi yi '
+  PINYIN_1CHAR                            : 'a', 'e', 'm', '   zhe', 'qu   ', ' lv ', 'nai ', ' sai '
+  LATIN_LETTER                            : 'A', 'B', 'C', 'phi', ' u', 'Mu', 'ted', 'dio'
+  LATIN_DIGIT                             : '0', '1', '2', '   1997', ' 1935', '2021', '   1945', ' 79'
+  PINYIN_WITH_DIGIT                       : '10 yue ', '12 yue ', '7 yue ', ' 1944 nian ', '   1997 nian ', ' 1949 nian ', '3 yue ', '64 nian '
+  PINYIN_4CHAR                            : ' ping fang gong li ', ' ping fang qian mi ', 'zheng zhi ren wu ', ' guo jia an quan ', 'gong zhong kai fang ', ' jie wei lu di ', 'zong bu wei yu ', 'she jiao mei ti '
+  PINYIN_5CHAR                            : ' de yi ge shi zhen ', ' shi wei yu mei guo ', 'mei guo ren kou pu ', 'yin yue lu ying dai ', ' de yi zuo cheng shi ', 'guan li wei yuan hui ', ' shi wu ke lan xi ', ' zhong guo guo min dang '
+  PUNCTUATION                             : '!', '"', '#', '   �', '� ', '..', '〈', '+'
+  PINYIN_6CHAR                            : 'hua ren min gong he guo ', 'sheng de yi ge shi zhen ', 'wen wu bao hu dan wei ', 'nei meng gu zi zhi qu ', 'min zhu zhu yi ren min ', ' wei yu gai guo zhong bu ', 'jia li fu ni ya zhou ', 'shan mai de yi bu fen '
+  PINYIN_7CHAR                            : ' zhong hua ren min gong he guo ', 'ao lin pi ke yun dong hui ', 'zhong hua ren min gong he guo ', ' de gui dao ban zhang zhou wei ', ' shi wu ke lan de cun luo ', ' ji bei mei dong bu shi qu ', 'zhong guo ren min jie fang jun ', ' wei yu gai guo dong nan bu '
+  OTHER_UNKNOWN                           : '_', '\n', 'α', 'α ', ' р', 'е', 'ü', 'и'
+  PINYIN_8CHAR                            : ' ren kou mi du wei mei ping fang ', 'suo shu de sheng ji xuan qu wei ', '   suo shu de sheng ji xuan qu wei ', 'xia ji ao lin pi ke yun dong ', ' wei yu fa guo xin a ji tan', ' shi yi ke wei rao tai yang gong ', 'xin guan fei yan que zhen bing li ', ' shi zhong hua ren min gong he guo '
+  OTHER_JAPANESE                          : 'ー', 'ン', 'の', ' ラ', ' ト', 'ト', 'い', 'ス'
+  PINYIN_9CHAR                            : ' ren kou mi du mei ping fang gong li ', 'yu shi de ren kou shu liang wei ren ', 'mei guo ren kou pu cha de shu ju ', ' wei zhu xiao xing xing dai xiao xing xing ', ' shi wei yu mei guo yi li nuo yi ', ' er ren kou mi du wei mei ping fang ', ' wei yu fa guo da dong bu da qu ', ' gai wu zhong de mo shi chan di zai '
+  PINYIN_11CHAR                           : ' er ren kou mi du wei mei ping fang qian mi ', ' zhong hua ren min gong he guo zheng zhi ren wu ', 'suo chu de hai ba wei gao yu hai ping mian ', '   zhe ke xiao xing xing de jue dui xing deng wei ', 'pi quan guo zhong dian wen wu bao hu dan wei '
   EMPTY                                   : ' ', '  ', '   '
+  PINYIN_12CHAR                           : 'xia xia de yi ge xiang zhen ji xing zheng dan wei ', ' er ren kou mi du wei mei ping fang qian mi ren ', ' shi yi ke rao tai yang yun zhuan de xiao xing xing '
+  PINYIN_10CHAR                           : ' tong shi gai di she you xia ling shi jian ', 'quan guo zhong dian wen wu bao hu dan wei '
+  PINYIN_13CHAR                           : ' shi xia xia de yi ge xiang zhen ji xing zheng dan wei ', ' shi yi ke wei rao tai yang gong zhuan de xiao xing xing '
 
 
 ====================================================================================================
 TOKENIZER: pinyin_toneless_subset100k_superbpe_32000_decoded.json
 ====================================================================================================
-Total Vocabulary Size: 31684
+Total Vocabulary Size: 31808
 
 Type                                               Count   Percentage
 ----------------------------------------------------------------------
-LATIN_LETTER                                       26302       83.01%
-LATIN_DIGIT                                         4363       13.77%
-OTHER_UNKNOWN                                        453        1.43%
-PUNCTUATION                                          237        0.75%
-OTHER_JAPANESE                                       153        0.48%
-OTHER_KOREAN                                         104        0.33%
-OTHER_RARE_CHINESE_UTF8                               42        0.13%
-DIGIT                                                 26        0.08%
-EMPTY                                                  4        0.01%
+PINYIN_2CHAR                                       16891       53.10%
+PINYIN_3CHAR                                        5249       16.50%
+LATIN_LETTER                                        2819        8.86%
+PINYIN_1CHAR                                        1885        5.93%
+PINYIN_WITH_DIGIT                                   1495        4.70%
+PINYIN_4CHAR                                        1323        4.16%
+LATIN_DIGIT                                         1224        3.85%
+PINYIN_5CHAR                                         321        1.01%
+PINYIN_6CHAR                                         141        0.44%
+PINYIN_7CHAR                                          85        0.27%
+OTHER_JAPANESE                                        80        0.25%
+PUNCTUATION                                           78        0.25%
+OTHER_UNKNOWN                                         64        0.20%
+PINYIN_8CHAR                                          51        0.16%
+PINYIN_9CHAR                                          38        0.12%
+PINYIN_10CHAR                                         23        0.07%
+PINYIN_11CHAR                                         17        0.05%
+PINYIN_12CHAR                                          9        0.03%
+PINYIN_13CHAR                                          6        0.02%
+EMPTY                                                  3        0.01%
+DIGIT                                                  2        0.01%
+PINYIN_15CHAR                                          1        0.00%
+PINYIN_16CHAR                                          1        0.00%
+PINYIN_14CHAR                                          1        0.00%
+PINYIN_21CHAR                                          1        0.00%
 
 Sample tokens by type:
 ----------------------------------------------------------------------
-  LATIN_LETTER                            : 'A', 'B', 'C', ' de yi xie ', 'se lie', 'court', 'nge', ' jiang'
-  LATIN_DIGIT                             : '0', '1', '2', '1990 nian dai ', ' 2002 nian ', '2590', '1075', '2390'
-  OTHER_UNKNOWN                           : '_', '\n', 'é', 'ᵝ', ' é', 'Φ', 'ʂ', 'ê'
-  PUNCTUATION                             : '!', '"', '#', 'ّ', '‒', '---', '•', '♡'
-  OTHER_JAPANESE                          : 'ー', 'ン', 'の', 'ぱ', 'ぞ', 'ぼ', 'エ', 'う'
-  OTHER_KOREAN                            : '이', '아', '한', '거', '먼', '일', '전', '여'
-  OTHER_RARE_CHINESE_UTF8                 : '𪸩', 'Ａ', '𬓋', '𫄬', '䭏', 'Ｄ', 'Ｘ', '𫊻'
-  DIGIT                                   : '²', '³', '１', '⒈', '⒉', '⁵', '⑨', '２'
+  PINYIN_2CHAR                            : ' de yi ', ' shi yi ', 'cheng wei ', 'kai tou ', 'ba shou ', 'fa lv', 'nong ye', 'yao wu '
+  PINYIN_3CHAR                            : ' de yi ge ', 'gong he guo ', ' wei yuan hui ', 'bian bu yi ', 'duo gong neng ', 'shang di de ', 'di er ji ', ' yin fa le '
+  LATIN_LETTER                            : 'A', 'B', 'C', 'be   ', 'oo ', 'lis ', ' William', 'code'
+  PINYIN_1CHAR                            : 'a', 'e', 'm', '   heng ', 'ka   ', 'lin', 'shui', 'ei'
+  PINYIN_WITH_DIGIT                       : '10 yue ', '12 yue ', '7 yue ', '1840 nian ', ' zai 2005', ' 1917 nian ', ' 2011 nian ', ' nian 6 yue 18 ri '
+  PINYIN_4CHAR                            : ' ping fang gong li ', ' ping fang qian mi ', 'zheng zhi ren wu ', 'xi ji shi jian ', 'mian zuo biao wei ', 'liu xing yin yue ', 'ba shi fu wu ', 'jiao tong shu niu '
+  LATIN_DIGIT                             : '0', '1', '2', '   1977', '   21 ', '52', ' 99', '147'
+  PINYIN_5CHAR                            : ' de yi ge shi zhen ', ' shi wei yu mei guo ', 'mei guo ren kou pu ', ' shi jie ge di de ', 'gu gong bo wu yuan ', 'shu ju tong ji shi ', 'she hui min zhu dang ', 'jin ri xing zheng qu '
+  PINYIN_6CHAR                            : 'hua ren min gong he guo ', 'sheng de yi ge shi zhen ', 'wen wu bao hu dan wei ', 'zu qiu huo gan lan qiu ', 'ying lian bang yun dong hui ', 'xian de yi ge shi zhen ', 'ou zhou guan jun lian sai ', 'shu de qi zhong yi zhong '
+  PINYIN_7CHAR                            : ' zhong hua ren min gong he guo ', 'ao lin pi ke yun dong hui ', 'zhong hua ren min gong he guo ', ' shi ao di li de shan feng ', 'dian shi san tai xia shu de ', 'ao lin pi ke wei yuan hui ', ' shi wu ke lan de cun luo ', 'bi huan guan kong zhong fa xian '
+  OTHER_JAPANESE                          : 'ー', 'ン', 'の', ' か', ' く', ' ン ', 'ド', 'ア'
+  PUNCTUATION                             : '!', '"', '#', '   �', '� ', '〉', '°', '》'
+  OTHER_UNKNOWN                           : '_', '\n', 'α', ' ο ', ' р', 'ü', 'ι', 'γ'
+  PINYIN_8CHAR                            : ' ren kou mi du wei mei ping fang ', 'suo shu de sheng ji xuan qu wei ', '   suo shu de sheng ji xuan qu wei ', 'kong zhong zhao pian hui ru di tu ', ' dang nian de zhai wu zong e wei ', ' wei fu qi yu gang nian xing mu ', 'ge ji zheng fu xie tiao fu ze ', ' xiang jiao yu jin ri xing zheng qu '
+  PINYIN_9CHAR                            : ' ren kou mi du mei ping fang gong li ', 'yu shi de ren kou shu liang wei ren ', 'mei guo ren kou pu cha de shu ju ', 'guan fang di tu shang yi you ji zai ', ' shi wu ke lan xi bu de cun zhuang ', ' shi wei yu mei guo mi su li zhou ', ' gai sheng fen wei fa guo dong bei bu ', 'xia ji ao lin pi ke yun dong hui '
+  PINYIN_10CHAR                           : ' tong shi gai di she you xia ling shi jian ', 'quan guo zhong dian wen wu bao hu dan wei ', 'can ji ren ao lin pi ke yun dong hui ', ' shi wei yu zhong hua ren min gong he guo ', ' nian qi dan ren quan guo ren da dai biao ', ' ren kou mi du wei mei ping fang gong li ', 'lian he ge ji zheng fu xie tiao fu ze ', ' wei fu qi yu gang zhi li mu zhi li '
+  PINYIN_11CHAR                           : ' er ren kou mi du wei mei ping fang qian mi ', ' zhong hua ren min gong he guo zheng zhi ren wu ', 'suo chu de hai ba wei gao yu hai ping mian ', ' shi yi ge qu yu xing de zhong xin cheng shi ', 'jie quan guo ren min dai biao da hui dai biao ', ' wei fu qi yu gang lu xing mu long tou yu ', ' er gai di de ping jun hai ba gao du wei ', 'chao xian min zhu zhu yi ren min gong he guo '
+  PINYIN_12CHAR                           : 'xia xia de yi ge xiang zhen ji xing zheng dan wei ', ' er ren kou mi du wei mei ping fang qian mi ren ', ' shi yi ke rao tai yang yun zhuan de xiao xing xing ', ' gai sheng fen wei fa guo bei bu yan hai sheng fen ', '   fa guo guo jia tong ji yu jing ji yan jiu suo '
+  PINYIN_13CHAR                           : ' shi xia xia de yi ge xiang zhen ji xing zheng dan wei ', ' shi yi ke wei rao tai yang gong zhuan de xiao xing xing ', ' gai sheng fen wei fa guo dong bei bu nei lu sheng fen ', ' gai sheng fen wei fa guo xi bei bu yan hai sheng fen ', ' wei fu qi yu gang lu xing mu long tou yu ya mu '
   EMPTY                                   : ' ', '  ', '   '
+  DIGIT                                   : '²', '² '
+  PINYIN_15CHAR                           : ' xin zeng jing wai shu ru xing xin guan fei yan que zhen bing li '
+  PINYIN_16CHAR                           : '   zhi lie chu ceng jin ru zhun jue sai de guo ji sai shi cheng ji '
+  PINYIN_14CHAR                           : ' wei fu qi yu gang lu xing mu long tou yu ya mu ci '
+  PINYIN_21CHAR                           : ' wei fu qi yu gang lu xing mu long tou yu ya mu ci diao ke de qi zhong yi zhong '
 
 
 ====================================================================================================
 TOKENIZER: pinyin_toneless_subset100k_superbpe_64000_decoded.json
 ====================================================================================================
-Total Vocabulary Size: 63589
+Total Vocabulary Size: 63756
 
 Type                                               Count   Percentage
 ----------------------------------------------------------------------
-LATIN_LETTER                                       53303       83.82%
-LATIN_DIGIT                                         8688       13.66%
-OTHER_UNKNOWN                                        689        1.08%
-PUNCTUATION                                          344        0.54%
-OTHER_KOREAN                                         237        0.37%
-OTHER_JAPANESE                                       162        0.25%
-OTHER_RARE_CHINESE_UTF8                              126        0.20%
-DIGIT                                                 36        0.06%
-EMPTY                                                  4        0.01%
+PINYIN_2CHAR                                       29385       46.09%
+PINYIN_3CHAR                                       13795       21.64%
+LATIN_LETTER                                        5909        9.27%
+PINYIN_4CHAR                                        4333        6.80%
+PINYIN_WITH_DIGIT                                   2969        4.66%
+LATIN_DIGIT                                         2569        4.03%
+PINYIN_1CHAR                                        2135        3.35%
+PINYIN_5CHAR                                        1029        1.61%
+PINYIN_6CHAR                                         445        0.70%
+PINYIN_7CHAR                                         271        0.43%
+OTHER_JAPANESE                                       182        0.29%
+OTHER_UNKNOWN                                        177        0.28%
+PINYIN_8CHAR                                         140        0.22%
+PINYIN_9CHAR                                         114        0.18%
+PUNCTUATION                                          100        0.16%
+PINYIN_10CHAR                                         79        0.12%
+PINYIN_11CHAR                                         38        0.06%
+PINYIN_12CHAR                                         36        0.06%
+PINYIN_13CHAR                                         22        0.03%
+PINYIN_14CHAR                                          6        0.01%
+PINYIN_15CHAR                                          5        0.01%
+PINYIN_16CHAR                                          5        0.01%
+DIGIT                                                  4        0.01%
+EMPTY                                                  3        0.00%
+OTHER_KOREAN                                           2        0.00%
+PINYIN_21CHAR                                          2        0.00%
+PINYIN_19CHAR                                          1        0.00%
 
 Sample tokens by type:
 ----------------------------------------------------------------------
-  LATIN_LETTER                            : 'A', 'B', 'C', 'zhuan xing ', ' bu shao', 'Clid', 'zeng ', 'brough'
-  LATIN_DIGIT                             : '0', '1', '2', 'lv wei 0', '18 shi ji ', '2992', '38D8', '2138'
-  OTHER_UNKNOWN                           : '_', '\n', 'é', 'β ', ' и', 'ꜣ', 'Х', 'ม'
-  PUNCTUATION                             : '!', '"', '#', '⌋', '-...-', '⇋', 'ّ', '....'
-  OTHER_KOREAN                            : '이', '아', '한', '쉬', '키', '면', '람', '울'
-  OTHER_JAPANESE                          : 'ー', 'ン', 'の', ' ン ', ' ん', 'ょ', 'ヌ', 'う'
-  OTHER_RARE_CHINESE_UTF8                 : '𪸩', 'Ａ', '𬓋', '㗎', '𭎂', 'Ｉ', '𐭊', 'Ｇ'
-  DIGIT                                   : '²', '³', '１', '⒋', '⒌', '９', '０', '２'
+  PINYIN_2CHAR                            : ' de yi ', ' shi yi ', 'cheng wei ', 'po jiang ', 'rong xiu ', ' ye li ', 'si zhe ', 'feng yun'
+  PINYIN_3CHAR                            : ' de yi ge ', 'gong he guo ', ' wei yuan hui ', 'zhong de zhong ', 'zheng zhi zhong ', 'bei bu sheng ', 'xue sheng shi ', 'mo shi shi '
+  LATIN_LETTER                            : 'A', 'B', 'C', 'Surface   Pro', ' zai formula ', 'all ', ' The', 'Council'
+  PINYIN_4CHAR                            : ' ping fang gong li ', ' ping fang qian mi ', 'zheng zhi ren wu ', ' zhong guo xian dai ', 'nv zi zhi ye ', 'xu duo qi ta ', 'dang di de di ', 'yu de guo de '
+  PINYIN_WITH_DIGIT                       : '10 yue ', '12 yue ', '7 yue ', ' zai 1989 nian ', '2 dian ', '   2016 nian 1 yue ', 'jue sai yi 2 bi 0 ', '1876 nian '
+  LATIN_DIGIT                             : '0', '1', '2', '128 ', '146 ', '1918', '   14 ', '777'
+  PINYIN_1CHAR                            : 'a', 'e', 'm', '   fo', '   ce ', ' bu', 'cun', 'bin'
+  PINYIN_5CHAR                            : ' de yi ge shi zhen ', ' shi wei yu mei guo ', 'mei guo ren kou pu ', 'pai cha zhong fa xian ', 'ce duan dian wei yu ', 'lai di qu meng fu ', 'chou bei wei yuan hui ', 'dian qi hua tie lu '
+  PINYIN_6CHAR                            : 'hua ren min gong he guo ', 'sheng de yi ge shi zhen ', 'wen wu bao hu dan wei ', ' wei yu xiang gang xin jie ', 'te ming quan quan da shi ', 'fa zhan you xian gong si ', ' qu er dai zhi de shi ', 'ming zhi san shi si nian '
+  PINYIN_7CHAR                            : ' zhong hua ren min gong he guo ', 'ao lin pi ke yun dong hui ', 'zhong hua ren min gong he guo ', ' de zhong yao zu cheng bu fen ', ' jie ao si ka jin xiang jiang ', '   ben ke bao kuo yi xia shu ', 'e luo si zong tong pu jing ', 'gong gong yun shu jiao hui chu '
+  OTHER_JAPANESE                          : 'ー', 'ン', 'の', ' ニ', 'で ', 'ム', 'プ', 'る '
+  OTHER_UNKNOWN                           : '_', '\n', 'α', ' с ', 'θ ', ' н', 'น', 'б'
+  PINYIN_8CHAR                            : ' ren kou mi du wei mei ping fang ', 'suo shu de sheng ji xuan qu wei ', '   suo shu de sheng ji xuan qu wei ', ' bo duo zheng zhi quan li zhong shen ', 'xi ban ya yi huo la ding yi ', 'fei xian ting gai she er shi ting ', ' gai di de mian ji he ren kou ', 'suo shu xing zheng qu yu hua gui '
+  PINYIN_9CHAR                            : ' ren kou mi du mei ping fang gong li ', 'yu shi de ren kou shu liang wei ren ', 'mei guo ren kou pu cha de shu ju ', ' xi jie suo mu sheng he wa zi sheng ', ' dong lin a deng sheng he ma en sheng ', ' zhong guo ren min jie fang jun shao jiang ', ' de jia ting yong you na shui zi ge ', 'di er ci shi jie da zhan qi jian '
+  PUNCTUATION                             : '!', '"', '#', ' �', '   �', '‧', '«', '★'
+  PINYIN_10CHAR                           : ' tong shi gai di she you xia ling shi jian ', 'quan guo zhong dian wen wu bao hu dan wei ', 'can ji ren ao lin pi ke yun dong hui ', 'sheng ji wen wu bao hu dan wei zhi yi ', ' shi wu ke lan xi bei bu de cun zhuang ', ' gai nong cun ju min dian de ren kou wei ', ' shi wei yu mei guo ming ni su da zhou ', ' di nie bo luo bi de luo fu si ke '
+  PINYIN_11CHAR                           : ' er ren kou mi du wei mei ping fang qian mi ', ' zhong hua ren min gong he guo zheng zhi ren wu ', 'suo chu de hai ba wei gao yu hai ping mian ', 'pai she de kong zhong zhao pian hui ru di tu ', ' wei yi ge sheng ji wen wu bao hu dan wei ', ' shi wei yu mei guo jia li fu ni ya zhou ', ' shu yu an di si shan mai de yi bu fen ', 'qu suo shu de yi ge nong cun ju min dian '
+  PINYIN_12CHAR                           : 'xia xia de yi ge xiang zhen ji xing zheng dan wei ', ' er ren kou mi du wei mei ping fang qian mi ren ', ' shi yi ke rao tai yang yun zhuan de xiao xing xing ', ' dang xuan di shi san jie quan guo zheng xie wei yuan ', ' shi wei yu wu ke lan dong nan bu de cun zhuang ', ' di shi yi jie quan guo ren min dai biao da hui ', '   xia xia yi xia cun ji xing zheng qu hua dan wei ', ' di shi er jie quan guo ren min dai biao da hui '
+  PINYIN_13CHAR                           : ' shi xia xia de yi ge xiang zhen ji xing zheng dan wei ', ' shi yi ke wei rao tai yang gong zhuan de xiao xing xing ', ' gai sheng fen wei fa guo dong bei bu nei lu sheng fen ', ' wei yu fa guo shang fa lan xi da qu ai na sheng ', ' bing jiang bao kuo he xin qu zai nei de zhou bian gong ', 'jin xian dai zhong yao shi ji ji dai biao xing jian zhu ', ' jing wai shu ru xing xin guan fei yan que zhen bing li ', ' wu xin zeng ben tu xin guan fei yan que zhen bing li '
+  PINYIN_14CHAR                           : ' wei fu qi yu gang lu xing mu long tou yu ya mu ci ', 'wu zheng zhuang gan ran zhe zai ge li guan kong zhong fa xian ', ' wei fu qi yu gang zhi li mu zhi li ya mu zhi li ', 'jing nei gong you zai xiao zhong deng jiao yu jie duan xue sheng ', 'wu ke lan ge di ji luo huo yin dian zi zhan cuo shi '
+  PINYIN_15CHAR                           : ' xin zeng jing wai shu ru xing xin guan fei yan que zhen bing li ', ' li wu zheng zhuang gan ran zhe zai ge li guan kong zhong fa xian ', 'xia ji can ji ren ao lin pi ke yun dong hui dai biao tuan '
+  PINYIN_16CHAR                           : '   zhi lie chu ceng jin ru zhun jue sai de guo ji sai shi cheng ji ', ' zai ri zhi qi chu qi de guan fang di tu shang yi you ji zai ', ' li xin zeng jing wai shu ru xing xin guan fei yan que zhen bing li '
+  DIGIT                                   : '²', '³', '² '
   EMPTY                                   : ' ', '  ', '   '
+  OTHER_KOREAN                            : '이', '아'
+  PINYIN_21CHAR                           : ' wei fu qi yu gang lu xing mu long tou yu ya mu ci diao ke de qi zhong yi zhong ', ' wei fu qi yu gang zhi li mu zhi li ya mu zhi li ke de qi zhong yi ge zhong '
+  PINYIN_19CHAR                           : 'huan jing shi wu you qi suo shu de lian he ge ji zheng fu xie tiao fu ze '
 
 
 ====================================================================================================
@@ -173,6 +301,8 @@ DIGIT              - Pure digits (0-9)
 PUNCTUATION        - Punctuation marks and symbols
 
 CHINESE_NCHAR      - N pure Chinese characters (Standard CJK: U+4E00-U+9FFF)
+PINYIN_NCHAR       - N valid pinyin syllables (Space separated in token)
+PINYIN_WITH_DIGIT  - Combination of valid pinyin syllables and digits
 MIXED_WITH_CHINESE - Tokens containing Chinese chars mixed with other content
 
 OTHER_JAPANESE     - Japanese characters (Hiragana/Katakana)

@@ -1,0 +1,309 @@
+====================================================================================================
+PINYIN DIACRITIC TOKENIZERS (superBPE) - VOCABULARY COMPOSITION ANALYSIS
+====================================================================================================
+
+Analyzing: Chinese characters, Latin letters, punctuation, and other languages (Japanese, Korean)
+Special focus: UTF-8 byte fragments (represented as 'half characters')
+Note: Pinyin tokens like 'zhishao', 'jinwang' are correct (correspond to Chinese words like '至少', '金王')
+
+Token Type                          | pinyin_diacri | pinyin_diacri | pinyin_diacri | pinyin_diacri | TOTAL
+===========================================================================================================
+LATIN_LETTER                        |           389 |           870 |          2213 |          5037 |  8509
+LATIN_DIGIT                         |           253 |           553 |           987 |          2197 |  3990
+DIGIT                               |             0 |             0 |             2 |             4 |     6
+PUNCTUATION                         |            54 |            68 |            75 |            96 |   293
+PINYIN_1CHAR                        |          2604 |          3289 |          3986 |          4710 | 14589
+PINYIN_2CHAR                        |          3752 |          8560 |         17105 |         32092 | 61509
+PINYIN_3CHAR                        |           372 |          1432 |          4238 |         10952 | 16994
+PINYIN_4CHAR                        |            68 |           295 |          1056 |          3664 |  5083
+PINYIN_5CHAR                        |            25 |            64 |           249 |           886 |  1224
+PINYIN_6CHAR                        |            19 |            47 |           120 |           392 |   578
+PINYIN_7CHAR                        |             8 |            22 |            65 |           228 |   323
+PINYIN_8CHAR                        |             4 |            14 |            40 |           128 |   186
+PINYIN_9CHAR                        |             4 |            11 |            28 |           101 |   144
+PINYIN_10CHAR                       |             1 |             3 |            21 |            72 |    97
+PINYIN_11CHAR                       |             4 |             9 |            16 |            39 |    68
+PINYIN_12CHAR                       |             0 |             1 |             9 |            30 |    40
+PINYIN_13CHAR                       |             0 |             2 |             6 |            15 |    23
+PINYIN_14CHAR                       |             0 |             0 |             0 |             3 |     3
+PINYIN_15CHAR                       |             0 |             0 |             1 |             3 |     4
+PINYIN_16CHAR                       |             0 |             0 |             1 |             2 |     3
+PINYIN_17CHAR                       |             0 |             0 |             0 |             1 |     1
+PINYIN_19CHAR                       |             0 |             0 |             0 |             1 |     1
+PINYIN_21CHAR                       |             0 |             0 |             0 |             2 |     2
+PINYIN_WITH_DIGIT                   |           255 |           561 |          1455 |          2686 |  4957
+OTHER_JAPANESE                      |             0 |             7 |            55 |           169 |   231
+OTHER_KOREAN                        |             0 |             0 |             0 |             1 |     1
+OTHER_UNKNOWN                       |            60 |            52 |            91 |           249 |   452
+EMPTY                               |             3 |             3 |             3 |             3 |    12
+-----------------------------------------------------------------------------------------------------------
+TOTAL                               |          7875 |         15863 |         31822 |         63763 | 119323
+
+====================================================================================================
+CATEGORY EXPLANATIONS
+====================================================================================================
+
+LATIN_LETTER       - Pure Latin letters (a-zA-Z)
+LATIN_DIGIT        - Latin letters and digits combined
+DIGIT              - Pure digits (0-9)
+PUNCTUATION        - Punctuation marks and symbols
+
+CHINESE_NCHAR      - N pure Chinese characters (Standard CJK: U+4E00-U+9FFF)
+PINYIN_NCHAR       - N valid pinyin syllables (Space separated in token)
+PINYIN_WITH_DIGIT  - Combination of valid pinyin syllables and digits
+MIXED_WITH_CHINESE - Tokens containing Chinese chars mixed with other content
+
+OTHER_JAPANESE     - Japanese characters (Hiragana/Katakana)
+OTHER_KOREAN       - Korean characters (Hangul: U+AC00-U+D7AF)
+OTHER_RARE_CHINESE_UTF8 - Rare Chinese chars or UTF-8 byte fragments
+                     (CJK Extension: U+3400-U+4DBF, or byte notation <0xXX>)
+OTHER_UNKNOWN      - Other unclassified tokens
+
+====================================================================================================
+DETAILED BREAKDOWN BY TOKENIZER
+====================================================================================================
+
+
+====================================================================================================
+TOKENIZER: pinyin_diacritic_subset100k_superbpe_8000_decoded.json
+====================================================================================================
+Total Vocabulary Size: 7875
+
+Type                                               Count   Percentage
+----------------------------------------------------------------------
+PINYIN_2CHAR                                        3752       47.64%
+PINYIN_1CHAR                                        2604       33.07%
+LATIN_LETTER                                         389        4.94%
+PINYIN_3CHAR                                         372        4.72%
+PINYIN_WITH_DIGIT                                    255        3.24%
+LATIN_DIGIT                                          253        3.21%
+PINYIN_4CHAR                                          68        0.86%
+OTHER_UNKNOWN                                         60        0.76%
+PUNCTUATION                                           54        0.69%
+PINYIN_5CHAR                                          25        0.32%
+PINYIN_6CHAR                                          19        0.24%
+PINYIN_7CHAR                                           8        0.10%
+PINYIN_9CHAR                                           4        0.05%
+PINYIN_8CHAR                                           4        0.05%
+PINYIN_11CHAR                                          4        0.05%
+EMPTY                                                  3        0.04%
+PINYIN_10CHAR                                          1        0.01%
+
+Sample tokens by type:
+----------------------------------------------------------------------
+  PINYIN_2CHAR                            : 'yí gè ', 'měi guó ', ' zhōng guó ', 'shuō shì ', 'dān dǎ ', 'yíng yè ', ' tā yě ', ' yǐ sè '
+  PINYIN_1CHAR                            : 'a', 'e', 'm', ' guò ', '   tiān ', ' gòng', ' měi', 'lěi'
+  LATIN_LETTER                            : 'A', 'B', 'C', 'ter ', 'oni', 'D ', 'ter', 'ari'
+  PINYIN_3CHAR                            : 'gòng hé guó ', 'wěi yuán huì ', 'huá rén mín ', 'jū mín diǎn ', ' yǐ sè liè', 'mín zhǔ dǎng ', 'shǐ jiàn yú ', ' wū kè lán '
+  PINYIN_WITH_DIGIT                       : '1 nián ', '5 nián ', '2 nián ', '2010 nián měi guó rén kǒu pǔ chá de shù jù ', ' 1946 nián ', '00 nián ', ' 1950 nián ', '22 rì '
+  LATIN_DIGIT                             : '0', '1', '2', '75 ', '   1', ' 2 ', '40', ' 7'
+  PINYIN_4CHAR                            : ' píng fāng gōng lǐ ', ' píng fāng qiān mǐ ', 'zhèng zhì rén wù ', 'yǐn zhǒng zāi péi ', 'kē huì shì dì ', 'fèn wèi fǎ guó ', ' hǎi bá gāo dù ', ' wèi fú qí yú '
+  OTHER_UNKNOWN                           : '_', '\n', 'h�', ' de shí qū wèi UTC ', ' ér gāi dì suǒ cǎi yòng de shí qū wèi UTC ', 'íng', 'ǔn ', 'jiē r'
+  PUNCTUATION                             : '!', '"', '#', ' �', '...', '..', '?', '』'
+  PINYIN_5CHAR                            : ' de yí gè shì zhèn ', ' shì wèi yú měi guó ', 'měi guó rén kǒu pǔ ', ' wèi fú qí yú gāng', 'zhuàn de xiǎo xíng xīng ', 'měi píng fāng gōng lǐ ', 'shěng jí xuǎn qū wèi ', 'wěi yuán huì wěi yuán '
+  PINYIN_6CHAR                            : 'huá rén mín gòng hé guó ', 'shěng de yí gè shì zhèn ', 'wén wù bǎo hù dān wèi ', 'wú zhèng zhuàng gǎn rǎn zhě ', 'gǔ fèn yǒu xiàn gōng sī ', ' ér shuǐ yù miàn jī wèi ', ' dāng dì gòng yǒu rén kǒu ', ' rén kǒu mì dù wèi měi'
+  PINYIN_7CHAR                            : ' zhōng huá rén mín gòng hé guó ', 'ào lín pǐ kè yùn dòng huì ', ' ér rén kǒu mì dù wèi měi', 'píng jūn hǎi bá gāo dù wèi ', 'yóu rén gōng yǐn zhǒng zāi péi '
+  PINYIN_9CHAR                            : ' rén kǒu mì dù měi píng fāng gōng lǐ ', 'měi guó rén kǒu pǔ chá de shù jù ', '   yú shí de rén kǒu shù liàng wèi rén '
+  PINYIN_8CHAR                            : 'shí de rén kǒu shù liàng wèi rén ', 'suǒ shǔ de shěng jí xuǎn qū wèi ', '   suǒ shǔ de shěng jí xuǎn qū wèi '
+  PINYIN_11CHAR                           : ' ér rén kǒu mì dù wèi měi píng fāng qiān mǐ ', ' zhōng huá rén mín gòng hé guó zhèng zhì rén wù ', 'suǒ chù de hǎi bá wèi gāo yú hǎi píng miàn '
+  EMPTY                                   : ' ', '  ', '   '
+  PINYIN_10CHAR                           : ' tóng shí gāi dì shè yǒu xià lìng shí jiān '
+
+
+====================================================================================================
+TOKENIZER: pinyin_diacritic_subset100k_superbpe_16000_decoded.json
+====================================================================================================
+Total Vocabulary Size: 15863
+
+Type                                               Count   Percentage
+----------------------------------------------------------------------
+PINYIN_2CHAR                                        8560       53.96%
+PINYIN_1CHAR                                        3289       20.73%
+PINYIN_3CHAR                                        1432        9.03%
+LATIN_LETTER                                         870        5.48%
+PINYIN_WITH_DIGIT                                    561        3.54%
+LATIN_DIGIT                                          553        3.49%
+PINYIN_4CHAR                                         295        1.86%
+PUNCTUATION                                           68        0.43%
+PINYIN_5CHAR                                          64        0.40%
+OTHER_UNKNOWN                                         52        0.33%
+PINYIN_6CHAR                                          47        0.30%
+PINYIN_7CHAR                                          22        0.14%
+PINYIN_8CHAR                                          14        0.09%
+PINYIN_9CHAR                                          11        0.07%
+PINYIN_11CHAR                                          9        0.06%
+OTHER_JAPANESE                                         7        0.04%
+EMPTY                                                  3        0.02%
+PINYIN_10CHAR                                          3        0.02%
+PINYIN_13CHAR                                          2        0.01%
+PINYIN_12CHAR                                          1        0.01%
+
+Sample tokens by type:
+----------------------------------------------------------------------
+  PINYIN_2CHAR                            : 'yí gè ', 'měi guó ', ' zhōng guó ', 'qīn fàn ', ' shī fàn', ' dàn shuǐ ', ' xiàn yú ', 'cǎi fǎng '
+  PINYIN_1CHAR                            : 'a', 'e', 'm', '   lóng ', ' láo', 'zhài', ' xìn ', 'xuǎn'
+  PINYIN_3CHAR                            : 'gòng hé guó ', 'wěi yuán huì ', 'huá rén mín ', 'bā sāi ěr ', 'chǎn jiē jí ', ' de dì fāng ', ' dì shí yī ', ' de dì sān '
+  LATIN_LETTER                            : 'A', 'B', 'C', '   Ga', '   Be', 'fe', 'Vi', 'BC '
+  PINYIN_WITH_DIGIT                       : '10 yuè ', '12 yuè ', '7 yuè ', ' yú 8 yuè ', ' tóng nián 7 yuè ', '18 nián ', '2003 nián ', '1919 nián '
+  LATIN_DIGIT                             : '0', '1', '2', ' 1939', '56 ', ' 1987', '1974', '1981'
+  PINYIN_4CHAR                            : ' píng fāng gōng lǐ ', ' píng fāng qiān mǐ ', 'zhèng zhì rén wù ', ' jǐn guǎn rú cǐ ', 'zhèng zhì wěi yuán ', 'lián sài qiú duì ', 'mí nǐ zhuān jí ', 'shuò shì xué wèi '
+  PUNCTUATION                             : '!', '"', '#', '•', '〕', '=', '|', '?'
+  PINYIN_5CHAR                            : ' de yí gè shì zhèn ', ' shì wèi yú měi guó ', 'měi guó rén kǒu pǔ ', 'wěi yuán huì zhǔ rèn ', 'yí cì shì jiè dà ', 'gāo yú hǎi píng miàn ', ' zài zhōng guó dà lù ', ' wèi fú qí yú gāng'
+  OTHER_UNKNOWN                           : '_', '\n', 'h�', ' р', ' ISTAT dài mǎ wèi 0', 'ī', 'ián', ' jí UTC '
+  PINYIN_6CHAR                            : 'huá rén mín gòng hé guó ', 'shěng de yí gè shì zhèn ', 'wén wù bǎo hù dān wèi ', ' fēn bù yú nán měi zhōu ', 'wěi yuán huì fù zhǔ rèn ', ' wèi yú gāi guó nán bù ', '   yǔ jiē rǎng de shì zhèn ', ' rén kǒu mì dù wèi měi'
+  PINYIN_7CHAR                            : ' zhōng huá rén mín gòng hé guó ', 'ào lín pǐ kè yùn dòng huì ', ' ér rén kǒu mì dù wèi měi', 'jiè quán guó rén dà dài biǎo ', 'ào kè xī tǎ ní dà qū ', ' zhōng guó rén mín jiě fàng jūn ', ' wèi yú gāi guó dōng nán bù ', 'guān fèi yán què zhěn bìng lì '
+  PINYIN_8CHAR                            : 'shí de rén kǒu shù liàng wèi rén ', 'suǒ shǔ de shěng jí xuǎn qū wèi ', '   suǒ shǔ de shěng jí xuǎn qū wèi ', ' shì wèi yú měi guó mì sū lǐ ', '   běn shǔ bāo kuò yǐ xià wù zhǒng ', 'lì hé wú zhèng zhuàng gǎn rǎn zhě ', ' gāi dì de miàn jī hé rén kǒu ', 'zhòng diǎn wén wù bǎo hù dān wèi '
+  PINYIN_9CHAR                            : ' rén kǒu mì dù měi píng fāng gōng lǐ ', 'měi guó rén kǒu pǔ chá de shù jù ', '   yú shí de rén kǒu shù liàng wèi rén ', ' gāi wù zhǒng de mó shì chǎn dì zài ', 'dōng jì ào lín pǐ kè yùn dòng huì ', 'jiè quán guó rén mín dài biǎo dà huì ', 'xià jì ào lín pǐ kè yùn dòng huì ', ' yú shí de rén kǒu shù liàng wèi rén '
+  PINYIN_11CHAR                           : ' ér rén kǒu mì dù wèi měi píng fāng qiān mǐ ', ' zhōng huá rén mín gòng hé guó zhèng zhì rén wù ', ' ér gāi dì de píng jūn hǎi bá gāo dù wèi ', '   zhè kē xiǎo xíng xīng de jué duì xīng děng wèi ', 'pī quán guó zhòng diǎn wén wù bǎo hù dān wèi '
+  OTHER_JAPANESE                          : ' ー', ' ン', ' ん', ' い', 'の'
+  EMPTY                                   : ' ', '  ', '   '
+  PINYIN_10CHAR                           : ' tóng shí gāi dì shè yǒu xià lìng shí jiān ', 'chù de hǎi bá wèi gāo yú hǎi píng miàn ', ' quán guó zhòng diǎn wén wù bǎo hù dān wèi '
+  PINYIN_13CHAR                           : ' shì xià xiá de yí gè xiāng zhèn jí xíng zhèng dān wèi ', ' shì yī kē wéi rào tài yáng gōng zhuàn de xiǎo xíng xīng '
+  PINYIN_12CHAR                           : 'xià xiá de yí gè xiāng zhèn jí xíng zhèng dān wèi '
+
+
+====================================================================================================
+TOKENIZER: pinyin_diacritic_subset100k_superbpe_32000_decoded.json
+====================================================================================================
+Total Vocabulary Size: 31822
+
+Type                                               Count   Percentage
+----------------------------------------------------------------------
+PINYIN_2CHAR                                       17105       53.75%
+PINYIN_3CHAR                                        4238       13.32%
+PINYIN_1CHAR                                        3986       12.53%
+LATIN_LETTER                                        2213        6.95%
+PINYIN_WITH_DIGIT                                   1455        4.57%
+PINYIN_4CHAR                                        1056        3.32%
+LATIN_DIGIT                                          987        3.10%
+PINYIN_5CHAR                                         249        0.78%
+PINYIN_6CHAR                                         120        0.38%
+OTHER_UNKNOWN                                         91        0.29%
+PUNCTUATION                                           75        0.24%
+PINYIN_7CHAR                                          65        0.20%
+OTHER_JAPANESE                                        55        0.17%
+PINYIN_8CHAR                                          40        0.13%
+PINYIN_9CHAR                                          28        0.09%
+PINYIN_10CHAR                                         21        0.07%
+PINYIN_11CHAR                                         16        0.05%
+PINYIN_12CHAR                                          9        0.03%
+PINYIN_13CHAR                                          6        0.02%
+EMPTY                                                  3        0.01%
+DIGIT                                                  2        0.01%
+PINYIN_15CHAR                                          1        0.00%
+PINYIN_16CHAR                                          1        0.00%
+
+Sample tokens by type:
+----------------------------------------------------------------------
+  PINYIN_2CHAR                            : 'yí gè ', 'měi guó ', ' zhōng guó ', 'bèi sī ', 'shǐ shū ', 'tóu lú ', 'mǎ chē ', 'guì zú'
+  PINYIN_3CHAR                            : 'gòng hé guó ', 'wěi yuán huì ', 'huá rén mín ', 'jī chǎng de ', ' dà xuǎn zhōng ', ' qí fàn wéi ', 'jǐ shí nián ', 'jí lín shěng '
+  PINYIN_1CHAR                            : 'a', 'e', 'm', '   qū ', 'bī ', ' shì ', ' qín ', ' jiāng'
+  LATIN_LETTER                            : 'A', 'B', 'C', 'that   ', 'THE   ', ' Fran', 'ps', 'CH'
+  PINYIN_WITH_DIGIT                       : '10 yuè ', '12 yuè ', '7 yuè ', ' zài 8 yuè ', ' yú 1999', ' nián 5 yuè 18 rì ', ' zài 2010', '53 nián '
+  PINYIN_4CHAR                            : ' píng fāng gōng lǐ ', ' píng fāng qiān mǐ ', 'zhèng zhì rén wù ', ' pǔ fǎ ěr cí', 'lú wǎ léi shěng ', ' píng fāng gōng chǐ ', ' shì é luó sī ', ' guān zhuàng bìng dú'
+  LATIN_DIGIT                             : '0', '1', '2', ' 31 ', '   1978', '62 ', 'B48', '1880'
+  PINYIN_5CHAR                            : ' de yí gè shì zhèn ', ' shì wèi yú měi guó ', 'měi guó rén kǒu pǔ ', ' jiā tài luó ní yà ', 'fú lǐ dé lǐ xī ', ' xíng diàn lì jī chē ', 'kē xué yuàn yuàn shì ', 'nóng cūn jū mín diǎn '
+  PINYIN_6CHAR                            : 'huá rén mín gòng hé guó ', 'shěng de yí gè shì zhèn ', 'wén wù bǎo hù dān wèi ', ' guó jiā jù fēng zhōng xīn ', ' xiàn de tiě lù chē zhàn ', ' shì wèi yú wū kè lán ', 'shǔ xià de yí gè zhǒng ', ' de yóu zhèng biān mǎ wèi '
+  OTHER_UNKNOWN                           : '_', '\n', 'h�', ' yòu míng CD ', ' A xíng ', 'íng', ' ISTAT dài mǎ wèi ', 'α '
+  PUNCTUATION                             : '!', '"', '#', '‰', '   �', '→', '—', '─'
+  PINYIN_7CHAR                            : ' zhōng huá rén mín gòng hé guó ', 'ào lín pǐ kè yùn dòng huì ', ' ér rén kǒu mì dù wèi měi', ' wèi fú qí yú gāng zhī lǐ ', 'zī shěng de yí gè shì zhèn ', 'zhōng huá rén mín gòng hé guó ', '   zhōng huá rén mín gòng hé guó ', ' gāi wù zhǒng de mó shì chǎn '
+  OTHER_JAPANESE                          : 'ー', 'ン', 'の', ' な', ' カ', ' イ', ' ア', ' ン'
+  PINYIN_8CHAR                            : 'shí de rén kǒu shù liàng wèi rén ', 'suǒ shǔ de shěng jí xuǎn qū wèi ', '   suǒ shǔ de shěng jí xuǎn qū wèi ', 'zé ěr shěng de yí gè shì zhèn ', 'lú wǎ ěr hé dì qū dà qū ', ' xiàn de yí gè xíng zhèng zhèn qū ', ' wèi zhōng guó de tè yǒu zhí wù ', 'nán jí tiáo yuē tǐ xì guǎn lǐ '
+  PINYIN_9CHAR                            : ' rén kǒu mì dù měi píng fāng gōng lǐ ', 'měi guó rén kǒu pǔ chá de shù jù ', '   yú shí de rén kǒu shù liàng wèi rén ', ' gāi shěng fèn wèi fǎ guó dōng nán bù ', ' shì wū kè lán běi bù de cūn zhuāng ', ' gāi shěng fèn wèi fǎ guó xī běi bù ', ' gāi shěng fèn wèi fǎ guó dōng běi bù ', 'mín zhǔ zhǔ yì rén mín gòng hé guó '
+  PINYIN_10CHAR                           : ' tóng shí gāi dì shè yǒu xià lìng shí jiān ', 'chù de hǎi bá wèi gāo yú hǎi píng miàn ', ' quán guó zhòng diǎn wén wù bǎo hù dān wèi ', 'ā ěr bēi sī shān mài de yī bù fèn ', ' shì wèi yú měi guó yìn dì ān nà zhōu ', 'zhǔn jué sài de guó jì sài shì chéng jì ', ' rén kǒu mì dù wèi měi píng fāng gōng lǐ ', ' zhōng guó rén mín zhèng zhì xié shāng huì yì '
+  PINYIN_11CHAR                           : ' ér rén kǒu mì dù wèi měi píng fāng qiān mǐ ', ' zhōng huá rén mín gòng hé guó zhèng zhì rén wù ', ' ér gāi dì de píng jūn hǎi bá gāo dù wèi ', ' wèi fú qí yú gāng lú xíng mù lóng tóu yú ', ' shì wèi yú wū kè lán dōng bù de cūn zhuāng ', ' wèi yú fǎ guó ào kè xī tǎ ní dà qū ', ' suǒ chù de hǎi bá wèi gāo yú hǎi píng miàn ', 'cháo xiān mín zhǔ zhǔ yì rén mín gòng hé guó '
+  PINYIN_12CHAR                           : 'xià xiá de yí gè xiāng zhèn jí xíng zhèng dān wèi ', ' ér rén kǒu mì dù wèi měi píng fāng qiān mǐ rén ', ' shì yī kē rào tài yáng yùn zhuàn de xiǎo xíng xīng ', ' dì shí sān jiè quán guó rén mín dài biǎo dà huì ', ' gāi shěng fèn wèi fǎ guó běi bù yán hǎi shěng fèn '
+  PINYIN_13CHAR                           : ' shì xià xiá de yí gè xiāng zhèn jí xíng zhèng dān wèi ', ' shì yī kē wéi rào tài yáng gōng zhuàn de xiǎo xíng xīng ', ' gāi shěng fèn wèi fǎ guó dōng běi bù nèi lù shěng fèn ', ' gāi shěng fèn wèi fǎ guó xī běi bù yán hǎi shěng fèn ', ' wèi fú qí yú gāng lú xíng mù lóng tóu yú yà mù '
+  EMPTY                                   : ' ', '  ', '   '
+  DIGIT                                   : '²', '² '
+  PINYIN_15CHAR                           : ' xīn zēng jìng wài shū rù xìng xīn guān fèi yán què zhěn bìng lì '
+  PINYIN_16CHAR                           : '   zhǐ liè chū céng jìn rù zhǔn jué sài de guó jì sài shì chéng jì '
+
+
+====================================================================================================
+TOKENIZER: pinyin_diacritic_subset100k_superbpe_64000_decoded.json
+====================================================================================================
+Total Vocabulary Size: 63763
+
+Type                                               Count   Percentage
+----------------------------------------------------------------------
+PINYIN_2CHAR                                       32092       50.33%
+PINYIN_3CHAR                                       10952       17.18%
+LATIN_LETTER                                        5037        7.90%
+PINYIN_1CHAR                                        4710        7.39%
+PINYIN_4CHAR                                        3664        5.75%
+PINYIN_WITH_DIGIT                                   2686        4.21%
+LATIN_DIGIT                                         2197        3.45%
+PINYIN_5CHAR                                         886        1.39%
+PINYIN_6CHAR                                         392        0.61%
+OTHER_UNKNOWN                                        249        0.39%
+PINYIN_7CHAR                                         228        0.36%
+OTHER_JAPANESE                                       169        0.27%
+PINYIN_8CHAR                                         128        0.20%
+PINYIN_9CHAR                                         101        0.16%
+PUNCTUATION                                           96        0.15%
+PINYIN_10CHAR                                         72        0.11%
+PINYIN_11CHAR                                         39        0.06%
+PINYIN_12CHAR                                         30        0.05%
+PINYIN_13CHAR                                         15        0.02%
+DIGIT                                                  4        0.01%
+EMPTY                                                  3        0.00%
+PINYIN_15CHAR                                          3        0.00%
+PINYIN_14CHAR                                          3        0.00%
+PINYIN_16CHAR                                          2        0.00%
+PINYIN_21CHAR                                          2        0.00%
+OTHER_KOREAN                                           1        0.00%
+PINYIN_17CHAR                                          1        0.00%
+PINYIN_19CHAR                                          1        0.00%
+
+Sample tokens by type:
+----------------------------------------------------------------------
+  PINYIN_2CHAR                            : 'yí gè ', 'měi guó ', ' zhōng guó ', 'xióng māo ', ' lā tè ', '   lèi xíng ', ' xī lín', ' gāi míng '
+  PINYIN_3CHAR                            : 'gòng hé guó ', 'wěi yuán huì ', 'huá rén mín ', ' kě tōng guò ', ' nǚ xìng de ', ' jí tuán hé ', ' hé zhèng zhì ', 'zhū lì yà'
+  LATIN_LETTER                            : 'A', 'B', 'C', 'np ', 'PAGASA ', 'Ga', 'N', 'on '
+  PINYIN_1CHAR                            : 'a', 'e', 'm', 'nà   ', 'que   ', '   jiāng ', '   li', 'pin'
+  PINYIN_4CHAR                            : ' píng fāng gōng lǐ ', ' píng fāng qiān mǐ ', 'zhèng zhì rén wù ', 'xiāng gǎng zhōng xué ', ' yǐ jīng wán chéng ', 'zhèng shì qǐ dòng ', ' wèi yú tái wān ', 'guǐ dào jiāo tōng'
+  PINYIN_WITH_DIGIT                       : '10 yuè ', '12 yuè ', '7 yuè ', '3 chù ', '6 xiǎo shí ', '42 rén ', '70 gōng lǐ ', ' nián 12 yuè 12 rì '
+  LATIN_DIGIT                             : '0', '1', '2', '125 ', 'NMB48', '729', '262', '18'
+  PINYIN_5CHAR                            : ' de yí gè shì zhèn ', ' shì wèi yú měi guó ', 'měi guó rén kǒu pǔ ', 'nán bù de cūn zhuāng ', 'xiāng gǎng jiāo yì suǒ ', 'zī xún wěi yuán huì ', 'má sà zhū sāi zhōu ', ' shì yì dà lì de '
+  PINYIN_6CHAR                            : 'huá rén mín gòng hé guó ', 'shěng de yí gè shì zhèn ', 'wén wù bǎo hù dān wèi ', 'shàng bǐ lì niú sī shěng ', 'yīng guó diàn yǐng xué yuàn ', ' rén mín guǎng bō diàn tái ', ' dì èr cì shì jiè dà ', ' huò dé yī méi tóng pái '
+  OTHER_UNKNOWN                           : '_', '\n', 'h�', 'JR xī rì běn ', 'й   ', ' р', ' ы', 'μ '
+  PINYIN_7CHAR                            : ' zhōng huá rén mín gòng hé guó ', 'ào lín pǐ kè yùn dòng huì ', ' ér rén kǒu mì dù wèi měi', 'wén huà dà gé mìng qī jiān ', ' bù liè diān gē lún bǐ yà ', 'gāng guǒ mín zhǔ gòng hé guó ', ' wèi yú gāi guó zhōng nán bù ', ' wèi yú fǎ guó bó gěn dì '
+  OTHER_JAPANESE                          : 'ー', 'ン', 'の', 'に ', 'れ ', 'ち', ' ラ', 'に'
+  PINYIN_8CHAR                            : 'shí de rén kǒu shù liàng wèi rén ', 'suǒ shǔ de shěng jí xuǎn qū wèi ', '   suǒ shǔ de shěng jí xuǎn qū wèi ', 'xiàn jí wén wù bǎo hù dān wèi ', 'běi měi zhōu jí jiā lè bǐ hǎi ', ' mǎ lái xī yà zhèng zhì rén wù ', 'suǒ shǔ xíng zhèng qū yù huà guī ', ' gāi shěng fèn wèi fǎ guó xī bù '
+  PINYIN_9CHAR                            : ' rén kǒu mì dù měi píng fāng gōng lǐ ', 'měi guó rén kǒu pǔ chá de shù jù ', '   yú shí de rén kǒu shù liàng wèi rén ', ' zhōng gòng zhōng yāng zhèng zhì jú cháng wěi ', ' wén wù yí zhǐ nián dài pàn dìng wèi ', ' wèi fú qí yú gāng lǐ xíng mù lǐ ', ' shì wèi yú měi guó ā kěn sè zhōu ', '   wū kè lán dì fāng zhèng fǔ biǎo shì '
+  PUNCTUATION                             : '!', '"', '#', '� ', '   �', '*', '…', '～'
+  PINYIN_10CHAR                           : ' tóng shí gāi dì shè yǒu xià lìng shí jiān ', 'chù de hǎi bá wèi gāo yú hǎi píng miàn ', ' quán guó zhòng diǎn wén wù bǎo hù dān wèi ', 'qū de yí gè chuán tǒng dì yù míng chēng ', ' wèi yú fǎ guó bù liè tǎ ní dà qū ', ' shì wèi yú měi guó běi dá kē tā zhōu ', 'quán guó zhòng diǎn wén wù bǎo hù dān wèi ', ' gāi nóng cūn jū mín diǎn de rén kǒu wèi '
+  PINYIN_11CHAR                           : ' ér rén kǒu mì dù wèi měi píng fāng qiān mǐ ', ' zhōng huá rén mín gòng hé guó zhèng zhì rén wù ', ' ér gāi dì de píng jūn hǎi bá gāo dù wèi ', ' wèi yú gāi guó xī nán bù wén ní chá zhōu ', ' gāi shěng fèn wèi fǎ guó zhōng běi bù shěng fèn ', ' gāi dì de miàn jī hé rén kǒu jiē wèi zhī ', ' shǔ yú ān dì sī shān mài de yī bù fèn ', ' wèi fú qí yú gāng zhī lǐ mù zhī lǐ yà '
+  PINYIN_12CHAR                           : 'xià xiá de yí gè xiāng zhèn jí xíng zhèng dān wèi ', ' ér rén kǒu mì dù wèi měi píng fāng qiān mǐ rén ', ' shì yī kē rào tài yáng yùn zhuàn de xiǎo xíng xīng ', 'liù pī quán guó zhòng diǎn wén wù bǎo hù dān wèi ', ' fēi lǜ bīn dà qì dì qiú wù lǐ hé tiān wén ', ' děng shì dāng dì zhǔ yào de dì fāng xìng méi tǐ ', ' xīn zēng běn tǔ xīn guān fèi yán què zhěn bìng lì ', 'xià jì cán jí rén ào lín pǐ kè yùn dòng huì '
+  PINYIN_13CHAR                           : ' shì xià xiá de yí gè xiāng zhèn jí xíng zhèng dān wèi ', ' shì yī kē wéi rào tài yáng gōng zhuàn de xiǎo xíng xīng ', ' gāi shěng fèn wèi fǎ guó dōng běi bù nèi lù shěng fèn ', ' shè huì jià zhí de lù shēng yě shēng dòng wù míng lù ', ' shì zhèn fàn wéi nèi gòng yǒu gè lèi yòng rén dān wèi ', 'xià jì ào lín pǐ kè yùn dòng huì tián jìng bǐ sài ', ' gāi shěng fèn wèi fǎ guó xī běi bù yán hǎi shěng fèn ', ' gāi shěng fèn wèi fǎ guó xī nán bù nèi lù shěng fèn '
+  DIGIT                                   : '²', '³', '² '
+  EMPTY                                   : ' ', '  ', '   '
+  PINYIN_15CHAR                           : ' xīn zēng jìng wài shū rù xìng xīn guān fèi yán què zhěn bìng lì ', ' lì wú zhèng zhuàng gǎn rǎn zhě zài gé lí guǎn kòng zhōng fā xiàn ', 'xīn zēng jìng wài shū rù xìng xīn guān fèi yán què zhěn bìng lì '
+  PINYIN_14CHAR                           : ' wèi fú qí yú gāng lú xíng mù lóng tóu yú yà mù cí ', 'wú zhèng zhuàng gǎn rǎn zhě zài gé lí guǎn kòng zhōng fā xiàn ', 'jìng nèi gòng yǒu zài xiào zhōng děng jiào yù jiē duàn xué shēng '
+  PINYIN_16CHAR                           : '   zhǐ liè chū céng jìn rù zhǔn jué sài de guó jì sài shì chéng jì ', ' zài rì zhì qī chū qī de guān fāng dì tú shàng yǐ yǒu jì zǎi '
+  PINYIN_21CHAR                           : ' wèi fú qí yú gāng lú xíng mù lóng tóu yú yà mù cí diāo kē de qí zhōng yī zhǒng ', ' wèi fú qí yú gāng zhī lǐ mù zhī lǐ yà mù zhī lǐ kē de qí zhōng yí gè zhǒng '
+  OTHER_KOREAN                            : '이'
+  PINYIN_17CHAR                           : ' shì wù yóu qí suǒ shǔ de lián hé gè jí zhèng fǔ xié tiáo fù zé '
+  PINYIN_19CHAR                           : 'huán jìng shì wù yóu qí suǒ shǔ de lián hé gè jí zhèng fǔ xié tiáo fù zé '
+
+
+====================================================================================================
+CATEGORY EXPLANATIONS
+====================================================================================================
+
+LATIN_LETTER       - Pure Latin letters (a-zA-Z)
+LATIN_DIGIT        - Latin letters and digits combined
+DIGIT              - Pure digits (0-9)
+PUNCTUATION        - Punctuation marks and symbols
+
+CHINESE_NCHAR      - N pure Chinese characters (Standard CJK: U+4E00-U+9FFF)
+PINYIN_NCHAR       - N valid pinyin syllables (Space separated in token)
+PINYIN_WITH_DIGIT  - Combination of valid pinyin syllables and digits
+MIXED_WITH_CHINESE - Tokens containing Chinese chars mixed with other content
+
+OTHER_JAPANESE     - Japanese characters (Hiragana/Katakana)
+OTHER_KOREAN       - Korean characters (Hangul: U+AC00-U+D7AF)
+OTHER_RARE_CHINESE_UTF8 - Rare Chinese chars or UTF-8 byte fragments
+                     (CJK Extension: U+3400-U+4DBF, or byte notation <0xXX>)
+OTHER_UNKNOWN      - Other unclassified tokens

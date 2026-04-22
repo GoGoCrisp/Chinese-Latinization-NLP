@@ -46,7 +46,7 @@ def ensure_corpus_dir(txt_file_path):
     return tmp_dir
 
 def run_superbpe_pipeline(corpus_path, total_vocab_size, name):
-    t_point = int(total_vocab_size * 0.90)
+    t_point = int(total_vocab_size * 0.10)
     print(f"\n{'='*50}\nStarting SuperBPE Pipeline for {name} ({total_vocab_size//1000}k)\n{'='*50}")
     
     corpus_dir = ensure_corpus_dir(corpus_path)
@@ -96,6 +96,7 @@ def run_superbpe_pipeline(corpus_path, total_vocab_size, name):
 
 if __name__ == "__main__":
     corpora = {
+        "chinese_origin": os.path.join(CORPUS_DIR, "chinese_origin_中国_train90.txt"),
         "pinyin_toned": os.path.join(CORPUS_DIR, "pinyin_toned_spaced_train90.txt"),
         "pinyin_toneless": os.path.join(CORPUS_DIR, "pinyin_toneless_spaced_train90.txt"),
         "pinyin_diacritic": os.path.join(CORPUS_DIR, "pinyin_diacritic_spaced_train90.txt")

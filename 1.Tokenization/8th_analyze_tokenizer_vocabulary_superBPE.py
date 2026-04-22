@@ -1,503 +1,703 @@
+from __future__ import annotations
+
 """
-分析Tokenizer Vocabulary构成
-统计各类型token的数量和分布
+Table 2 vocabulary composition analysis for SuperBPE tokenizers.
+
+This script produces mutually exclusive counts for the categories used in the
+paper table:
+
+    character-based Chinese BPE vs. Pinyin-Toned BPE
+    at 8K / 16K / 32K / 64K vocabulary sizes.
+
+Parent rows such as "SUB-SYLLABLE FRAGMENTS" are reported as subtotals. The
+sanity check is computed only over leaf categories, so each tokenizer's leaf
+counts must sum to its vocabulary size.
 """
 
+import csv
 import json
 import os
 import re
-import random
 import unicodedata
 from collections import Counter, defaultdict
 from pathlib import Path
 
-# ===== 配置 =====
-TOKENIZERS_DIR = "decoded_superTokenizers"
+try:
+    from pypinyin import Style, pinyin
+    HAS_PYPINYIN = True
+except ImportError:
+    HAS_PYPINYIN = False
 
-# 配置：分别分析 Chinese Origin 和 Pinyin Toneless
-CONFIGS = {
-    "chinese_origin": {
-        "tokenizers": [
-            "chinese_origin_subset100k_superbpe_8000_decoded.json",
-            "chinese_origin_subset100k_superbpe_16000_decoded.json",
-            "chinese_origin_subset100k_superbpe_32000_decoded.json",
-            "chinese_origin_subset100k_superbpe_64000_decoded.json",
-        ],
-        "output_file": "tokenizer_vocabulary_analysis_chinese_origin_superBPE.txt",
-        "title": "CHINESE ORIGIN TOKENIZERS (superBPE) - VOCABULARY COMPOSITION ANALYSIS",
+
+# ===== Paths / outputs =====
+
+BASE_DIR = Path(__file__).resolve().parent
+TOKENIZERS_DIR = BASE_DIR / "decoded_superTokenizers"
+DICTS_DIR = BASE_DIR / "dicts"
+CEDICT_PATH = DICTS_DIR / "cedict_ts.u8"
+MERGED_PINYIN_DICT_PATH = DICTS_DIR / "merged_pinyin_dict.json"
+
+OUTPUT_TXT = TOKENIZERS_DIR / "tokenizer_vocabulary_table2_superBPE.txt"
+OUTPUT_CSV = TOKENIZERS_DIR / "tokenizer_vocabulary_table2_superBPE.csv"
+
+VOCAB_SIZES = [8000, 16000, 32000, 64000]
+
+TOKENIZER_FILES = {
+    "chinese": {
+        size: f"chinese_origin_subset100k_superbpe_{size}_decoded.json"
+        for size in VOCAB_SIZES
     },
-    "pinyin_toneless": {
-        "tokenizers": [
-            "pinyin_toneless_subset100k_superbpe_8000_decoded.json",
-            "pinyin_toneless_subset100k_superbpe_16000_decoded.json",
-            "pinyin_toneless_subset100k_superbpe_32000_decoded.json",
-            "pinyin_toneless_subset100k_superbpe_64000_decoded.json",
-        ],
-        "output_file": "tokenizer_vocabulary_analysis_pinyin_toneless_superBPE.txt",
-        "title": "PINYIN TONELESS TOKENIZERS (superBPE) - VOCABULARY COMPOSITION ANALYSIS",
+    "pinyin_toned": {
+        size: f"pinyin_toned_subset100k_superbpe_{size}_decoded.json"
+        for size in VOCAB_SIZES
     },
 }
 
 
-# ===== 分类函数 =====
+# ===== Category rows =====
 
-def is_latin(token: str) -> bool:
-    """检查是否为拉丁字母"""
-    return bool(re.match(r'^[a-zA-Z]+$', token))
+CAT_SINGLE_LETTERS = "SINGLE LETTERS (A-Z)"
+CAT_SINGLE_CJK = "SINGLE CJK CHARACTERS"
+CAT_DIGITS = "DIGITS"
+CAT_PUNCTUATION = "PUNCTUATION"
+CAT_SUB_INITIALS = "(initials: zh, ch, sh, ...)"
+CAT_SUB_FINALS = "(finals: ong, ang, ian, ...)"
+CAT_SUB_OTHER = "(other partial sequences)"
+CAT_ONE_SYLLABLE = "1-SYLLABLE / 1-CHAR TOKENS"
+CAT_ONE_SYLLABLE_TONE = "1-SYLLABLE + TONE NUMBER"
+CAT_TWO = "2-SYLLABLE / 2-CHAR"
+CAT_THREE = "3-SYLLABLE / 3-CHAR"
+CAT_FOUR = "4-SYLLABLE / 4-CHAR"
+CAT_FIVE = "5-SYLLABLE / 5-CHAR"
+CAT_SIX_PLUS = "6+-SYLLABLE / 6+-CHAR"
+CAT_CROSS_WORD = "CROSS-WORD MERGES"
+CAT_MIXED_LATIN_CJK = "MIXED (LATIN + CJK)"
+CAT_JK_RARE = "JAPANESE / KOREAN / RARE CJK"
+CAT_OTHER = "OTHER / UNKNOWN"
+
+LEAF_CATEGORIES = [
+    CAT_SINGLE_LETTERS,
+    CAT_SINGLE_CJK,
+    CAT_DIGITS,
+    CAT_PUNCTUATION,
+    CAT_SUB_INITIALS,
+    CAT_SUB_FINALS,
+    CAT_SUB_OTHER,
+    CAT_ONE_SYLLABLE,
+    CAT_ONE_SYLLABLE_TONE,
+    CAT_TWO,
+    CAT_THREE,
+    CAT_FOUR,
+    CAT_FIVE,
+    CAT_SIX_PLUS,
+    CAT_CROSS_WORD,
+    CAT_MIXED_LATIN_CJK,
+    CAT_JK_RARE,
+    CAT_OTHER,
+]
+
+TABLE_ROWS = [
+    ("Base inventory", None),
+    (CAT_SINGLE_LETTERS, CAT_SINGLE_LETTERS),
+    (CAT_SINGLE_CJK, CAT_SINGLE_CJK),
+    (CAT_DIGITS, CAT_DIGITS),
+    (CAT_PUNCTUATION, CAT_PUNCTUATION),
+    ("Sub-syllable / sub-character units", None),
+    ("SUB-SYLLABLE FRAGMENTS", "SUBTOTAL_SUB_SYLLABLE"),
+    (CAT_SUB_INITIALS, CAT_SUB_INITIALS),
+    (CAT_SUB_FINALS, CAT_SUB_FINALS),
+    (CAT_SUB_OTHER, CAT_SUB_OTHER),
+    ("Syllable-level / character-level tokens", None),
+    (CAT_ONE_SYLLABLE, CAT_ONE_SYLLABLE),
+    (CAT_ONE_SYLLABLE_TONE, CAT_ONE_SYLLABLE_TONE),
+    ("Multi-syllable / multi-character tokens", None),
+    (CAT_TWO, CAT_TWO),
+    (CAT_THREE, CAT_THREE),
+    (CAT_FOUR, CAT_FOUR),
+    (CAT_FIVE, CAT_FIVE),
+    (CAT_SIX_PLUS, CAT_SIX_PLUS),
+    ("Cross-boundary and mixed tokens", None),
+    (CAT_CROSS_WORD, CAT_CROSS_WORD),
+    (CAT_MIXED_LATIN_CJK, CAT_MIXED_LATIN_CJK),
+    ("Other", None),
+    (CAT_JK_RARE, CAT_JK_RARE),
+    (CAT_OTHER, CAT_OTHER),
+    ("Total", "TOTAL"),
+]
 
 
-def is_latin_digit(token: str) -> bool:
-    """检查是否为拉丁字母+数字"""
-    return bool(re.match(r'^[a-zA-Z0-9]+$', token))
+# ===== Pinyin definitions =====
+
+VALID_PINYIN = {
+    "a", "ai", "an", "ang", "ao", "ba", "bai", "ban", "bang", "bao",
+    "bei", "ben", "beng", "bi", "bian", "biao", "bie", "bin", "bing",
+    "bo", "bu", "ca", "cai", "can", "cang", "cao", "ce", "cen", "ceng",
+    "cha", "chai", "chan", "chang", "chao", "che", "chen", "cheng",
+    "chi", "chong", "chou", "chu", "chua", "chuai", "chuan", "chuang",
+    "chui", "chun", "chuo", "ci", "cong", "cou", "cu", "cuan", "cui",
+    "cun", "cuo", "da", "dai", "dan", "dang", "dao", "de", "dei",
+    "deng", "di", "dian", "diao", "die", "ding", "diu", "dong", "dou",
+    "du", "duan", "dui", "dun", "duo", "e", "ei", "en", "eng", "er",
+    "fa", "fan", "fang", "fei", "fen", "feng", "fo", "fou", "fu", "ga",
+    "gai", "gan", "gang", "gao", "ge", "gei", "gen", "geng", "gong",
+    "gou", "gu", "gua", "guai", "guan", "guang", "gui", "gun", "guo",
+    "ha", "hai", "han", "hang", "hao", "he", "hei", "hen", "heng",
+    "hm", "hng", "hong", "hou", "hu", "hua", "huai", "huan", "huang",
+    "hui", "hun", "huo", "ji", "jia", "jian", "jiang", "jiao", "jie",
+    "jin", "jing", "jiong", "jiu", "ju", "juan", "jue", "jun", "ka",
+    "kai", "kan", "kang", "kao", "ke", "kei", "ken", "keng", "kong",
+    "kou", "ku", "kua", "kuai", "kuan", "kuang", "kui", "kun", "kuo",
+    "la", "lai", "lan", "lang", "lao", "le", "lei", "leng", "li",
+    "lia", "lian", "liang", "liao", "lie", "lin", "ling", "liu", "lo",
+    "long", "lou", "lu", "lv", "lve", "luan", "lun", "luo", "m", "ma",
+    "mai", "man", "mang", "mao", "me", "mei", "men", "meng", "mi",
+    "mian", "miao", "mie", "min", "ming", "miu", "mo", "mou", "mu",
+    "na", "nai", "nan", "nang", "nao", "ne", "nei", "nen", "neng",
+    "ng", "ni", "nian", "niang", "niao", "nie", "nin", "ning", "niu",
+    "nong", "nou", "nu", "nv", "nve", "nuan", "nun", "nuo", "o", "ou",
+    "pa", "pai", "pan", "pang", "pao", "pei", "pen", "peng", "pi",
+    "pian", "piao", "pie", "pin", "ping", "po", "pou", "pu", "qi",
+    "qia", "qian", "qiang", "qiao", "qie", "qin", "qing", "qiong",
+    "qiu", "qu", "quan", "que", "qun", "ran", "rang", "rao", "re",
+    "ren", "reng", "ri", "rong", "rou", "ru", "ruan", "rui", "run",
+    "ruo", "sa", "sai", "san", "sang", "sao", "se", "sen", "seng",
+    "sha", "shai", "shan", "shang", "shao", "she", "shei", "shen",
+    "sheng", "shi", "shou", "shu", "shua", "shuai", "shuan", "shuang",
+    "shui", "shun", "shuo", "si", "song", "sou", "su", "suan", "sui",
+    "sun", "suo", "ta", "tai", "tan", "tang", "tao", "te", "teng",
+    "ti", "tian", "tiao", "tie", "ting", "tong", "tou", "tu", "tuan",
+    "tui", "tun", "tuo", "wa", "wai", "wan", "wang", "wei", "wen",
+    "weng", "wo", "wu", "xi", "xia", "xian", "xiang", "xiao", "xie",
+    "xin", "xing", "xiong", "xiu", "xu", "xuan", "xue", "xun", "ya",
+    "yan", "yang", "yao", "ye", "yi", "yin", "ying", "yo", "yong",
+    "you", "yu", "yuan", "yue", "yun", "za", "zai", "zan", "zang",
+    "zao", "ze", "zei", "zen", "zeng", "zha", "zhai", "zhan", "zhang",
+    "zhao", "zhe", "zhei", "zhen", "zheng", "zhi", "zhong", "zhou",
+    "zhu", "zhua", "zhuai", "zhuan", "zhuang", "zhui", "zhun", "zhuo",
+    "zi", "zong", "zou", "zu", "zuan", "zui", "zun", "zuo",
+}
+
+PINYIN_INITIALS = {
+    "b", "p", "m", "f", "d", "t", "n", "l", "g", "k", "h",
+    "j", "q", "x", "zh", "ch", "sh", "r", "z", "c", "s", "y", "w",
+}
+
+PINYIN_FINALS = {
+    "a", "o", "e", "ai", "ei", "ao", "ou", "an", "en", "ang", "eng",
+    "ong", "i", "ia", "ie", "iao", "iou", "iu", "ian", "in", "iang",
+    "ing", "iong", "u", "ua", "uo", "uai", "uei", "ui", "uan", "uen",
+    "un", "uang", "ueng", "v", "ve", "van", "vn", "ü", "üe", "üan",
+    "ün", "er",
+}
+
+TONE_MARK_TO_BASE_AND_NUM = {
+    "ā": ("a", "1"), "á": ("a", "2"), "ǎ": ("a", "3"), "à": ("a", "4"),
+    "ē": ("e", "1"), "é": ("e", "2"), "ě": ("e", "3"), "è": ("e", "4"),
+    "ī": ("i", "1"), "í": ("i", "2"), "ǐ": ("i", "3"), "ì": ("i", "4"),
+    "ō": ("o", "1"), "ó": ("o", "2"), "ǒ": ("o", "3"), "ò": ("o", "4"),
+    "ū": ("u", "1"), "ú": ("u", "2"), "ǔ": ("u", "3"), "ù": ("u", "4"),
+    "ǖ": ("v", "1"), "ǘ": ("v", "2"), "ǚ": ("v", "3"), "ǜ": ("v", "4"),
+    "ń": ("n", "2"), "ň": ("n", "3"), "ǹ": ("n", "4"),
+    "ḿ": ("m", "2"),
+}
+
+TONE_MARKS = str.maketrans({
+    mark: base for mark, (base, _tone) in TONE_MARK_TO_BASE_AND_NUM.items()
+} | {"ü": "v"})
 
 
-def is_punctuation(token: str) -> bool:
-    """检查是否为标点符号"""
-    return bool(re.match(r'^[^\w\s\u4e00-\u9fff]+$', token, re.UNICODE))
+# ===== Character / token helpers =====
+
+def strip_token(token: str) -> str:
+    return token.replace("##", "").replace("Ġ", "")
 
 
-def is_japanese(token: str) -> bool:
-    """检查是否为日语（平假名、片假名）"""
-    # 平假名: \u3041-\u3096
-    # 片假名: \u30A1-\u30FC
-    return bool(re.search(r'[\u3041-\u3096\u30A1-\u30FC]', token))
+def compact_token(token: str) -> str:
+    return strip_token(token).strip().replace(" ", "")
 
 
-def is_korean(token: str) -> bool:
-    """检查是否为韩语（韩文字母）"""
-    # 韩文字母范围: \uAC00-\uD7AF
-    return bool(re.search(r'[\uAC00-\uD7AF]', token))
+def is_standard_cjk_char(ch: str) -> bool:
+    return "\u4e00" <= ch <= "\u9fff" and unicodedata.category(ch)[0] != "C"
 
 
-def is_rare_chinese_or_utf8_byte(token: str) -> bool:
-    """
-    检查是否为生僻中文字或UTF-8字节碎片
-    包括CJK扩展和特殊的字节编码
-    """
-    # 1. 检查是否为特殊的字节表示 <0xXX>
-    if re.match(r'^<0x[0-9A-Fa-f]{2}>$', token):
+def count_standard_cjk(token: str) -> int:
+    return sum(1 for ch in token if is_standard_cjk_char(ch))
+
+
+def is_all_standard_cjk(token: str) -> bool:
+    return bool(token) and all(is_standard_cjk_char(ch) for ch in token)
+
+
+def has_latin(token: str) -> bool:
+    return bool(re.search(r"[A-Za-z]", token))
+
+
+def has_standard_cjk(token: str) -> bool:
+    return any(is_standard_cjk_char(ch) for ch in token)
+
+
+def has_japanese_korean_or_rare_cjk(token: str) -> bool:
+    if re.search(r"[\u3041-\u3096\u30A1-\u30FF\uAC00-\uD7AF]", token):
         return True
-    
-    # 2. 检查是否为中文扩展区域的字符
-    # 中日韩统一表意文字扩展A: U+3400-U+4DBF
-    if re.search(r'[\u3400-\u4DBF]', token):
+    if re.search(r"[\u3400-\u4DBF]", token):
         return True
-    
-    # 3. 检查单个字符且为高Unicode码点（可能是组合字符或特殊字符）
-    if len(token) == 1 and ord(token) > 0xE000:
+    if re.search(r"<0x[0-9A-Fa-f]{2}>", token):
         return True
-    
+    for ch in token:
+        code = ord(ch)
+        if 0x20000 <= code <= 0x2FA1F:
+            return True
     return False
 
 
-def count_chinese_chars(token: str) -> int:
-    """
-    统计token中中文字符的数量（标准CJK范围）
-    排除无效的边界字符（如U+9FFF等）
-    """
-    count = 0
-    for char in token:
-        # 检查是否在标准CJK范围
-        if '\u4e00' <= char <= '\u9fff':
-            # 排除某些无效的边界字符
-            # U+9FFF, U+FFFE, U+FFFF 等
-            if ord(char) not in [0x9fff, 0xfffe, 0xffff]:
-                # 检查是否是真实的字符（不是控制字符）
-                try:
-                    cat = unicodedata.category(char)
-                    # 排除控制字符 (Cc) 和格式字符 (Cf)
-                    if cat not in ['Cc', 'Cf', 'Co', 'Cs', 'Cn']:
-                        count += 1
-                except:
-                    pass
-    return count
-
-
-def get_token_type(token: str) -> str:
-    """
-    对token进行分类
-    返回分类标签
-    """
-    # 移除特殊前缀
-    clean_token = token.replace("##", "").replace("Ġ", "").replace(" ", "")
-    
-    if not clean_token:
-        return "EMPTY"
-    
-    # 统计中文字符
-    chinese_count = count_chinese_chars(clean_token)
-    
-    # 1. 纯中文token（标准CJK范围）
-    if chinese_count > 0 and len(clean_token) == chinese_count:
-        return f"CHINESE_{chinese_count}CHAR"
-    
-    # 2. 包含中文但不纯中文的token
-    if chinese_count > 0:
-        return "MIXED_WITH_CHINESE"
-    
-    # 3. 拉丁字母
-    if is_latin(clean_token):
-        return "LATIN_LETTER"
-    
-    # 4. 拉丁字母+数字
-    if is_latin_digit(clean_token):
-        return "LATIN_DIGIT"
-    
-    # 5. 数字
-    if clean_token.isdigit():
-        return "DIGIT"
-    
-    # 6. 标点符号
-    if is_punctuation(clean_token):
-        return "PUNCTUATION"
-    
-    # ===== OTHER分类 =====
-    # 7. 日语
-    if is_japanese(clean_token):
-        return "OTHER_JAPANESE"
-    
-    # 8. 韩语
-    if is_korean(clean_token):
-        return "OTHER_KOREAN"
-    
-    # 9. 生僻中文或UTF-8字节碎片
-    if is_rare_chinese_or_utf8_byte(clean_token):
-        return "OTHER_RARE_CHINESE_UTF8"
-    
-    # 10. 其他
-    return "OTHER_UNKNOWN"
-
-
-# ===== 主分析函数 =====
-
-def analyze_tokenizer(vocab_path: str) -> dict:
-    """
-    分析单个tokenizer的vocabulary
-    """
-    print(f"\nAnalyzing: {vocab_path}")
-    print("-" * 80)
-    
-    # 加载vocabulary
-    try:
-        with open(vocab_path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-            
-            # 对于 decoded_superTokenizers，文件本身就是 {"token": id} 的形式
-            vocab = data
-            
-    except Exception as e:
-        print(f"✗ Error loading tokenizer: {e}")
-        return {}
-    
-    print(f"✓ Total tokens: {len(vocab)}")
-    
-    # 统计各类型token
-    type_counter = Counter()
-    detailed_stats = defaultdict(list)
-    
-    for token_str in vocab.keys():
-        token_type = get_token_type(token_str)
-        type_counter[token_type] += 1
-        detailed_stats[token_type].append(token_str)
-    
-    # 整理结果
-    results = {
-        "total_vocab_size": len(vocab),
-        "type_distribution": dict(type_counter),
-        "detailed_stats": dict(detailed_stats),
-    }
-    
-    return results
-
-
-def sort_tokenizers_by_vocab_size(tokenizer_names):
-    """
-    按vocab大小排序tokenizer
-    从名字中提取 8000, 16000, 32000, 64000 等
-    """
-    def extract_vocab_size(name):
-        match = re.search(r'_(\d+)_decoded', name)
-        if match:
-            return int(match.group(1))
-        return 0
-    
-    return sorted(tokenizer_names, key=extract_vocab_size)
-
-def extract_vocab_size_from_name(name):
-    """从tokenizer名字中提取vocab大小用于排序"""
-    match = re.search(r'_(\d+)_decoded', name)
-    if match:
-        return int(match.group(1))
-    return 0
-
-
-def format_results(results_dict: dict, title: str = "") -> str:
-    """
-    将分析结果格式化为表格
-    """
-    report = []
-    report.append("=" * 100)
-    report.append(title or "TOKENIZERS - VOCABULARY COMPOSITION ANALYSIS")
-    report.append("=" * 100)
-    report.append("")
-    report.append("Analyzing: Chinese characters, Latin letters, punctuation, and other languages (Japanese, Korean)")
-    report.append("Special focus: UTF-8 byte fragments (represented as 'half characters')")
-    report.append("Note: Pinyin tokens like 'zhishao', 'jinwang' are correct (correspond to Chinese words like '至少', '金王')")
-    report.append("")
-    
-    # 提取所有可能的类型（按顺序排列）
-    all_types = set()
-    for results in results_dict.values():
-        all_types.update(results.get("type_distribution", {}).keys())
-    
-    # 排序类型
-    type_order = [
-        "LATIN_LETTER",
-        "LATIN_DIGIT", 
-        "DIGIT",
-        "PUNCTUATION",
-        "CHINESE_1CHAR",
-        "CHINESE_2CHAR",
-        "CHINESE_3CHAR",
-        "CHINESE_4CHAR",
-        "CHINESE_5CHAR",
-        "CHINESE_6CHAR",
-        "MIXED_WITH_CHINESE",
-        "OTHER_JAPANESE",
-        "OTHER_KOREAN",
-        "OTHER_RARE_CHINESE_UTF8",
-        "OTHER_UNKNOWN",
-        "EMPTY",
-    ]
-    
-    sorted_types = [t for t in type_order if t in all_types]
-    sorted_types.extend(sorted([t for t in all_types if t not in type_order]))
-    
-    # 生成表格标题
-    header = "Token Type".ljust(35)
-    for name in sort_tokenizers_by_vocab_size(list(results_dict.keys())):
-        header += f" | {name[:13]:>13}"
-    header += " | TOTAL"
-    
-    report.append(header)
-    report.append("=" * len(header))
-    
-    # 生成表格内容
-    totals = {name: 0 for name in results_dict.keys()}
-    sorted_names = sort_tokenizers_by_vocab_size(list(results_dict.keys()))
-    
-    for token_type in sorted_types:
-        row = token_type.ljust(35)
-        type_total = 0
-        
-        for name in sorted_names:
-            count = results_dict[name]["type_distribution"].get(token_type, 0)
-            row += f" | {count:>13}"
-            totals[name] += count
-            type_total += count
-        
-        row += f" | {type_total:>5}"
-        report.append(row)
-    
-    # 总和行
-    report.append("-" * len(header))
-    row = "TOTAL".ljust(35)
-    grand_total = 0
-    for name in sorted_names:
-        total = results_dict[name]["total_vocab_size"]
-        row += f" | {total:>13}"
-        grand_total += total
-    row += f" | {grand_total:>5}"
-    report.append(row)
-    
-    report.append("")
-    report.append("=" * 100)
-    report.append("CATEGORY EXPLANATIONS")
-    report.append("=" * 100)
-    report.append("")
-    report.append("LATIN_LETTER       - Pure Latin letters (a-zA-Z)")
-    report.append("LATIN_DIGIT        - Latin letters and digits combined")
-    report.append("DIGIT              - Pure digits (0-9)")
-    report.append("PUNCTUATION        - Punctuation marks and symbols")
-    report.append("")
-    report.append("CHINESE_NCHAR      - N pure Chinese characters (Standard CJK: U+4E00-U+9FFF)")
-    report.append("MIXED_WITH_CHINESE - Tokens containing Chinese chars mixed with other content")
-    report.append("")
-    report.append("OTHER_JAPANESE     - Japanese characters (Hiragana/Katakana)")
-    report.append("OTHER_KOREAN       - Korean characters (Hangul: U+AC00-U+D7AF)")
-    report.append("OTHER_RARE_CHINESE_UTF8 - Rare Chinese chars or UTF-8 byte fragments")
-    report.append("                     (CJK Extension: U+3400-U+4DBF, or byte notation <0xXX>)")
-    report.append("OTHER_UNKNOWN      - Other unclassified tokens")
-    report.append("")
-    
-    return "\n".join(report)
-
-
-def generate_detailed_report(results_dict: dict) -> str:
-    """
-    生成详细报告
-    """
-    report = []
-    report.append("")
-    report.append("=" * 100)
-    report.append("DETAILED BREAKDOWN BY TOKENIZER")
-    report.append("=" * 100)
-    report.append("")
-    
-    for name, results in sorted(results_dict.items(), key=lambda x: extract_vocab_size_from_name(x[0])):
-        report.append(f"\n{'=' * 100}")
-        report.append(f"TOKENIZER: {name}")
-        report.append(f"{'=' * 100}")
-        report.append(f"Total Vocabulary Size: {results['total_vocab_size']}")
-        report.append("")
-        
-        # 按数量排序类型
-        sorted_types = sorted(
-            results["type_distribution"].items(),
-            key=lambda x: x[1],
-            reverse=True
-        )
-        
-        report.append(f"{'Type':<45} {'Count':>10} {'Percentage':>12}")
-        report.append("-" * 70)
-        
-        for token_type, count in sorted_types:
-            percentage = (count / results["total_vocab_size"]) * 100
-            report.append(f"{token_type:<45} {count:>10} {percentage:>11.2f}%")
-        
-        # 示例token - 显示所有类型
-        report.append("")
-        report.append("Sample tokens by type:")
-        report.append("-" * 70)
-        
-        # 动态获取该tokenizer的所有token类型，按照出现数量排序
-        all_token_types = sorted(
-            results["detailed_stats"].keys(),
-            key=lambda t: len(results["detailed_stats"].get(t, [])),
-            reverse=True
-        )
-        
-        for token_type in all_token_types:
-            tokens = results["detailed_stats"].get(token_type, [])
-            if tokens:
-                # 采样策略：前3个 + 最后2个 + 随机3个
-                samples = []
-                
-                # 前3个
-                samples.extend(tokens[:min(3, len(tokens))])
-                
-                # 后2个（如果足够多）
-                if len(tokens) > 5:
-                    samples.extend(tokens[-2:])
-                
-                # 随机采样3个（从中间部分）
-                if len(tokens) > 10:
-                    random_samples = random.sample(tokens[3:-2], min(3, len(tokens)-5))
-                    samples.extend(random_samples)
-                
-                # 去重并保持顺序
-                seen = set()
-                unique_samples = []
-                for s in samples:
-                    if s not in seen:
-                        seen.add(s)
-                        unique_samples.append(s)
-                
-                samples_str = ", ".join([repr(t) for t in unique_samples[:10]])
-                report.append(f"  {token_type:<40}: {samples_str}")
-        
-        report.append("")
-    
-    # 添加说明
-    report.append("")
-    report.append("=" * 100)
-    report.append("CATEGORY EXPLANATIONS")
-    report.append("=" * 100)
-    report.append("")
-    report.append("LATIN_LETTER       - Pure Latin letters (a-zA-Z)")
-    report.append("LATIN_DIGIT        - Latin letters and digits combined")
-    report.append("DIGIT              - Pure digits (0-9)")
-    report.append("PUNCTUATION        - Punctuation marks and symbols")
-    report.append("")
-    report.append("CHINESE_NCHAR      - N pure Chinese characters (Standard CJK: U+4E00-U+9FFF)")
-    report.append("MIXED_WITH_CHINESE - Tokens containing Chinese chars mixed with other content")
-    report.append("")
-    report.append("OTHER_JAPANESE     - Japanese characters (Hiragana/Katakana)")
-    report.append("OTHER_KOREAN       - Korean characters (Hangul: U+AC00-U+D7AF)")
-    report.append("OTHER_RARE_CHINESE_UTF8 - Rare Chinese chars or UTF-8 byte fragments")
-    report.append("                     (CJK Extension: U+3400-U+4DBF, or byte notation <0xXX>)")
-    report.append("OTHER_UNKNOWN      - Other unclassified tokens")
-    report.append("")
-    
-    return "\n".join(report)
-
-
-# ===== 主流程 =====
-
-def analyze_config(config_name: str, config: dict):
-    """
-    分析单个配置（中文或拼音）的所有tokenizer
-    """
-    print(f"\n{'='*100}")
-    print(f"ANALYZING: {config_name.upper()}")
-    print(f"{'='*100}")
-    
-    results_dict = {}
-    tokenizers_to_analyze = config["tokenizers"]
-    
-    # 分析每个tokenizer
-    for tokenizer_name in tokenizers_to_analyze:
-        tokenizer_path = os.path.join(TOKENIZERS_DIR, tokenizer_name)
-        
-        if not os.path.exists(tokenizer_path):
-            print(f"✗ File not found: {tokenizer_path}")
+def is_punctuation_token(token: str) -> bool:
+    if not token:
+        return False
+    for ch in token:
+        if ch.isspace():
             continue
-        
-        results = analyze_tokenizer(tokenizer_path)
-        results_dict[tokenizer_name] = results
-    
-    if not results_dict:
-        print(f"✗ No tokenizers analyzed for {config_name}. Skipping.")
-        return
-    
-    # 生成报告
-    summary_report = format_results(results_dict, title=config["title"])
-    detailed_report = generate_detailed_report(results_dict)
-    
-    # 完整报告
-    full_report = summary_report + detailed_report
-    
-    # 保存到文件
-    output_path = os.path.join(TOKENIZERS_DIR, config["output_file"])
-    try:
-        with open(output_path, "w", encoding="utf-8") as f:
-            f.write(full_report)
-        print(f"\n✓ Report saved to: {output_path}")
-    except Exception as e:
-        print(f"✗ Error saving report: {e}")
-    
-    # 打印到控制台（摘要部分）
-    print("\n" + summary_report)
+        cat = unicodedata.category(ch)
+        if not (cat.startswith("P") or cat.startswith("S")):
+            return False
+    return True
 
 
-def main():
+def normalize_pinyin_base(s: str) -> str:
+    s = s.lower().replace("u:", "v").replace("ü", "v")
+    s = s.translate(TONE_MARKS)
+    s = re.sub(r"[1-5]", "", s)
+    s = "".join(
+        ch for ch in unicodedata.normalize("NFD", s)
+        if unicodedata.category(ch) != "Mn"
+    )
+    return s
+
+
+def tone_marks_to_numbered(s: str) -> str:
+    """Convert one pinyin syllable with tone marks to tone-number style."""
+    s = s.lower().replace("u:", "v").replace("ü", "v")
+    if re.search(r"[1-5]$", s):
+        return s
+
+    tone = ""
+    chars = []
+    for ch in s:
+        if ch in TONE_MARK_TO_BASE_AND_NUM:
+            base, tone = TONE_MARK_TO_BASE_AND_NUM[ch]
+            chars.append(base)
+        else:
+            chars.append(ch)
+
+    numbered = "".join(chars)
+    if tone:
+        numbered += tone
+    return numbered
+
+
+def normalize_pinyin_toned_syllable(s: str) -> str:
+    return tone_marks_to_numbered(s)
+
+
+def is_valid_pinyin_syllable(s: str) -> bool:
+    if not s or any("A" <= ch <= "Z" for ch in s):
+        return False
+    return normalize_pinyin_base(s) in VALID_PINYIN
+
+
+def has_tone_number(s: str) -> bool:
+    return bool(re.fullmatch(r"[a-züv:]+[1-5]", s.lower()))
+
+
+def split_pinyin_syllables(token: str) -> list[str] | None:
+    """Return pinyin syllables if token is entirely a valid pinyin sequence."""
+    clean = strip_token(token)
+    if not clean.strip():
+        return None
+
+    parts = [part for part in re.split(r"\s+", clean.strip()) if part]
+    if len(parts) > 1:
+        if all(is_valid_pinyin_syllable(part) for part in parts):
+            return [normalize_pinyin_toned_syllable(part) for part in parts]
+        return None
+
+    one = parts[0] if parts else ""
+    if is_valid_pinyin_syllable(one):
+        return [normalize_pinyin_toned_syllable(one)]
+
+    # Handle compact toned tokens such as zhong1guo2 if they occur.
+    compact = one.lower().replace("u:", "v").replace("ü", "v")
+    matches = re.findall(r"[a-zv]+[1-5]", compact)
+    if matches and "".join(matches) == compact:
+        if all(is_valid_pinyin_syllable(match) for match in matches):
+            return [normalize_pinyin_toned_syllable(match) for match in matches]
+
+    return None
+
+
+def pinyin_sequence_key(syllables: list[str]) -> tuple[str, ...]:
+    return tuple(normalize_pinyin_toned_syllable(s) for s in syllables)
+
+
+def is_pinyin_sequence_with_spaces(token: str) -> bool:
+    clean = strip_token(token)
+    return bool(re.search(r"\S\s+\S", clean.strip()))
+
+
+def classify_latin_fragment(token: str) -> str | None:
+    if not re.fullmatch(r"[A-Za-züÜv:]+", token):
+        return None
+
+    lower = token.lower().replace("ü", "v").replace("u:", "v")
+    if len(lower) == 1:
+        return None
+    if is_valid_pinyin_syllable(lower):
+        return None
+    if lower in PINYIN_INITIALS:
+        return CAT_SUB_INITIALS
+    if lower in PINYIN_FINALS:
+        return CAT_SUB_FINALS
+    return CAT_SUB_OTHER
+
+
+def load_vocab(path: Path) -> dict:
+    with path.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+    if not isinstance(data, dict):
+        raise ValueError(f"Expected JSON object vocabulary: {path}")
+    return data
+
+
+def load_merged_char_pinyin() -> dict[str, str]:
+    if not MERGED_PINYIN_DICT_PATH.exists():
+        return {}
+    with MERGED_PINYIN_DICT_PATH.open("r", encoding="utf-8") as f:
+        data = json.load(f)
+    raw_mapping = data.get("data", {})
+    mapping = {}
+    for char, py in raw_mapping.items():
+        if not char or not py:
+            continue
+        first = str(py).split()[0]
+        numbered = normalize_pinyin_toned_syllable(first)
+        if is_valid_pinyin_syllable(numbered):
+            mapping[char] = numbered
+    return mapping
+
+
+def load_cedict_sequences() -> set[tuple[str, ...]]:
+    sequences = set()
+    if not CEDICT_PATH.exists():
+        return sequences
+
+    with CEDICT_PATH.open("r", encoding="utf-8") as f:
+        for line in f:
+            if line.startswith("#"):
+                continue
+            match = re.match(r"(\S+)\s+(\S+)\s+\[(.*?)\]", line)
+            if not match:
+                continue
+            simplified = match.group(2)
+            pinyin_text = match.group(3)
+            if len(simplified) < 2 or not is_all_standard_cjk(simplified):
+                continue
+
+            syllables = [
+                normalize_pinyin_toned_syllable(part)
+                for part in pinyin_text.lower().split()
+            ]
+            if len(syllables) != len(simplified):
+                continue
+            if all(is_valid_pinyin_syllable(syllable) for syllable in syllables):
+                sequences.add(tuple(syllables))
+
+    return sequences
+
+
+CEDICT_SEQUENCES = load_cedict_sequences()
+MERGED_CHAR_PINYIN = load_merged_char_pinyin()
+
+
+def build_known_chinese_pinyin_sequences(size: int) -> set[tuple[str, ...]]:
+    """Build pinyin signatures for known Chinese tokens at the same vocab size.
+
+    This gives the cross-word heuristic a conservative reference: a pinyin
+    multi-syllable token that corresponds to a Chinese vocab token is treated as
+    a multi-syllable token, while a valid pinyin sequence not found here is
+    treated as a cross-word merge.
+    """
+    vocab_path = TOKENIZERS_DIR / TOKENIZER_FILES["chinese"][size]
+    vocab = load_vocab(vocab_path)
+    known = set(CEDICT_SEQUENCES)
+
+    for raw_token in vocab:
+        token = compact_token(raw_token)
+        if count_standard_cjk(token) < 2 or not is_all_standard_cjk(token):
+            continue
+
+        syllables = []
+        for char in token:
+            py = MERGED_CHAR_PINYIN.get(char)
+            if not py:
+                syllables = []
+                break
+            syllables.append(py)
+
+        if len(syllables) == len(token) and all(is_valid_pinyin_syllable(s) for s in syllables):
+            known.add(tuple(syllables))
+
+        if HAS_PYPINYIN:
+            py = pinyin(token, style=Style.TONE3, strict=False)
+            pypinyin_syllables = [
+                normalize_pinyin_toned_syllable(item[0])
+                for item in py
+                if item and item[0]
+            ]
+            if len(pypinyin_syllables) == len(token):
+                known.add(tuple(pypinyin_syllables))
+
+    return known
+
+
+def classify_token(raw_token: str, side: str, known_sequences: set[tuple[str, ...]]) -> str:
+    clean = strip_token(raw_token)
+    compact = compact_token(raw_token)
+
+    if not compact:
+        return CAT_OTHER
+
+    # Rare scripts first: the table asks for these as an "Other" class.
+    if has_japanese_korean_or_rare_cjk(compact):
+        return CAT_JK_RARE
+
+    if has_latin(compact) and has_standard_cjk(compact):
+        return CAT_MIXED_LATIN_CJK
+
+    # Base inventory.
+    if re.fullmatch(r"[A-Za-z]", compact):
+        return CAT_SINGLE_LETTERS
+    if len(compact) == 1 and is_standard_cjk_char(compact):
+        return CAT_SINGLE_CJK
+    if re.fullmatch(r"\d+", compact):
+        return CAT_DIGITS
+    if is_punctuation_token(compact):
+        return CAT_PUNCTUATION
+
+    # Pure CJK multi-character tokens. Single CJK has already been consumed by
+    # the base inventory row, so 1-CHAR is not counted a second time.
+    if is_all_standard_cjk(compact):
+        cjk_len = len(compact)
+        if cjk_len == 2:
+            return CAT_TWO
+        if cjk_len == 3:
+            return CAT_THREE
+        if cjk_len == 4:
+            return CAT_FOUR
+        if cjk_len == 5:
+            return CAT_FIVE
+        if cjk_len >= 6:
+            return CAT_SIX_PLUS
+
+    # Pinyin syllable-level categories only apply to the pinyin-toned panel.
+    if side == "pinyin_toned":
+        syllables = split_pinyin_syllables(clean)
+        if syllables:
+            n_syllables = len(syllables)
+            if (
+                n_syllables >= 2
+                and is_pinyin_sequence_with_spaces(clean)
+                and known_sequences
+                and pinyin_sequence_key(syllables) not in known_sequences
+            ):
+                return CAT_CROSS_WORD
+
+            if n_syllables == 1:
+                if has_tone_number(syllables[0]):
+                    return CAT_ONE_SYLLABLE_TONE
+                return CAT_ONE_SYLLABLE
+            if n_syllables == 2:
+                return CAT_TWO
+            if n_syllables == 3:
+                return CAT_THREE
+            if n_syllables == 4:
+                return CAT_FOUR
+            if n_syllables == 5:
+                return CAT_FIVE
+            return CAT_SIX_PLUS
+
+    fragment_category = classify_latin_fragment(compact)
+    if fragment_category:
+        return fragment_category
+
+    return CAT_OTHER
+
+
+def analyze_vocab(path: Path, side: str, known_sequences: set[tuple[str, ...]]) -> dict:
+    vocab = load_vocab(path)
+    counts = Counter()
+    examples = defaultdict(list)
+
+    for raw_token in vocab:
+        category = classify_token(raw_token, side, known_sequences)
+        counts[category] += 1
+        if len(examples[category]) < 8:
+            examples[category].append(raw_token)
+
+    total = len(vocab)
+    leaf_total = sum(counts[category] for category in LEAF_CATEGORIES)
+
+    return {
+        "total": total,
+        "leaf_total": leaf_total,
+        "counts": counts,
+        "examples": examples,
+    }
+
+
+def get_row_value(results: dict, side: str, size: int, key: str | None) -> str:
+    if key is None:
+        return ""
+
+    result = results[side][size]
+    counts = result["counts"]
+
+    if key == "TOTAL":
+        return str(result["total"])
+    if key == "SUBTOTAL_SUB_SYLLABLE":
+        subtotal = counts[CAT_SUB_INITIALS] + counts[CAT_SUB_FINALS] + counts[CAT_SUB_OTHER]
+        return str(subtotal)
+    return str(counts[key])
+
+
+def format_markdown_table(results: dict) -> str:
+    headers = [
+        "Token Category",
+        "Chinese 8K", "Chinese 16K", "Chinese 32K", "Chinese 64K",
+        "Pinyin-Toned 8K", "Pinyin-Toned 16K", "Pinyin-Toned 32K", "Pinyin-Toned 64K",
+    ]
+    rows = []
+    for label, key in TABLE_ROWS:
+        values = [label]
+        values.extend(get_row_value(results, "chinese", size, key) for size in VOCAB_SIZES)
+        values.extend(get_row_value(results, "pinyin_toned", size, key) for size in VOCAB_SIZES)
+        rows.append(values)
+
+    widths = [
+        max(len(str(row[i])) for row in [headers] + rows)
+        for i in range(len(headers))
+    ]
+
+    lines = []
+    lines.append(" | ".join(headers[i].ljust(widths[i]) for i in range(len(headers))))
+    lines.append("-+-".join("-" * widths[i] for i in range(len(headers))))
+    for row in rows:
+        lines.append(" | ".join(str(row[i]).ljust(widths[i]) for i in range(len(headers))))
+    return "\n".join(lines)
+
+
+def write_csv(results: dict) -> None:
+    headers = [
+        "Token Category",
+        "Chinese 8K", "Chinese 16K", "Chinese 32K", "Chinese 64K",
+        "Pinyin-Toned 8K", "Pinyin-Toned 16K", "Pinyin-Toned 32K", "Pinyin-Toned 64K",
+    ]
+    with OUTPUT_CSV.open("w", encoding="utf-8", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(headers)
+        for label, key in TABLE_ROWS:
+            row = [label]
+            row.extend(get_row_value(results, "chinese", size, key) for size in VOCAB_SIZES)
+            row.extend(get_row_value(results, "pinyin_toned", size, key) for size in VOCAB_SIZES)
+            writer.writerow(row)
+
+
+def format_examples(results: dict) -> str:
+    lines = []
+    lines.append("")
+    lines.append("SAMPLE TOKENS BY LEAF CATEGORY")
+    lines.append("=" * 100)
+    for side in ["chinese", "pinyin_toned"]:
+        for size in VOCAB_SIZES:
+            result = results[side][size]
+            lines.append("")
+            lines.append(f"{side} {size}")
+            lines.append("-" * 80)
+            for category in LEAF_CATEGORIES:
+                sample = result["examples"].get(category, [])
+                if sample:
+                    sample_str = ", ".join(repr(x) for x in sample)
+                    lines.append(f"{category:<38} {sample_str}")
+    return "\n".join(lines)
+
+
+def format_sanity_checks(results: dict) -> str:
+    lines = []
+    lines.append("")
+    lines.append("SANITY CHECKS")
+    lines.append("=" * 100)
+    if not HAS_PYPINYIN:
+        lines.append(
+            "NOTE: pypinyin is not installed. CROSS-WORD MERGES uses CEDICT plus "
+            "merged_pinyin_dict.json instead of pypinyin context readings."
+        )
+    lines.append(f"CEDICT pinyin sequences loaded: {len(CEDICT_SEQUENCES)}")
+    lines.append(f"Merged char pinyin entries loaded: {len(MERGED_CHAR_PINYIN)}")
+
+    for side in ["chinese", "pinyin_toned"]:
+        for size in VOCAB_SIZES:
+            result = results[side][size]
+            delta = result["leaf_total"] - result["total"]
+            status = "OK" if delta == 0 else f"BAD delta={delta}"
+            lines.append(
+                f"{side:<13} {size:>5}: leaf_total={result['leaf_total']:<6} "
+                f"vocab_size={result['total']:<6} {status}"
+            )
+    return "\n".join(lines)
+
+
+def main() -> None:
     print("=" * 100)
-    print("TOKENIZER VOCABULARY ANALYSIS - DUAL ANALYSIS")
+    print("TABLE 2 VOCABULARY COMPOSITION ANALYSIS - SUPERBPE")
     print("=" * 100)
-    print("\nThis analysis will compare both Chinese Origin and Pinyin Toneless tokenizers")
-    print("and save results to separate files for easy comparison.\n")
-    
-    # 处理每个配置
-    for config_name, config in CONFIGS.items():
-        analyze_config(config_name, config)
-    
-    print(f"\n{'='*100}")
-    print("ALL ANALYSES COMPLETE!")
-    print(f"{'='*100}")
-    print("\nReports saved to:")
-    for config_name, config in CONFIGS.items():
-        output_path = os.path.join(TOKENIZERS_DIR, config["output_file"])
-        print(f"  • {config_name}: {output_path}")
+
+    known_sequences_by_size = {}
+    for size in VOCAB_SIZES:
+        print(f"Building known Chinese pinyin sequence reference for {size}...")
+        known_sequences_by_size[size] = build_known_chinese_pinyin_sequences(size)
+        print(f"  known sequences: {len(known_sequences_by_size[size])}")
+
+    results = {"chinese": {}, "pinyin_toned": {}}
+
+    for side in ["chinese", "pinyin_toned"]:
+        for size in VOCAB_SIZES:
+            path = TOKENIZERS_DIR / TOKENIZER_FILES[side][size]
+            print(f"Analyzing {side} {size}: {path.name}")
+            known_sequences = known_sequences_by_size[size] if side == "pinyin_toned" else set()
+            results[side][size] = analyze_vocab(path, side, known_sequences)
+
+    report_parts = [
+        "TABLE 2 VOCABULARY COMPOSITION ANALYSIS - SUPERBPE",
+        "=" * 100,
+        "",
+        "Counts are mutually exclusive at the leaf-category level.",
+        "The SUB-SYLLABLE FRAGMENTS row is a subtotal of initials, finals, and other partial sequences.",
+        "SINGLE CJK CHARACTERS consumes 1-character Chinese tokens, so 1-SYLLABLE / 1-CHAR does not recount them.",
+        "CROSS-WORD MERGES for pinyin-toned tokenizers are valid multi-syllable pinyin tokens whose syllable sequence is not found among same-size Chinese-origin vocabulary tokens converted to numbered-tone pinyin.",
+        "",
+        format_markdown_table(results),
+        format_sanity_checks(results),
+        format_examples(results),
+        "",
+    ]
+
+    OUTPUT_TXT.write_text("\n".join(report_parts), encoding="utf-8")
+    write_csv(results)
+
+    print("")
+    print(format_markdown_table(results))
+    print(format_sanity_checks(results))
+    print("")
+    print(f"Report saved to: {OUTPUT_TXT}")
+    print(f"CSV saved to:    {OUTPUT_CSV}")
 
 
 if __name__ == "__main__":
