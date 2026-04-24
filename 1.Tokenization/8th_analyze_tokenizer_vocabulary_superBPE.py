@@ -12,6 +12,10 @@ paper table:
 Parent rows such as "SUB-SYLLABLE FRAGMENTS" are reported as subtotals. The
 sanity check is computed only over leaf categories, so each tokenizer's leaf
 counts must sum to its vocabulary size.
+
+Each table cell is formatted as unique whitespace-insensitive content count, followed by
+raw vocabulary-entry count in parentheses. The raw count preserves the original
+SuperBPE vocabulary entries, including entries that differ only by whitespace.
 """
 
 import csv
@@ -216,6 +220,10 @@ def compact_token(token: str) -> str:
     return strip_token(token).strip().replace(" ", "")
 
 
+def whitespace_insensitive_token(token: str) -> str:
+    return re.sub(r"\s+", "", strip_token(token))
+
+
 def is_standard_cjk_char(ch: str) -> bool:
     return "\u4e00" <= ch <= "\u9fff" and unicodedata.category(ch)[0] != "C"
 
@@ -336,6 +344,11 @@ def split_pinyin_syllables(token: str) -> list[str] | None:
 
 def pinyin_sequence_key(syllables: list[str]) -> tuple[str, ...]:
     return tuple(normalize_pinyin_toned_syllable(s) for s in syllables)
+
+
+def normalized_content_key(raw_token: str, side: str) -> str:
+    """Return the whitespace-insensitive content used for unique counts."""
+    return whitespace_insensitive_token(raw_token)
 
 
 def is_pinyin_sequence_with_spaces(token: str) -> bool:
@@ -534,23 +547,36 @@ def classify_token(raw_token: str, side: str, known_sequences: set[tuple[str, ..
 def analyze_vocab(path: Path, side: str, known_sequences: set[tuple[str, ...]]) -> dict:
     vocab = load_vocab(path)
     counts = Counter()
+    unique_keys = defaultdict(set)
     examples = defaultdict(list)
 
     for raw_token in vocab:
         category = classify_token(raw_token, side, known_sequences)
         counts[category] += 1
+        unique_keys[category].add(normalized_content_key(raw_token, side))
         if len(examples[category]) < 8:
             examples[category].append(raw_token)
 
     total = len(vocab)
     leaf_total = sum(counts[category] for category in LEAF_CATEGORIES)
+    unique_total = len(set().union(*(unique_keys[category] for category in LEAF_CATEGORIES)))
 
     return {
         "total": total,
+        "unique_total": unique_total,
         "leaf_total": leaf_total,
         "counts": counts,
+        "unique_counts": Counter({
+            category: len(unique_keys[category])
+            for category in LEAF_CATEGORIES
+        }),
+        "unique_keys": unique_keys,
         "examples": examples,
     }
+
+
+def format_dual_count(unique_count: int, raw_count: int) -> str:
+    return f"{unique_count} ({raw_count})"
 
 
 def get_row_value(results: dict, side: str, size: int, key: str | None) -> str:
@@ -559,13 +585,19 @@ def get_row_value(results: dict, side: str, size: int, key: str | None) -> str:
 
     result = results[side][size]
     counts = result["counts"]
+    unique_counts = result["unique_counts"]
 
     if key == "TOTAL":
-        return str(result["total"])
+        return format_dual_count(result["unique_total"], result["total"])
     if key == "SUBTOTAL_SUB_SYLLABLE":
         subtotal = counts[CAT_SUB_INITIALS] + counts[CAT_SUB_FINALS] + counts[CAT_SUB_OTHER]
-        return str(subtotal)
-    return str(counts[key])
+        unique_subtotal = len(
+            result["unique_keys"][CAT_SUB_INITIALS]
+            | result["unique_keys"][CAT_SUB_FINALS]
+            | result["unique_keys"][CAT_SUB_OTHER]
+        )
+        return format_dual_count(unique_subtotal, subtotal)
+    return format_dual_count(unique_counts[key], counts[key])
 
 
 def format_markdown_table(results: dict) -> str:
@@ -639,6 +671,7 @@ def format_sanity_checks(results: dict) -> str:
             "NOTE: pypinyin is not installed. CROSS-WORD MERGES uses CEDICT plus "
             "merged_pinyin_dict.json instead of pypinyin context readings."
         )
+    lines.append("Table cells are formatted as: unique whitespace-insensitive content (raw vocab entries).")
     lines.append(f"CEDICT pinyin sequences loaded: {len(CEDICT_SEQUENCES)}")
     lines.append(f"Merged char pinyin entries loaded: {len(MERGED_CHAR_PINYIN)}")
 
@@ -679,6 +712,8 @@ def main() -> None:
         "=" * 100,
         "",
         "Counts are mutually exclusive at the leaf-category level.",
+        "Each numeric cell is formatted as unique whitespace-insensitive content count (raw vocab-entry count).",
+        "Unique content removes whitespace variants only; otherwise distinct token strings remain distinct.",
         "The SUB-SYLLABLE FRAGMENTS row is a subtotal of initials, finals, and other partial sequences.",
         "SINGLE CJK CHARACTERS consumes 1-character Chinese tokens, so 1-SYLLABLE / 1-CHAR does not recount them.",
         "CROSS-WORD MERGES for pinyin-toned tokenizers are valid multi-syllable pinyin tokens whose syllable sequence is not found among same-size Chinese-origin vocabulary tokens converted to numbered-tone pinyin.",

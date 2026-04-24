@@ -2,41 +2,44 @@ TABLE 2 VOCABULARY COMPOSITION ANALYSIS - SUPERBPE
 ====================================================================================================
 
 Counts are mutually exclusive at the leaf-category level.
+Each numeric cell is formatted as unique whitespace-insensitive content count (raw vocab-entry count).
+Unique content removes whitespace variants only; otherwise distinct token strings remain distinct.
 The SUB-SYLLABLE FRAGMENTS row is a subtotal of initials, finals, and other partial sequences.
 SINGLE CJK CHARACTERS consumes 1-character Chinese tokens, so 1-SYLLABLE / 1-CHAR does not recount them.
 CROSS-WORD MERGES for pinyin-toned tokenizers are valid multi-syllable pinyin tokens whose syllable sequence is not found among same-size Chinese-origin vocabulary tokens converted to numbered-tone pinyin.
 
-Token Category                          | Chinese 8K | Chinese 16K | Chinese 32K | Chinese 64K | Pinyin-Toned 8K | Pinyin-Toned 16K | Pinyin-Toned 32K | Pinyin-Toned 64K
-----------------------------------------+------------+-------------+-------------+-------------+-----------------+------------------+------------------+-----------------
-Base inventory                          |            |             |             |             |                 |                  |                  |                 
-SINGLE LETTERS (A-Z)                    | 93         | 104         | 115         | 137         | 181             | 235              | 302              | 347             
-SINGLE CJK CHARACTERS                   | 2415       | 3181        | 4021        | 4938        | 0               | 0                | 0                | 0               
-DIGITS                                  | 185        | 294         | 391         | 694         | 252             | 552              | 971              | 2077            
-PUNCTUATION                             | 131        | 202         | 309         | 472         | 54              | 66               | 73               | 94              
-Sub-syllable / sub-character units      |            |             |             |             |                 |                  |                  |                 
-SUB-SYLLABLE FRAGMENTS                  | 260        | 703         | 1560        | 3425        | 215             | 568              | 1697             | 4326            
-(initials: zh, ch, sh, ...)             | 7          | 10          | 12          | 14          | 13              | 15               | 21               | 25              
-(finals: ong, ang, ian, ...)            | 13         | 20          | 27          | 35          | 11              | 23               | 38               | 50              
-(other partial sequences)               | 240        | 673         | 1521        | 3376        | 191             | 530              | 1638             | 4251            
-Syllable-level / character-level tokens |            |             |             |             |                 |                  |                  |                 
-1-SYLLABLE / 1-CHAR TOKENS              | 0          | 0           | 0           | 0           | 104             | 161              | 232              | 355             
-1-SYLLABLE + TONE NUMBER                | 0          | 0           | 0           | 0           | 2481            | 3123             | 3746             | 4366            
-Multi-syllable / multi-character tokens |            |             |             |             |                 |                  |                  |                 
-2-SYLLABLE / 2-CHAR                     | 3481       | 7721        | 15322       | 28038       | 3460            | 7887             | 15805            | 29606           
-3-SYLLABLE / 3-CHAR                     | 552        | 1952        | 5374        | 13309       | 331             | 1254             | 3634             | 9274            
-4-SYLLABLE / 4-CHAR                     | 97         | 446         | 1701        | 5753        | 54              | 261              | 928              | 3257            
-5-SYLLABLE / 5-CHAR                     | 23         | 100         | 389         | 1344        | 19              | 49               | 203              | 732             
-6+-SYLLABLE / 6+-CHAR                   | 42         | 125         | 395         | 1349        | 33              | 90               | 262              | 826             
-Cross-boundary and mixed tokens         |            |             |             |             |                 |                  |                  |                 
-CROSS-WORD MERGES                       | 0          | 0           | 0           | 0           | 374             | 908              | 2120             | 4918            
-MIXED (LATIN + CJK)                     | 5          | 12          | 51          | 164         | 0               | 0                | 0                | 0               
-Other                                   |            |             |             |             |                 |                  |                  |                 
-JAPANESE / KOREAN / RARE CJK            | 1          | 9           | 51          | 123         | 1               | 8                | 51               | 172             
-OTHER / UNKNOWN                         | 303        | 724         | 1867        | 3753        | 318             | 702              | 1791             | 3413            
-Total                                   | 7588       | 15573       | 31546       | 63499       | 7877            | 15864            | 31815            | 63763           
+Token Category                          | Chinese 8K  | Chinese 16K   | Chinese 32K   | Chinese 64K   | Pinyin-Toned 8K | Pinyin-Toned 16K | Pinyin-Toned 32K | Pinyin-Toned 64K
+----------------------------------------+-------------+---------------+---------------+---------------+-----------------+------------------+------------------+-----------------
+Base inventory                          |             |               |               |               |                 |                  |                  |                 
+SINGLE LETTERS (A-Z)                    | 52 (93)     | 52 (104)      | 52 (115)      | 52 (137)      | 52 (181)        | 52 (235)         | 52 (302)         | 52 (347)        
+SINGLE CJK CHARACTERS                   | 2375 (2415) | 3061 (3181)   | 3769 (4021)   | 4515 (4938)   | 0 (0)           | 0 (0)            | 0 (0)            | 0 (0)           
+DIGITS                                  | 155 (185)   | 246 (294)     | 312 (391)     | 559 (694)     | 110 (252)       | 251 (552)        | 474 (971)        | 1211 (2077)     
+PUNCTUATION                             | 131 (131)   | 201 (202)     | 308 (309)     | 471 (472)     | 52 (54)         | 63 (66)          | 70 (73)          | 91 (94)         
+Sub-syllable / sub-character units      |             |               |               |               |                 |                  |                  |                 
+SUB-SYLLABLE FRAGMENTS                  | 241 (260)   | 638 (703)     | 1391 (1560)   | 2919 (3425)   | 173 (215)       | 401 (568)        | 1173 (1697)      | 3005 (4326)     
+(initials: zh, ch, sh, ...)             | 5 (7)       | 7 (10)        | 7 (12)        | 7 (14)        | 4 (13)          | 5 (15)           | 7 (21)           | 7 (25)          
+(finals: ong, ang, ian, ...)            | 10 (13)     | 14 (20)       | 21 (27)       | 26 (35)       | 7 (11)          | 12 (23)          | 20 (38)          | 23 (50)         
+(other partial sequences)               | 226 (240)   | 617 (673)     | 1363 (1521)   | 2886 (3376)   | 162 (191)       | 384 (530)        | 1146 (1638)      | 2975 (4251)     
+Syllable-level / character-level tokens |             |               |               |               |                 |                  |                  |                 
+1-SYLLABLE / 1-CHAR TOKENS              | 0 (0)       | 0 (0)         | 0 (0)         | 0 (0)         | 76 (104)        | 101 (161)        | 123 (232)        | 165 (355)       
+1-SYLLABLE + TONE NUMBER                | 0 (0)       | 0 (0)         | 0 (0)         | 0 (0)         | 930 (2481)      | 1038 (3123)      | 1111 (3746)      | 1169 (4366)     
+Multi-syllable / multi-character tokens |             |               |               |               |                 |                  |                  |                 
+2-SYLLABLE / 2-CHAR                     | 3441 (3481) | 7588 (7721)   | 15003 (15322) | 27277 (28038) | 2562 (3460)     | 5472 (7887)      | 10351 (15805)    | 18383 (29606)   
+3-SYLLABLE / 3-CHAR                     | 552 (552)   | 1949 (1952)   | 5352 (5374)   | 13215 (13309) | 288 (331)       | 1075 (1254)      | 2957 (3634)      | 7225 (9274)     
+4-SYLLABLE / 4-CHAR                     | 95 (97)     | 442 (446)     | 1687 (1701)   | 5710 (5753)   | 50 (54)         | 229 (261)        | 802 (928)        | 2718 (3257)     
+5-SYLLABLE / 5-CHAR                     | 23 (23)     | 100 (100)     | 389 (389)     | 1341 (1344)   | 18 (19)         | 46 (49)          | 190 (203)        | 645 (732)       
+6+-SYLLABLE / 6+-CHAR                   | 40 (42)     | 121 (125)     | 386 (395)     | 1336 (1349)   | 31 (33)         | 86 (90)          | 246 (262)        | 765 (826)       
+Cross-boundary and mixed tokens         |             |               |               |               |                 |                  |                  |                 
+CROSS-WORD MERGES                       | 0 (0)       | 0 (0)         | 0 (0)         | 0 (0)         | 372 (374)       | 898 (908)        | 2077 (2120)      | 4777 (4918)     
+MIXED (LATIN + CJK)                     | 5 (5)       | 12 (12)       | 51 (51)       | 160 (164)     | 0 (0)           | 0 (0)            | 0 (0)            | 0 (0)           
+Other                                   |             |               |               |               |                 |                  |                  |                 
+JAPANESE / KOREAN / RARE CJK            | 1 (1)       | 9 (9)         | 51 (51)       | 123 (123)     | 1 (1)           | 8 (8)            | 33 (51)          | 98 (172)        
+OTHER / UNKNOWN                         | 278 (303)   | 656 (724)     | 1696 (1867)   | 3457 (3753)   | 232 (318)       | 510 (702)        | 1404 (1791)      | 2630 (3413)     
+Total                                   | 7389 (7588) | 15075 (15573) | 30447 (31546) | 61135 (63499) | 4947 (7877)     | 10230 (15864)    | 21063 (31815)    | 42934 (63763)   
 
 SANITY CHECKS
 ====================================================================================================
+Table cells are formatted as: unique whitespace-insensitive content (raw vocab entries).
 CEDICT pinyin sequences loaded: 101811
 Merged char pinyin entries loaded: 44376
 chinese        8000: leaf_total=7588   vocab_size=7588   OK

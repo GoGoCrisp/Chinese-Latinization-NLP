@@ -40,10 +40,10 @@ OUTPUT_FILE = "tokenizer_overlap_analysis_superBPE.txt"
 
 # 4个64k tokenizers映射
 TOKENIZERS_64K = {
-    "A_chinese_origin": "chinese_origin_subset100k_superbpe_64000_decoded.json",
-    "B_pinyin_toneless": "pinyin_toneless_subset100k_superbpe_64000_decoded.json",
-    "C_pinyin_toned": "pinyin_toned_subset100k_superbpe_64000_decoded.json",
-    "D_pinyin_diacritic": "pinyin_diacritic_subset100k_superbpe_64000_decoded.json",
+    "A_chinese_origin": "chinese_origin_subset100k_superbpe_32000_decoded.json",
+    "B_pinyin_toneless": "pinyin_toneless_subset100k_superbpe_32000_decoded.json",
+    "C_pinyin_toned": "pinyin_toned_subset100k_superbpe_32000_decoded.json",
+    "D_pinyin_diacritic": "pinyin_diacritic_subset100k_superbpe_32000_decoded.json",
 }
 
 # 生成所有的tokenizer对
