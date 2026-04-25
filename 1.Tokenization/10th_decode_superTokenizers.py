@@ -4,8 +4,8 @@ from tokenizers import Tokenizer
 from tokenizers.decoders import ByteLevel
 
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-INPUT_DIR = os.path.join(BASE_DIR, "superTokenizers_BPE")
-OUTPUT_DIR = os.path.join(BASE_DIR, "decoded_superTokenizers")
+INPUT_DIR = os.path.join(BASE_DIR, "superTokenizers_BPE_0.05")
+OUTPUT_DIR = os.path.join(BASE_DIR, "decoded_superTokenizers_0.05")
 
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 

@@ -20,29 +20,18 @@ SuperBPE vocabulary entries, including entries that differ only by whitespace.
 
 import csv
 import json
-import os
 import re
 import unicodedata
 from collections import Counter, defaultdict
 from pathlib import Path
 
-try:
-    from pypinyin import Style, pinyin
-    HAS_PYPINYIN = True
-except ImportError:
-    HAS_PYPINYIN = False
-
-
 # ===== Paths / outputs =====
 
 BASE_DIR = Path(__file__).resolve().parent
 TOKENIZERS_DIR = BASE_DIR / "decoded_superTokenizers"
-DICTS_DIR = BASE_DIR / "dicts"
-CEDICT_PATH = DICTS_DIR / "cedict_ts.u8"
-MERGED_PINYIN_DICT_PATH = DICTS_DIR / "merged_pinyin_dict.json"
 
-OUTPUT_TXT = TOKENIZERS_DIR / "tokenizer_vocabulary_table2_superBPE.txt"
-OUTPUT_CSV = TOKENIZERS_DIR / "tokenizer_vocabulary_table2_superBPE.csv"
+OUTPUT_TXT = TOKENIZERS_DIR / "table1_tokenizer_vocabulary_table2_superBPE.txt"
+OUTPUT_CSV = TOKENIZERS_DIR / "table1_tokenizer_vocabulary_table2_superBPE.csv"
 
 VOCAB_SIZES = [8000, 16000, 32000, 64000]
 
@@ -64,19 +53,13 @@ CAT_SINGLE_LETTERS = "SINGLE LETTERS (A-Z)"
 CAT_SINGLE_CJK = "SINGLE CJK CHARACTERS"
 CAT_DIGITS = "DIGITS"
 CAT_PUNCTUATION = "PUNCTUATION"
-CAT_SUB_INITIALS = "(initials: zh, ch, sh, ...)"
-CAT_SUB_FINALS = "(finals: ong, ang, ian, ...)"
-CAT_SUB_OTHER = "(other partial sequences)"
-CAT_ONE_SYLLABLE = "1-SYLLABLE / 1-CHAR TOKENS"
-CAT_ONE_SYLLABLE_TONE = "1-SYLLABLE + TONE NUMBER"
+CAT_PURE_LATIN = "PURE LATIN COMBINATIONS"
 CAT_TWO = "2-SYLLABLE / 2-CHAR"
 CAT_THREE = "3-SYLLABLE / 3-CHAR"
 CAT_FOUR = "4-SYLLABLE / 4-CHAR"
 CAT_FIVE = "5-SYLLABLE / 5-CHAR"
 CAT_SIX_PLUS = "6+-SYLLABLE / 6+-CHAR"
-CAT_CROSS_WORD = "CROSS-WORD MERGES"
 CAT_MIXED_LATIN_CJK = "MIXED (LATIN + CJK)"
-CAT_JK_RARE = "JAPANESE / KOREAN / RARE CJK"
 CAT_OTHER = "OTHER / UNKNOWN"
 
 LEAF_CATEGORIES = [
@@ -84,19 +67,13 @@ LEAF_CATEGORIES = [
     CAT_SINGLE_CJK,
     CAT_DIGITS,
     CAT_PUNCTUATION,
-    CAT_SUB_INITIALS,
-    CAT_SUB_FINALS,
-    CAT_SUB_OTHER,
-    CAT_ONE_SYLLABLE,
-    CAT_ONE_SYLLABLE_TONE,
+    CAT_PURE_LATIN,
     CAT_TWO,
     CAT_THREE,
     CAT_FOUR,
     CAT_FIVE,
     CAT_SIX_PLUS,
-    CAT_CROSS_WORD,
     CAT_MIXED_LATIN_CJK,
-    CAT_JK_RARE,
     CAT_OTHER,
 ]
 
@@ -106,25 +83,16 @@ TABLE_ROWS = [
     (CAT_SINGLE_CJK, CAT_SINGLE_CJK),
     (CAT_DIGITS, CAT_DIGITS),
     (CAT_PUNCTUATION, CAT_PUNCTUATION),
-    ("Sub-syllable / sub-character units", None),
-    ("SUB-SYLLABLE FRAGMENTS", "SUBTOTAL_SUB_SYLLABLE"),
-    (CAT_SUB_INITIALS, CAT_SUB_INITIALS),
-    (CAT_SUB_FINALS, CAT_SUB_FINALS),
-    (CAT_SUB_OTHER, CAT_SUB_OTHER),
-    ("Syllable-level / character-level tokens", None),
-    (CAT_ONE_SYLLABLE, CAT_ONE_SYLLABLE),
-    (CAT_ONE_SYLLABLE_TONE, CAT_ONE_SYLLABLE_TONE),
+    (CAT_PURE_LATIN, CAT_PURE_LATIN),
     ("Multi-syllable / multi-character tokens", None),
     (CAT_TWO, CAT_TWO),
     (CAT_THREE, CAT_THREE),
     (CAT_FOUR, CAT_FOUR),
     (CAT_FIVE, CAT_FIVE),
     (CAT_SIX_PLUS, CAT_SIX_PLUS),
-    ("Cross-boundary and mixed tokens", None),
-    (CAT_CROSS_WORD, CAT_CROSS_WORD),
+    ("Mixed tokens", None),
     (CAT_MIXED_LATIN_CJK, CAT_MIXED_LATIN_CJK),
     ("Other", None),
-    (CAT_JK_RARE, CAT_JK_RARE),
     (CAT_OTHER, CAT_OTHER),
     ("Total", "TOTAL"),
 ]
@@ -179,19 +147,6 @@ VALID_PINYIN = {
     "zhao", "zhe", "zhei", "zhen", "zheng", "zhi", "zhong", "zhou",
     "zhu", "zhua", "zhuai", "zhuan", "zhuang", "zhui", "zhun", "zhuo",
     "zi", "zong", "zou", "zu", "zuan", "zui", "zun", "zuo",
-}
-
-PINYIN_INITIALS = {
-    "b", "p", "m", "f", "d", "t", "n", "l", "g", "k", "h",
-    "j", "q", "x", "zh", "ch", "sh", "r", "z", "c", "s", "y", "w",
-}
-
-PINYIN_FINALS = {
-    "a", "o", "e", "ai", "ei", "ao", "ou", "an", "en", "ang", "eng",
-    "ong", "i", "ia", "ie", "iao", "iou", "iu", "ian", "in", "iang",
-    "ing", "iong", "u", "ua", "uo", "uai", "uei", "ui", "uan", "uen",
-    "un", "uang", "ueng", "v", "ve", "van", "vn", "ü", "üe", "üan",
-    "ün", "er",
 }
 
 TONE_MARK_TO_BASE_AND_NUM = {
@@ -312,10 +267,6 @@ def is_valid_pinyin_syllable(s: str) -> bool:
     return normalize_pinyin_base(s) in VALID_PINYIN
 
 
-def has_tone_number(s: str) -> bool:
-    return bool(re.fullmatch(r"[a-züv:]+[1-5]", s.lower()))
-
-
 def split_pinyin_syllables(token: str) -> list[str] | None:
     """Return pinyin syllables if token is entirely a valid pinyin sequence."""
     clean = strip_token(token)
@@ -342,18 +293,9 @@ def split_pinyin_syllables(token: str) -> list[str] | None:
     return None
 
 
-def pinyin_sequence_key(syllables: list[str]) -> tuple[str, ...]:
-    return tuple(normalize_pinyin_toned_syllable(s) for s in syllables)
-
-
 def normalized_content_key(raw_token: str, side: str) -> str:
     """Return the whitespace-insensitive content used for unique counts."""
     return whitespace_insensitive_token(raw_token)
-
-
-def is_pinyin_sequence_with_spaces(token: str) -> bool:
-    clean = strip_token(token)
-    return bool(re.search(r"\S\s+\S", clean.strip()))
 
 
 def classify_latin_fragment(token: str) -> str | None:
@@ -364,12 +306,8 @@ def classify_latin_fragment(token: str) -> str | None:
     if len(lower) == 1:
         return None
     if is_valid_pinyin_syllable(lower):
-        return None
-    if lower in PINYIN_INITIALS:
-        return CAT_SUB_INITIALS
-    if lower in PINYIN_FINALS:
-        return CAT_SUB_FINALS
-    return CAT_SUB_OTHER
+        return CAT_PURE_LATIN
+    return CAT_PURE_LATIN
 
 
 def load_vocab(path: Path) -> dict:
@@ -380,107 +318,16 @@ def load_vocab(path: Path) -> dict:
     return data
 
 
-def load_merged_char_pinyin() -> dict[str, str]:
-    if not MERGED_PINYIN_DICT_PATH.exists():
-        return {}
-    with MERGED_PINYIN_DICT_PATH.open("r", encoding="utf-8") as f:
-        data = json.load(f)
-    raw_mapping = data.get("data", {})
-    mapping = {}
-    for char, py in raw_mapping.items():
-        if not char or not py:
-            continue
-        first = str(py).split()[0]
-        numbered = normalize_pinyin_toned_syllable(first)
-        if is_valid_pinyin_syllable(numbered):
-            mapping[char] = numbered
-    return mapping
-
-
-def load_cedict_sequences() -> set[tuple[str, ...]]:
-    sequences = set()
-    if not CEDICT_PATH.exists():
-        return sequences
-
-    with CEDICT_PATH.open("r", encoding="utf-8") as f:
-        for line in f:
-            if line.startswith("#"):
-                continue
-            match = re.match(r"(\S+)\s+(\S+)\s+\[(.*?)\]", line)
-            if not match:
-                continue
-            simplified = match.group(2)
-            pinyin_text = match.group(3)
-            if len(simplified) < 2 or not is_all_standard_cjk(simplified):
-                continue
-
-            syllables = [
-                normalize_pinyin_toned_syllable(part)
-                for part in pinyin_text.lower().split()
-            ]
-            if len(syllables) != len(simplified):
-                continue
-            if all(is_valid_pinyin_syllable(syllable) for syllable in syllables):
-                sequences.add(tuple(syllables))
-
-    return sequences
-
-
-CEDICT_SEQUENCES = load_cedict_sequences()
-MERGED_CHAR_PINYIN = load_merged_char_pinyin()
-
-
-def build_known_chinese_pinyin_sequences(size: int) -> set[tuple[str, ...]]:
-    """Build pinyin signatures for known Chinese tokens at the same vocab size.
-
-    This gives the cross-word heuristic a conservative reference: a pinyin
-    multi-syllable token that corresponds to a Chinese vocab token is treated as
-    a multi-syllable token, while a valid pinyin sequence not found here is
-    treated as a cross-word merge.
-    """
-    vocab_path = TOKENIZERS_DIR / TOKENIZER_FILES["chinese"][size]
-    vocab = load_vocab(vocab_path)
-    known = set(CEDICT_SEQUENCES)
-
-    for raw_token in vocab:
-        token = compact_token(raw_token)
-        if count_standard_cjk(token) < 2 or not is_all_standard_cjk(token):
-            continue
-
-        syllables = []
-        for char in token:
-            py = MERGED_CHAR_PINYIN.get(char)
-            if not py:
-                syllables = []
-                break
-            syllables.append(py)
-
-        if len(syllables) == len(token) and all(is_valid_pinyin_syllable(s) for s in syllables):
-            known.add(tuple(syllables))
-
-        if HAS_PYPINYIN:
-            py = pinyin(token, style=Style.TONE3, strict=False)
-            pypinyin_syllables = [
-                normalize_pinyin_toned_syllable(item[0])
-                for item in py
-                if item and item[0]
-            ]
-            if len(pypinyin_syllables) == len(token):
-                known.add(tuple(pypinyin_syllables))
-
-    return known
-
-
-def classify_token(raw_token: str, side: str, known_sequences: set[tuple[str, ...]]) -> str:
+def classify_token(raw_token: str, side: str) -> str:
     clean = strip_token(raw_token)
     compact = compact_token(raw_token)
 
     if not compact:
         return CAT_OTHER
 
-    # Rare scripts first: the table asks for these as an "Other" class.
+    # Rare scripts are folded into the final OTHER / UNKNOWN row.
     if has_japanese_korean_or_rare_cjk(compact):
-        return CAT_JK_RARE
+        return CAT_OTHER
 
     if has_latin(compact) and has_standard_cjk(compact):
         return CAT_MIXED_LATIN_CJK
@@ -515,18 +362,8 @@ def classify_token(raw_token: str, side: str, known_sequences: set[tuple[str, ..
         syllables = split_pinyin_syllables(clean)
         if syllables:
             n_syllables = len(syllables)
-            if (
-                n_syllables >= 2
-                and is_pinyin_sequence_with_spaces(clean)
-                and known_sequences
-                and pinyin_sequence_key(syllables) not in known_sequences
-            ):
-                return CAT_CROSS_WORD
-
             if n_syllables == 1:
-                if has_tone_number(syllables[0]):
-                    return CAT_ONE_SYLLABLE_TONE
-                return CAT_ONE_SYLLABLE
+                return CAT_PURE_LATIN
             if n_syllables == 2:
                 return CAT_TWO
             if n_syllables == 3:
@@ -544,14 +381,14 @@ def classify_token(raw_token: str, side: str, known_sequences: set[tuple[str, ..
     return CAT_OTHER
 
 
-def analyze_vocab(path: Path, side: str, known_sequences: set[tuple[str, ...]]) -> dict:
+def analyze_vocab(path: Path, side: str) -> dict:
     vocab = load_vocab(path)
     counts = Counter()
     unique_keys = defaultdict(set)
     examples = defaultdict(list)
 
     for raw_token in vocab:
-        category = classify_token(raw_token, side, known_sequences)
+        category = classify_token(raw_token, side)
         counts[category] += 1
         unique_keys[category].add(normalized_content_key(raw_token, side))
         if len(examples[category]) < 8:
@@ -589,14 +426,6 @@ def get_row_value(results: dict, side: str, size: int, key: str | None) -> str:
 
     if key == "TOTAL":
         return format_dual_count(result["unique_total"], result["total"])
-    if key == "SUBTOTAL_SUB_SYLLABLE":
-        subtotal = counts[CAT_SUB_INITIALS] + counts[CAT_SUB_FINALS] + counts[CAT_SUB_OTHER]
-        unique_subtotal = len(
-            result["unique_keys"][CAT_SUB_INITIALS]
-            | result["unique_keys"][CAT_SUB_FINALS]
-            | result["unique_keys"][CAT_SUB_OTHER]
-        )
-        return format_dual_count(unique_subtotal, subtotal)
     return format_dual_count(unique_counts[key], counts[key])
 
 
@@ -666,14 +495,7 @@ def format_sanity_checks(results: dict) -> str:
     lines.append("")
     lines.append("SANITY CHECKS")
     lines.append("=" * 100)
-    if not HAS_PYPINYIN:
-        lines.append(
-            "NOTE: pypinyin is not installed. CROSS-WORD MERGES uses CEDICT plus "
-            "merged_pinyin_dict.json instead of pypinyin context readings."
-        )
     lines.append("Table cells are formatted as: unique whitespace-insensitive content (raw vocab entries).")
-    lines.append(f"CEDICT pinyin sequences loaded: {len(CEDICT_SEQUENCES)}")
-    lines.append(f"Merged char pinyin entries loaded: {len(MERGED_CHAR_PINYIN)}")
 
     for side in ["chinese", "pinyin_toned"]:
         for size in VOCAB_SIZES:
@@ -692,20 +514,13 @@ def main() -> None:
     print("TABLE 2 VOCABULARY COMPOSITION ANALYSIS - SUPERBPE")
     print("=" * 100)
 
-    known_sequences_by_size = {}
-    for size in VOCAB_SIZES:
-        print(f"Building known Chinese pinyin sequence reference for {size}...")
-        known_sequences_by_size[size] = build_known_chinese_pinyin_sequences(size)
-        print(f"  known sequences: {len(known_sequences_by_size[size])}")
-
     results = {"chinese": {}, "pinyin_toned": {}}
 
     for side in ["chinese", "pinyin_toned"]:
         for size in VOCAB_SIZES:
             path = TOKENIZERS_DIR / TOKENIZER_FILES[side][size]
             print(f"Analyzing {side} {size}: {path.name}")
-            known_sequences = known_sequences_by_size[size] if side == "pinyin_toned" else set()
-            results[side][size] = analyze_vocab(path, side, known_sequences)
+            results[side][size] = analyze_vocab(path, side)
 
     report_parts = [
         "TABLE 2 VOCABULARY COMPOSITION ANALYSIS - SUPERBPE",
@@ -714,9 +529,9 @@ def main() -> None:
         "Counts are mutually exclusive at the leaf-category level.",
         "Each numeric cell is formatted as unique whitespace-insensitive content count (raw vocab-entry count).",
         "Unique content removes whitespace variants only; otherwise distinct token strings remain distinct.",
-        "The SUB-SYLLABLE FRAGMENTS row is a subtotal of initials, finals, and other partial sequences.",
-        "SINGLE CJK CHARACTERS consumes 1-character Chinese tokens, so 1-SYLLABLE / 1-CHAR does not recount them.",
-        "CROSS-WORD MERGES for pinyin-toned tokenizers are valid multi-syllable pinyin tokens whose syllable sequence is not found among same-size Chinese-origin vocabulary tokens converted to numbered-tone pinyin.",
+        "SINGLE CJK CHARACTERS consumes 1-character Chinese tokens and single Latin letters remain in SINGLE LETTERS (A-Z).",
+        "Pure Latin combinations include non-single-letter Latin tokens such as 1-syllable pinyin forms and Latin fragments.",
+        "Pinyin multi-syllable tokens are grouped only by syllable count; cross-boundary status is not tracked separately.",
         "",
         format_markdown_table(results),
         format_sanity_checks(results),
