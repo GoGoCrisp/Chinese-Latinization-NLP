@@ -3,11 +3,11 @@ import shutil
 import subprocess
 import random
 
-transition_point = 0.1   # 前5% merges保留，后续95%重新训练
+t_point = 2048   # 前2048个merges保留，后续重新训练
 # ===== Paths Configuration =====
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 CORPUS_DIR = os.path.join(BASE_DIR, "corpora")
-OUTPUT_DIR = os.path.join(BASE_DIR, f"superTokenizers_BPE_sqrt({transition_point})_subset100k")
+OUTPUT_DIR = os.path.join(BASE_DIR, f"superTokenizers_BPE_{t_point}_subset100k")
 SUPERBPE_VENV_PYTHON = os.path.abspath(os.path.join(BASE_DIR, "..", "superbpe", "superbpe_venv", "bin", "python"))
 TRAIN_TOKENIZER_SCRIPT = os.path.abspath(os.path.join(BASE_DIR, "..", "superbpe", "train_tokenizer.py"))
 
@@ -47,7 +47,7 @@ def ensure_corpus_dir(txt_file_path):
 
 def run_superbpe_pipeline(corpus_path, total_vocab_size, name):
     
-    t_point = int(total_vocab_size * transition_point)
+    #t_point = int(total_vocab_size * transition_point)
     print(f"\n{'='*50}\nStarting SuperBPE Pipeline for {name} ({total_vocab_size//1000}k)\n{'='*50}")
     
     corpus_dir = ensure_corpus_dir(corpus_path)

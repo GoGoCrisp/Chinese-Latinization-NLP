@@ -3,8 +3,8 @@ from __future__ import annotations
 """
 64K-only A↔C overlap analysis for SuperBPE tokenizers.
 
-A = chinese_origin
-C = pinyin_toned
+A = Chinese superBPE
+C = Pinyin-Toned superBPE
 
 Outputs:
   - table2_ac_overlap_superBPE_report.txt
@@ -15,7 +15,9 @@ Outputs:
 
 import csv
 import json
+import math
 import os
+import random
 import re
 from collections import defaultdict
 from dataclasses import dataclass
@@ -29,7 +31,8 @@ import matplotlib
 
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from matplotlib.patches import Patch
+from matplotlib import font_manager
+from matplotlib.patches import Patch, Rectangle
 from matplotlib.ticker import FuncFormatter, MaxNLocator
 
 try:
@@ -41,7 +44,7 @@ except ImportError:
 
 
 BASE_DIR = Path(__file__).resolve().parent
-TOKENIZERS_DIR = BASE_DIR / "decoded_superTokenizers"
+TOKENIZERS_DIR = BASE_DIR / "decoded_superTokenizers_2048_subset100k"
 DICTS_DIR = BASE_DIR / "dicts"
 VOCAB_SIZE = 64000
 
@@ -59,6 +62,28 @@ OUTPUT_PLOT_SVG = OUTPUT_DIR / "table2_ac_overlap_superBPE_plot.svg"
 OUTPUT_PLOT_PDF = OUTPUT_DIR / "table2_ac_overlap_superBPE_plot.pdf"
 
 SPECIAL_TOKENS = {"[UNK]", "[PAD]", "[CLS]", "[SEP]", "[MASK]"}
+SAMPLE_N_VALUES = (3, 20, 22, 41)
+SAMPLE_A_TOKEN_COUNT = 3
+MAX_EXAMPLE_ROWS_PER_N = 5
+SAMPLE_RANDOM_SEED = 20260428
+BAR_LABEL_FONTSIZE = 4.4
+EXAMPLE_N_LABEL_FONTSIZE = 8.0
+EXAMPLE_BOX_FONTSIZE = 8.0
+EXAMPLE_BOX_HEIGHT = 0.58
+EXAMPLE_BOX_BOTTOM = 0.00
+EXAMPLE_ROW_STEP = 0.095
+EXAMPLE_COLUMN_LAYOUT = {
+    3: {"x": 0.000, "width": 0.310, "arrow": 0.115, "source": 0.142},
+    20: {"x": 0.345, "width": 0.195, "arrow": 0.072, "source": 0.098},
+    22: {"x": 0.575, "width": 0.195, "arrow": 0.072, "source": 0.098},
+    41: {"x": 0.805, "width": 0.195, "arrow": 0.072, "source": 0.098},
+}
+CJK_FONT_CANDIDATES = [
+    Path("/System/Library/Fonts/Supplemental/Arial Unicode.ttf"),
+    Path("/System/Library/Fonts/Hiragino Sans GB.ttc"),
+    Path("/System/Library/Fonts/STHeiti Medium.ttc"),
+    Path("/System/Library/Fonts/CJKSymbolsFallback.ttc"),
+]
 
 TONE_MARK_TO_BASE_AND_NUM = {
     "ā": ("a", "1"),
@@ -370,8 +395,8 @@ def build_report(result: AnalysisResult, converter_name: str, y_scale_mode: str)
     lines.append("=" * 100)
     lines.append("")
     lines.append("Legend:")
-    lines.append("  A = chinese_origin")
-    lines.append("  C = pinyin_toned")
+    lines.append("  A = Chinese superBPE")
+    lines.append("  C = Pinyin-Toned superBPE")
     lines.append("")
     lines.append("Method:")
     lines.append("  • Only the 64K tokenizer pair is analyzed.")
@@ -473,17 +498,36 @@ def _format_bar_label(value: int) -> str:
     return f"{value / 1000:.1f}k" if value >= 1000 else str(value)
 
 
+def _format_axis_label(value: float, _position: int | None = None) -> str:
+    if value >= 1000:
+        return f"{value / 1000:g}k"
+    return f"{value:g}"
+
+
+def _resolve_plot_font_family() -> list[str]:
+    for font_path in CJK_FONT_CANDIDATES:
+        if not font_path.exists():
+            continue
+        font_manager.fontManager.addfont(str(font_path))
+        family_name = font_manager.FontProperties(fname=str(font_path)).get_name()
+        return [family_name, "DejaVu Sans"]
+    return ["DejaVu Sans"]
+
+
 def _setup_publication_style() -> None:
     plt.rcParams.update(
         {
-            "font.family": "DejaVu Sans",
-            "font.size": 8.0,
-            "axes.titlesize": 9.0,
-            "axes.labelsize": 8.0,
-            "axes.linewidth": 0.7,
-            "xtick.labelsize": 7.0,
-            "ytick.labelsize": 7.0,
-            "legend.fontsize": 7.0,
+            "font.family": _resolve_plot_font_family(),
+            "font.size": 7.0,
+            "axes.titlesize": 8.0,
+            "axes.labelsize": 7.0,
+            "axes.linewidth": 0.55,
+            "xtick.labelsize": 6.2,
+            "ytick.labelsize": 6.2,
+            "legend.fontsize": 6.5,
+            "legend.handlelength": 1.15,
+            "legend.handletextpad": 0.45,
+            "legend.columnspacing": 0.9,
             "pdf.fonttype": 42,
             "ps.fonttype": 42,
             "svg.fonttype": "none",
@@ -500,7 +544,7 @@ def _draw_overlap_context(ax: plt.Axes, result: AnalysisResult) -> None:
     }
     rows = [
         (
-            "Chinese-origin\nA tokens",
+            "Chinese superBPE\nA tokens",
             [
                 ("1-to-1 mapped", result.one_to_one_source_count),
                 ("N-to-1 mapped", result.many_to_one_source_count),
@@ -509,7 +553,7 @@ def _draw_overlap_context(ax: plt.Axes, result: AnalysisResult) -> None:
             result.vocab_a_size,
         ),
         (
-            "Pinyin-toned\nC tokens",
+            "Pinyin-Toned superBPE\nC tokens",
             [
                 ("1-to-1 mapped", result.one_to_one_source_count),
                 ("N-to-1 mapped", result.many_to_one_pair_count),
@@ -576,6 +620,239 @@ def _draw_overlap_context(ax: plt.Axes, result: AnalysisResult) -> None:
     )
 
 
+def _nice_axis_top(value: float) -> float:
+    if value <= 0:
+        return 1
+    magnitude = 10 ** math.floor(math.log10(value))
+    for multiplier in (1, 2, 3, 5, 10):
+        top = multiplier * magnitude
+        if top >= value:
+            return top
+    return 10 * magnitude
+
+
+def _shared_y_ticks(y_min: float, y_max: float, y_scale_mode: str) -> list[float]:
+    if y_scale_mode == "log":
+        ticks = [1, 10, 100, 1000]
+        if y_max not in ticks:
+            ticks.append(y_max)
+        return [tick for tick in ticks if y_min <= tick <= y_max]
+
+    locator = MaxNLocator(nbins=5)
+    return [
+        tick
+        for tick in locator.tick_values(y_min, y_max)
+        if y_min <= tick <= y_max
+    ]
+
+
+def _set_shared_y_axes(
+    ax_left: plt.Axes,
+    ax_right: plt.Axes,
+    pair_counts: list[int],
+    source_counts: list[int],
+    y_scale_mode: str,
+) -> None:
+    max_value = max(pair_counts + source_counts, default=1)
+    if y_scale_mode == "log":
+        y_min = 0.75
+        y_max = _nice_axis_top(max_value * 1.2)
+    else:
+        y_min = 0
+        y_max = _nice_axis_top(max_value * 1.12)
+
+    ax_left.set_ylim(y_min, y_max)
+    ax_right.set_ylim(y_min, y_max)
+    ticks = _shared_y_ticks(y_min, y_max, y_scale_mode)
+    ax_left.set_yticks(ticks)
+    ax_right.set_yticks(ticks)
+
+
+def _bar_label_y_position(value: int, y_scale_mode: str) -> float:
+    if y_scale_mode == "log":
+        return max(value * 1.12, 1.15)
+    return value * 1.015
+
+
+def _add_bar_labels(
+    ax: plt.Axes,
+    bars,
+    y_scale_mode: str,
+    color: str = "#2B2B2B",
+) -> None:
+    for bar in bars:
+        height = int(bar.get_height())
+        ax.text(
+            bar.get_x() + bar.get_width() / 2,
+            _bar_label_y_position(height, y_scale_mode),
+            _format_bar_label(height),
+            ha="center",
+            va="bottom",
+            fontsize=BAR_LABEL_FONTSIZE,
+            color=color,
+        )
+
+
+def _sample_a_tokens(n_value: int, token_c: str, sources: list[str]) -> list[str]:
+    sample_size = min(SAMPLE_A_TOKEN_COUNT, len(sources))
+    rng = random.Random(f"{SAMPLE_RANDOM_SEED}:{n_value}:{token_c}")
+    return rng.sample(sources, sample_size)
+
+
+def _is_phrase_source_token(token: str) -> bool:
+    return len(clean_token(token)) > 1
+
+
+def _select_example_entries(
+    n_value: int,
+    entries: list[tuple[str, list[str]]],
+) -> list[tuple[str, list[str]]]:
+    if n_value != 3:
+        return entries[:MAX_EXAMPLE_ROWS_PER_N]
+
+    phrase_entries = [
+        (token_c, sources)
+        for token_c, sources in entries
+        if all(_is_phrase_source_token(source) for source in sources)
+    ]
+    if len(phrase_entries) >= MAX_EXAMPLE_ROWS_PER_N:
+        return phrase_entries[:MAX_EXAMPLE_ROWS_PER_N]
+
+    selected = phrase_entries[:]
+    selected_keys = {token_c for token_c, _sources in selected}
+    for token_c, sources in entries:
+        if token_c in selected_keys:
+            continue
+        selected.append((token_c, sources))
+        if len(selected) >= MAX_EXAMPLE_ROWS_PER_N:
+            break
+    return selected
+
+
+def _draw_example_box_background(
+    ax: plt.Axes,
+    x_pos: float,
+    width: float,
+) -> None:
+    bottom = EXAMPLE_BOX_BOTTOM
+    height = EXAMPLE_BOX_HEIGHT
+    ax.add_patch(
+        Rectangle(
+            (x_pos, bottom),
+            width,
+            height,
+            transform=ax.transAxes,
+            facecolor="#FAFAFA",
+            edgecolor="none",
+            linewidth=0.0,
+            clip_on=False,
+        )
+    )
+    ax.plot(
+        [x_pos, x_pos + width],
+        [bottom + height, bottom + height],
+        transform=ax.transAxes,
+        color="#B8C4D0",
+        linewidth=0.75,
+        solid_capstyle="butt",
+        clip_on=False,
+    )
+
+
+def _draw_selected_token_examples(
+    ax: plt.Axes,
+    result: AnalysisResult,
+) -> None:
+    ax.set_ylim(0, 1)
+    ax.set_xlim(0, 1)
+    ax.axis("off")
+    ax.text(
+        0.0,
+        0.92,
+        "(b) Representative token collisions",
+        transform=ax.transAxes,
+        ha="left",
+        va="bottom",
+        fontsize=7.6,
+        fontweight="bold",
+        color="#333333",
+    )
+
+    box_top = EXAMPLE_BOX_BOTTOM + EXAMPLE_BOX_HEIGHT
+    for n_value in SAMPLE_N_VALUES:
+        layout = EXAMPLE_COLUMN_LAYOUT[n_value]
+        x_pos = layout["x"]
+        label_y = box_top + 0.11
+        entries = result.n_to_entries.get(n_value, [])
+        examples = []
+        if entries:
+            for token_c, sources in _select_example_entries(n_value, entries):
+                sampled_sources = _sample_a_tokens(n_value, token_c, sources)
+                examples.append((token_c, ", ".join(sampled_sources)))
+
+        ax.text(
+            x_pos,
+            label_y,
+            f"N={n_value}",
+            transform=ax.transAxes,
+            ha="left",
+            va="top",
+            fontsize=EXAMPLE_N_LABEL_FONTSIZE,
+            fontweight="bold",
+            color="#333333",
+        )
+
+        _draw_example_box_background(ax, x_pos, layout["width"])
+
+        if not examples:
+            ax.text(
+                x_pos + 0.012,
+                box_top - 0.09,
+                "No matching C token",
+                transform=ax.transAxes,
+                ha="left",
+                va="top",
+                fontsize=EXAMPLE_BOX_FONTSIZE,
+                color="#2B2B2B",
+            )
+            continue
+
+        for row_idx, (token_c, source_text) in enumerate(examples):
+            row_y = box_top - 0.09 - row_idx * EXAMPLE_ROW_STEP
+            ax.text(
+                x_pos + 0.012,
+                row_y,
+                token_c,
+                transform=ax.transAxes,
+                ha="left",
+                va="top",
+                fontsize=EXAMPLE_BOX_FONTSIZE,
+                color="#2B2B2B",
+                family="DejaVu Sans Mono",
+            )
+            ax.text(
+                x_pos + layout["arrow"],
+                row_y,
+                "->",
+                transform=ax.transAxes,
+                ha="left",
+                va="top",
+                fontsize=EXAMPLE_BOX_FONTSIZE,
+                color="#555555",
+                family="DejaVu Sans Mono",
+            )
+            ax.text(
+                x_pos + layout["source"],
+                row_y,
+                source_text,
+                transform=ax.transAxes,
+                ha="left",
+                va="top",
+                fontsize=EXAMPLE_BOX_FONTSIZE,
+                color="#2B2B2B",
+            )
+
+
 def _draw_multiplicity_distribution(
     ax: plt.Axes,
     result: AnalysisResult,
@@ -586,152 +863,110 @@ def _draw_multiplicity_distribution(
     x_positions = list(range(len(n_values)))
     pair_counts = [len(result.n_to_entries[n_value]) for n_value in n_values]
     source_counts = [n_value * len(result.n_to_entries[n_value]) for n_value in n_values]
+    bar_width = 0.32
 
-    bars = ax.bar(
-        x_positions,
+    c_bars = ax.bar(
+        [x_pos - bar_width / 2 for x_pos in x_positions],
         pair_counts,
-        width=0.72,
-        color="#D55E00",
+        width=bar_width,
+        color="#D95F02",
         edgecolor="#6B2D00",
-        linewidth=0.45,
+        linewidth=0.35,
+        alpha=0.92,
+    )
+    a_bars = ax.bar(
+        [x_pos + bar_width / 2 for x_pos in x_positions],
+        source_counts,
+        width=bar_width,
+        color="#4DA3D9",
+        edgecolor="#006DA3",
+        linewidth=0.35,
+        alpha=0.84,
     )
 
     if y_scale_mode == "log":
         ax.set_yscale("log")
 
-    if pair_counts:
-        top_indices = set(sorted(range(len(pair_counts)), key=pair_counts.__getitem__, reverse=True)[:3])
-        top_indices.update({0, len(pair_counts) - 1})
-        for idx, bar in enumerate(bars):
-            if idx not in top_indices:
-                continue
-            height = int(bar.get_height())
-            ax.text(
-                bar.get_x() + bar.get_width() / 2,
-                height,
-                _format_bar_label(height),
-                ha="center",
-                va="bottom",
-                fontsize=6.8,
-                color="#2B2B2B",
-            )
-
     ax2 = ax.twinx()
-    ax2.plot(
-        x_positions,
-        source_counts,
-        color="#0072B2",
-        linewidth=1.4,
-        marker="o",
-        markersize=3.0,
-        markerfacecolor="white",
-        markeredgewidth=0.8,
-    )
     if y_scale_mode == "log":
         ax2.set_yscale("log")
+    _set_shared_y_axes(ax, ax2, pair_counts, source_counts, y_scale_mode)
+
+    _add_bar_labels(ax, c_bars, y_scale_mode)
+    _add_bar_labels(ax, a_bars, y_scale_mode, color="#005B8F")
 
     ax.set_xlim(-0.75, len(n_values) - 0.25)
     ax.set_xlabel("Multiplicity N")
-    ax.set_ylabel("")
-    ax2.set_ylabel("")
-    ax.tick_params(axis="y", colors="#D55E00")
-    ax2.tick_params(axis="y", colors="#0072B2")
-    ax.spines["left"].set_color("#D55E00")
-    ax2.spines["right"].set_color("#0072B2")
-    ax.set_title("N-to-1 collision profile", loc="left", fontweight="bold")
+    ax.set_ylabel("Count (log scale)")
+    ax2.set_ylabel("Count (log scale)")
+    ax.tick_params(axis="y", colors="#444444", width=0.55, length=2.6)
+    ax2.tick_params(axis="y", colors="#444444", width=0.55, length=2.6)
+    ax.spines["left"].set_color("#777777")
+    ax2.spines["right"].set_color("#777777")
+    ax.set_title("")
     ax.set_xticks(x_positions)
     ax.set_xticklabels([str(n_value) for n_value in n_values])
-    ax.tick_params(axis="x", labelrotation=0, pad=2)
-    ax.yaxis.set_major_formatter(FuncFormatter(_format_count))
-    ax2.yaxis.set_major_formatter(FuncFormatter(_format_count))
-    ax.grid(axis="y", which="major", color="#D8D8D8", linewidth=0.45)
+    ax.tick_params(axis="x", labelrotation=0, pad=2, width=0.55, length=2.6)
+    ax.yaxis.set_major_formatter(FuncFormatter(_format_axis_label))
+    ax2.yaxis.set_major_formatter(FuncFormatter(_format_axis_label))
+    ax.grid(axis="y", which="major", color="#D5D5D5", linewidth=0.35)
     ax.set_axisbelow(True)
     ax.spines["top"].set_visible(False)
     ax2.spines["top"].set_visible(False)
+    ax.spines["bottom"].set_color("#777777")
+    ax2.spines["bottom"].set_visible(False)
 
     legend_handles = [
-        Patch(facecolor="#D55E00", edgecolor="#6B2D00", label="C tokens (left y-axis)"),
-        plt.Line2D(
-            [0],
-            [0],
-            color="#0072B2",
-            marker="o",
-            markersize=3.2,
-            linewidth=1.4,
-            label="A source tokens (right y-axis)",
-        ),
+        Patch(facecolor="#D95F02", edgecolor="#6B2D00", alpha=0.92, label="Pinyin-Toned superBPE"),
+        Patch(facecolor="#4DA3D9", edgecolor="#006DA3", alpha=0.84, label="Chinese superBPE"),
     ]
-    ax.legend(handles=legend_handles, loc="upper right", frameon=False)
+    ax.legend(
+        handles=legend_handles,
+        loc="upper right",
+        bbox_to_anchor=(1.0, 1.12),
+        ncol=2,
+        frameon=False,
+        borderaxespad=0.0,
+    )
 
     if rare_ax is None:
         return
-
-    rare_ax.set_ylim(0, 1)
-    rare_ax.axis("off")
-    rare_ax.text(
-        0.0,
-        0.96,
-        "C tokens for rare groups (C-token count <= 3)",
-        transform=rare_ax.transAxes,
-        ha="left",
-        va="top",
-        fontsize=7.2,
-        fontweight="bold",
-        color="#333333",
-    )
-
-    rare_items = [
-        (
-            idx,
-            n_value,
-            [token_c for token_c, _sources in result.n_to_entries[n_value]],
-        )
-        for idx, n_value in enumerate(n_values)
-        if len(result.n_to_entries[n_value]) <= 3
-    ]
-    columns = 4
-    x_slots = [0.0, 0.265, 0.53, 0.795]
-    y_slots = [0.65, 0.39, 0.13]
-    for item_idx, (_x_pos, n_value, tokens) in enumerate(rare_items):
-        row = item_idx // columns
-        col = item_idx % columns
-        x_pos = x_slots[col]
-        y_pos = y_slots[row]
-        label = f"N={n_value}: " + ", ".join(tokens)
-        rare_ax.text(
-            x_pos,
-            y_pos,
-            label,
-            transform=rare_ax.transAxes,
-            ha="left",
-            va="center",
-            fontsize=6.6,
-            color="#4A2500",
-            bbox={
-                "boxstyle": "round,pad=0.16",
-                "facecolor": "white",
-                "edgecolor": "#D8A06A",
-                "linewidth": 0.45,
-                "alpha": 0.96,
-            },
-        )
+    _draw_selected_token_examples(rare_ax, result)
 
 
-def create_plot(result: AnalysisResult, y_scale_mode: str) -> None:
+def create_plot(
+    result: AnalysisResult,
+    y_scale_mode: str,
+) -> None:
     _setup_publication_style()
 
     fig, (ax_distribution, ax_rare) = plt.subplots(
         2,
         1,
-        figsize=(7.2, 4.2),
+        figsize=(7.2, 4.95),
         dpi=600,
-        gridspec_kw={"height_ratios": [3.2, 1.2], "hspace": 0.16},
+        gridspec_kw={"height_ratios": [2.95, 1.55], "hspace": 0.24},
     )
     fig.patch.set_facecolor("white")
+    fig.text(
+        0.08,
+        0.968,
+        "(a) N-to-1 homophone collision profile",
+        ha="left",
+        va="top",
+        fontsize=8.2,
+        fontweight="bold",
+        color="#111111",
+    )
 
-    _draw_multiplicity_distribution(ax_distribution, result, y_scale_mode, rare_ax=ax_rare)
+    _draw_multiplicity_distribution(
+        ax_distribution,
+        result,
+        y_scale_mode,
+        rare_ax=ax_rare,
+    )
 
-    fig.subplots_adjust(left=0.08, right=0.92, bottom=0.06, top=0.94)
+    fig.subplots_adjust(left=0.08, right=0.92, bottom=0.06, top=0.89)
     fig.savefig(OUTPUT_PLOT, bbox_inches="tight", pad_inches=0.03)
     fig.savefig(OUTPUT_PLOT_SVG, bbox_inches="tight", pad_inches=0.03)
     fig.savefig(OUTPUT_PLOT_PDF, bbox_inches="tight", pad_inches=0.03)

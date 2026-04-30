@@ -31,17 +31,52 @@
 
 import os
 import csv
+import argparse
 from tokenizers import Tokenizer
 from tokenizers.decoders import ByteLevel
 from tqdm import tqdm
 BASE_DIR = "/Users/crisp/Desktop/code_field/python/Chinese_Latinization_NLP/1.Tokenization"
 
 CORPORA_DIR = os.path.join(BASE_DIR, "corpora")
-TOKENIZER_DIR = os.path.join(BASE_DIR, "superTokenizers_BPE")
+TOKENIZER_DIR = os.path.join(BASE_DIR, "superTokenizers_BPE_2048_subset100k")
 DICT_DIR = os.path.join(BASE_DIR, "dicts")
 
-OUTPUT_FILE = os.path.join(BASE_DIR, "evaluation_4abcd_superBPE.csv")
-REPORT_FILE = os.path.join(BASE_DIR, "tokenizer_evaluation_report_superBPE.txt")
+OUTPUT_FILE = os.path.join(TOKENIZER_DIR, "evaluation_4abcd_superBPE.csv")
+REPORT_FILE = os.path.join(TOKENIZER_DIR, "tokenizer_evaluation_report_superBPE.txt")
+
+
+def resolve_base_path(path):
+    return path if os.path.isabs(path) else os.path.join(BASE_DIR, path)
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Evaluate SuperBPE tokenizers with 4a/4b/4d metrics."
+    )
+    parser.add_argument(
+        "--tokenizer-dir",
+        default=TOKENIZER_DIR,
+        help="Tokenizer directory. Relative paths are resolved under BASE_DIR.",
+    )
+    parser.add_argument(
+        "--output-dir",
+        default=BASE_DIR,
+        help="Directory for CSV and report outputs. Relative paths are resolved under BASE_DIR.",
+    )
+    parser.add_argument(
+        "--output-suffix",
+        default="",
+        help="Suffix appended to output filenames, e.g. 0.05 -> *_0.05.csv.",
+    )
+    return parser.parse_args()
+
+
+args = parse_args()
+TOKENIZER_DIR = resolve_base_path(args.tokenizer_dir)
+OUTPUT_DIR = resolve_base_path(args.output_dir)
+OUTPUT_SUFFIX = f"_{args.output_suffix}" if args.output_suffix else ""
+OUTPUT_FILE = os.path.join(OUTPUT_DIR, f"evaluation_4abcd_superBPE{OUTPUT_SUFFIX}.csv")
+REPORT_FILE = os.path.join(OUTPUT_DIR, f"tokenizer_evaluation_report_superBPE{OUTPUT_SUFFIX}.txt")
 
 # ===== DETECT TYPE =====
 def detect_type(name):
@@ -325,6 +360,36 @@ def generate_report(collector, output_file=None):
     return report_text
 
 
+def write_csv(results, output_file):
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+    fieldnames = [
+        'file',
+        'type',
+        'test_file',
+        'tokens_per_sample',
+        'tokens_per_surface_char',
+        'tokens_per_original_char',
+        'total_tokens',
+        'total_chars',
+        'total_original_chars',
+        'morph_score',
+        'valid_tokens',
+        'checked_tokens',
+        'invalid_tokens',
+        'skipped_punctuation_tokens',
+        'overlap',
+        'chars_per_token',
+        'bytes_per_token',
+        'chars_per_byte',
+        'bytes_per_original_char',
+    ]
+    with open(output_file, "w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(results)
+    print(f"\n✓ CSV saved to: {output_file}")
+
+
 # ===== MAIN =====
 collector = TokenizerAnalysisCollector()
 
@@ -332,7 +397,7 @@ origin_test_path = find_test_file("origin")
 origin_texts = load_texts(origin_test_path)
 total_original_chars = sum(len(t) for t in origin_texts)
 
-folders = [folder for folder in os.listdir(TOKENIZER_DIR) if "_superbpe_" in folder]
+folders = sorted(folder for folder in os.listdir(TOKENIZER_DIR) if "_superbpe_" in folder)
 
 for folder in tqdm(folders, desc="Tokenizers"):
     # Only pick superbpe directories
@@ -471,7 +536,8 @@ for folder in tqdm(folders, desc="Tokenizers"):
         }
     )
 
-# ===== GENERATE DETAILED REPORT =====
+# ===== SAVE CSV + GENERATE DETAILED REPORT =====
+write_csv(collector.results, OUTPUT_FILE)
 generate_report(collector)
 
 print("\n" + "=" * 100)

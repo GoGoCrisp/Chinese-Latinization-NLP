@@ -20,6 +20,7 @@ import json
 import os
 import re
 import random
+import argparse
 from tokenizers import Tokenizer as HFTokenizer
 from itertools import combinations
 from tqdm import tqdm
@@ -34,9 +35,42 @@ except ImportError:
     print("Warning: pypinyin not installed. Fallback will be disabled.")
 
 # ===== 配置 =====
-TOKENIZERS_DIR = "decoded_superTokenizers"
-DICTS_DIR = "./dicts"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+TOKENIZERS_DIR = os.path.join(BASE_DIR, "decoded_superTokenizers")
+DICTS_DIR = os.path.join(BASE_DIR, "dicts")
 OUTPUT_FILE = "tokenizer_overlap_analysis_superBPE.txt"
+
+
+def resolve_base_path(path):
+    return path if os.path.isabs(path) else os.path.join(BASE_DIR, path)
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Compare overlap among 64k SuperBPE decoded tokenizers."
+    )
+    parser.add_argument(
+        "--tokenizers-dir",
+        default=TOKENIZERS_DIR,
+        help="Directory containing *_decoded.json files. Relative paths are resolved under this script directory.",
+    )
+    parser.add_argument(
+        "--dicts-dir",
+        default=DICTS_DIR,
+        help="Dictionary directory. Relative paths are resolved under this script directory.",
+    )
+    parser.add_argument(
+        "--output-file",
+        default=OUTPUT_FILE,
+        help="Output report filename/path. Relative paths are resolved under tokenizers-dir.",
+    )
+    return parser.parse_args()
+
+
+ARGS = parse_args()
+TOKENIZERS_DIR = resolve_base_path(ARGS.tokenizers_dir)
+DICTS_DIR = resolve_base_path(ARGS.dicts_dir)
+OUTPUT_FILE = ARGS.output_file
 
 # 4个64k tokenizers映射
 TOKENIZERS_64K = {
@@ -1177,4 +1211,3 @@ def generate_detailed_report(all_results: dict, pair_order: list) -> str:
 
 if __name__ == "__main__":
     main()
-

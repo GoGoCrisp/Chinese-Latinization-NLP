@@ -19,6 +19,7 @@ SuperBPE vocabulary entries, including entries that differ only by whitespace.
 """
 
 import csv
+import argparse
 import json
 import re
 import unicodedata
@@ -32,6 +33,39 @@ TOKENIZERS_DIR = BASE_DIR / "decoded_superTokenizers"
 
 OUTPUT_TXT = TOKENIZERS_DIR / "table1_tokenizer_vocabulary_table2_superBPE.txt"
 OUTPUT_CSV = TOKENIZERS_DIR / "table1_tokenizer_vocabulary_table2_superBPE.csv"
+
+
+def resolve_base_path(path: str | Path) -> Path:
+    path = Path(path)
+    return path if path.is_absolute() else BASE_DIR / path
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Analyze SuperBPE decoded tokenizer vocabulary composition."
+    )
+    parser.add_argument(
+        "--tokenizers-dir",
+        default=str(TOKENIZERS_DIR),
+        help="Directory containing *_decoded.json files. Relative paths are resolved under this script directory.",
+    )
+    parser.add_argument(
+        "--output-txt",
+        default=None,
+        help="Output report path. Defaults to <tokenizers-dir>/table1_tokenizer_vocabulary_table2_superBPE.txt.",
+    )
+    parser.add_argument(
+        "--output-csv",
+        default=None,
+        help="Output CSV path. Defaults to <tokenizers-dir>/table1_tokenizer_vocabulary_table2_superBPE.csv.",
+    )
+    return parser.parse_args()
+
+
+ARGS = parse_args()
+TOKENIZERS_DIR = resolve_base_path(ARGS.tokenizers_dir)
+OUTPUT_TXT = resolve_base_path(ARGS.output_txt) if ARGS.output_txt else TOKENIZERS_DIR / "table1_tokenizer_vocabulary_table2_superBPE.txt"
+OUTPUT_CSV = resolve_base_path(ARGS.output_csv) if ARGS.output_csv else TOKENIZERS_DIR / "table1_tokenizer_vocabulary_table2_superBPE.csv"
 
 VOCAB_SIZES = [8000, 16000, 32000, 64000]
 

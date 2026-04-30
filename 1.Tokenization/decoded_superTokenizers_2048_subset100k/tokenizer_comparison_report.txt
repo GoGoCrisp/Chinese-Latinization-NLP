@@ -1,0 +1,202 @@
+====================================================================================================
+TOKENIZER COMPARISON REPORT: 2048 SuperBPE 64K Custom Tokenizers vs. Production LLM Tokenizers
+====================================================================================================
+
+TEST DATA SUMMARY BY TOKENIZER
+----------------------------------------------------------------------------------------------------
+custom_chinese_origin_64k:
+  Test file: /Users/crisp/Desktop/code_field/python/Chinese_Latinization_NLP/1.Tokenization/corpora/chinese_origin_中国_test10.txt
+  Number of test sentences: 133751
+  Total characters: 76799271
+  Average sentence length: 574.20 chars
+custom_pinyin_diacritic_64k:
+  Test file: /Users/crisp/Desktop/code_field/python/Chinese_Latinization_NLP/1.Tokenization/corpora/pinyin_diacritic_spaced_test10.txt
+  Number of test sentences: 133751
+  Total characters: 266293328
+  Average sentence length: 1990.96 chars
+custom_pinyin_toned_64k:
+  Test file: /Users/crisp/Desktop/code_field/python/Chinese_Latinization_NLP/1.Tokenization/corpora/pinyin_toned_spaced_test10.txt
+  Number of test sentences: 133751
+  Total characters: 322861495
+  Average sentence length: 2413.90 chars
+custom_pinyin_toneless_64k:
+  Test file: /Users/crisp/Desktop/code_field/python/Chinese_Latinization_NLP/1.Tokenization/corpora/pinyin_toneless_spaced_test10.txt
+  Number of test sentences: 133751
+  Total characters: 266293328
+  Average sentence length: 1990.96 chars
+
+====================================================================================================
+4A. FERTILITY ANALYSIS (Tokens-per-sentence & Tokens-per-character)
+====================================================================================================
+
+====================================================================================================
+4B. MORPHOLOGICAL COHERENCE ANALYSIS
+====================================================================================================
+
+CUSTOM_CHINESE_ORIGIN_64K
+--------------------------------------------------
+  type: origin
+  analysis_level: vocabulary_token_types
+  dictionary_source: CEDICT + vocab-derived lexical compounds; pinyin derived with pypinyin
+  enhanced_chinese_added_words: 1484
+  total_vocab_tokens: 64000
+  classified_tokens: 58075
+  strong_valid_tokens: 30048
+  weak_valid_tokens: 14385
+  invalid_tokens: 13642
+  excluded_tokens: 5925
+  coherence_ratio: 0.5174
+  strict_valid_rate: 0.5174
+  inclusive_valid_rate: 0.7651
+  invalid_rate: 0.2349
+  coverage_over_vocab: 0.9074
+  top_reasons:
+    28428: SV: CEDICT hit
+    9925: IV: not a dictionary unit, licensed phrase, or known morpheme
+    7208: WV: decomposable into known Chinese units
+    4253: EX: non-CJK token excluded from Chinese morphology
+    3556: IV: proper substring of a longer dictionary word
+    3471: WV: function/predicate prefix plus known unit
+    2282: WV: content unit plus grammatical particle
+    1574: SV: complete numeric/time expression
+    1150: WV: known unit plus predicate/function suffix
+    974: EX: punctuation/symbol/empty token
+  unit_bucket_counts: {'EX_unit_0': 2, 'EX_unit_1': 970, 'EX_unit_10': 14, 'EX_unit_11': 8, 'EX_unit_12': 7, 'EX_unit_13': 4, 'EX_unit_16': 2, 'EX_unit_2': 1533, 'EX_unit_3': 1914, 'EX_unit_4': 833, 'EX_unit_5': 337, 'EX_unit_6': 168, 'EX_unit_7': 91, 'EX_unit_8': 24, 'EX_unit_9': 18, 'IV_unit_10': 36, 'IV_unit_11': 27, 'IV_unit_12': 18, 'IV_unit_13': 12, 'IV_unit_14': 5, 'IV_unit_15': 4, 'IV_unit_16': 7, 'IV_unit_17': 1, 'IV_unit_18': 1, 'IV_unit_2': 7948, 'IV_unit_21': 2, 'IV_unit_3': 3573, 'IV_unit_34': 1, 'IV_unit_4': 1049, 'IV_unit_5': 440, 'IV_unit_6': 236, 'IV_unit_7': 132, 'IV_unit_8': 99, 'IV_unit_9': 51, 'SV_unit_1': 4938, 'SV_unit_10': 5, 'SV_unit_11': 2, 'SV_unit_13': 1, 'SV_unit_2': 18186, 'SV_unit_3': 4490, 'SV_unit_4': 1363, 'SV_unit_5': 869, 'SV_unit_6': 98, 'SV_unit_7': 71, 'SV_unit_8': 18, 'SV_unit_9': 7, 'WV_unit_10': 43, 'WV_unit_11': 23, 'WV_unit_12': 29, 'WV_unit_13': 17, 'WV_unit_14': 14, 'WV_unit_15': 2, 'WV_unit_16': 1, 'WV_unit_19': 1, 'WV_unit_2': 2455, 'WV_unit_3': 5939, 'WV_unit_4': 3731, 'WV_unit_5': 914, 'WV_unit_6': 829, 'WV_unit_7': 202, 'WV_unit_8': 99, 'WV_unit_9': 86}
+  sample_strong_valid_tokens:
+    ['福兴', '1846年', '汉娜', '二十六日', '选用', '宋楚瑜', '奠定', '不甚', '1903年', '400名']
+  sample_weak_valid_tokens:
+    ['住房保障', '头部的', '最高纪录', '停止使用', '广播公司的', '其市镇范围', '来自英国', '电影和', '旨在为', '冬季奥运会']
+  sample_invalid_tokens:
+    ['之都', '霍洛', '更强的', '75岁及以上人口占', '突击炮', '克莱曼', '惠特', '栖息在底中层水域', '谷爱凌', '提亚']
+  sample_excluded_tokens:
+    ['�', 'PB', 'y D', '--', 'KP', 'ient', 'CST', 'ared', 'Cal', '�']
+
+CUSTOM_PINYIN_DIACRITIC_64K
+--------------------------------------------------
+  type: diacritic
+  analysis_level: vocabulary_token_types
+  dictionary_source: CEDICT + vocab-derived lexical compounds; pinyin derived with pypinyin
+  enhanced_chinese_added_words: 1484
+  total_vocab_tokens: 64000
+  classified_tokens: 60082
+  strong_valid_tokens: 39254
+  weak_valid_tokens: 18548
+  invalid_tokens: 2280
+  excluded_tokens: 3918
+  coherence_ratio: 0.6533
+  strict_valid_rate: 0.6533
+  inclusive_valid_rate: 0.9621
+  invalid_rate: 0.0379
+  coverage_over_vocab: 0.9388
+  top_reasons:
+    38583: SV: pinyin dictionary hit
+    16787: WV: complete syllable sequence with plausible known-unit decomposition
+    1838: IV: cannot parse into complete legal pinyin syllables
+    1837: EX: foreign/cased Latin token excluded from pinyin morphology
+    1760: WV: numeric expression followed by a complete measure/time unit
+    1215: EX: pure numeric inventory token
+    647: SV: pinyin dictionary hit with digits
+    387: IV: mixed digit+pinyin token without a complete numeric pattern
+    344: EX: punctuation/symbol/empty token
+    342: EX: single Latin inventory letter
+  unit_bucket_counts: {'EX_unit_0': 3501, 'EX_unit_1': 402, 'EX_unit_2': 13, 'EX_unit_6': 2, 'IV_unit_0': 2201, 'IV_unit_10': 1, 'IV_unit_11': 7, 'IV_unit_2': 4, 'IV_unit_3': 11, 'IV_unit_4': 24, 'IV_unit_5': 12, 'IV_unit_6': 8, 'IV_unit_7': 6, 'IV_unit_8': 1, 'IV_unit_9': 5, 'SV_unit_0': 372, 'SV_unit_1': 5172, 'SV_unit_10': 3, 'SV_unit_12': 1, 'SV_unit_2': 28701, 'SV_unit_3': 3660, 'SV_unit_4': 1042, 'SV_unit_5': 224, 'SV_unit_6': 41, 'SV_unit_7': 28, 'SV_unit_8': 10, 'WV_unit_0': 1555, 'WV_unit_1': 1, 'WV_unit_10': 61, 'WV_unit_11': 45, 'WV_unit_12': 34, 'WV_unit_13': 15, 'WV_unit_14': 3, 'WV_unit_15': 2, 'WV_unit_16': 2, 'WV_unit_17': 1, 'WV_unit_19': 1, 'WV_unit_2': 4425, 'WV_unit_21': 2, 'WV_unit_3': 7984, 'WV_unit_4': 2897, 'WV_unit_5': 716, 'WV_unit_6': 356, 'WV_unit_7': 222, 'WV_unit_8': 118, 'WV_unit_9': 108}
+  sample_strong_valid_tokens:
+    ['rèn hé rén', 'shù jù', 'fǔ yīn', 'děng zhí', 'yǐ miǎn', 'yīn cǐ', 'zhǔ shí', 'mù bēi', 'kě kào xìng', 'gōng mín']
+  sample_weak_valid_tokens:
+    ['kāng sī tǎn', 'wǎng qiú gōng kāi sài', 'miàn jī yuē', 'běi bīn dà xī yáng yīng jí lì hǎi xiá', 'sǐ xíng de', 'yǐ kāi shǐ', 'shǒu bù', 'dǎo děng', 'bāo kuò zài', 'lǐ zōng']
+  sample_invalid_tokens:
+    ['night', 'par', '1 miàn 1 xiàn de', 'ood', 'ater', 'ref', 'part', 'tertain', 'con', 'ra']
+  sample_excluded_tokens:
+    ['Premi', 'Jr', '1951', 'Pre', 'Gre', '53', '69', 'Blu', '18', '66']
+
+CUSTOM_PINYIN_TONED_64K
+--------------------------------------------------
+  type: toned
+  analysis_level: vocabulary_token_types
+  dictionary_source: CEDICT + vocab-derived lexical compounds; pinyin derived with pypinyin
+  enhanced_chinese_added_words: 1484
+  total_vocab_tokens: 64000
+  classified_tokens: 60100
+  strong_valid_tokens: 39149
+  weak_valid_tokens: 18910
+  invalid_tokens: 2041
+  excluded_tokens: 3900
+  coherence_ratio: 0.6514
+  strict_valid_rate: 0.6514
+  inclusive_valid_rate: 0.966
+  invalid_rate: 0.034
+  coverage_over_vocab: 0.9391
+  top_reasons:
+    38478: SV: pinyin dictionary hit
+    17149: WV: complete syllable sequence with plausible known-unit decomposition
+    1825: EX: foreign/cased Latin token excluded from pinyin morphology
+    1761: WV: numeric expression followed by a complete measure/time unit
+    1599: IV: cannot parse into complete legal pinyin syllables
+    1217: EX: pure numeric inventory token
+    647: SV: pinyin dictionary hit with digits
+    387: IV: mixed digit+pinyin token without a complete numeric pattern
+    345: EX: punctuation/symbol/empty token
+    342: EX: single Latin inventory letter
+  unit_bucket_counts: {'EX_unit_0': 3489, 'EX_unit_1': 397, 'EX_unit_2': 13, 'EX_unit_6': 1, 'IV_unit_0': 1964, 'IV_unit_10': 1, 'IV_unit_11': 7, 'IV_unit_2': 3, 'IV_unit_3': 11, 'IV_unit_4': 24, 'IV_unit_5': 12, 'IV_unit_6': 7, 'IV_unit_7': 6, 'IV_unit_8': 1, 'IV_unit_9': 5, 'SV_unit_0': 77, 'SV_unit_1': 5139, 'SV_unit_10': 3, 'SV_unit_11': 1, 'SV_unit_2': 28844, 'SV_unit_3': 3688, 'SV_unit_4': 1071, 'SV_unit_5': 236, 'SV_unit_6': 46, 'SV_unit_7': 35, 'SV_unit_8': 9, 'WV_unit_0': 1556, 'WV_unit_10': 73, 'WV_unit_11': 39, 'WV_unit_12': 30, 'WV_unit_13': 17, 'WV_unit_14': 3, 'WV_unit_15': 4, 'WV_unit_16': 3, 'WV_unit_17': 1, 'WV_unit_19': 1, 'WV_unit_2': 4533, 'WV_unit_21': 2, 'WV_unit_3': 8123, 'WV_unit_4': 2960, 'WV_unit_5': 732, 'WV_unit_6': 380, 'WV_unit_7': 213, 'WV_unit_8': 130, 'WV_unit_9': 110}
+  sample_strong_valid_tokens:
+    ['song1 shan1', 'zheng4 quan4', 'bian4 su4 xiang1', 'zheng4 gui1', 'mei3 nv3', 'xian4 shi2 zhong1', 'jun1 zhang3', 'de wu3', 'yi4 xi2', 'tai4 xue2']
+  sample_weak_valid_tokens:
+    ['gong1 zuo4 de', 'zhu3 yao4 bi3 sai4 cheng2 ji4', 'ye3 tong2 shi2', 'zong3 bu4 wei4 yu2', 'liang3 men2', 'bai4 le', 'nian2 6 yue4 7 ri4', 'xi4 tong3 zhong1 de', 'ren4 wei2 gai1', 'nian2 6 yue4 12 ri4']
+  sample_invalid_tokens:
+    ['yu2 1941', 'ower', 'bit', 'ver', 'lob', 'art', '8 dian3', 'end', 'am', '25G']
+  sample_excluded_tokens:
+    ['＞', 'Na', 'H2', '2008', 'Radio', 'Is', 'Encore', '�', '�', '2017']
+
+CUSTOM_PINYIN_TONELESS_64K
+--------------------------------------------------
+  type: toneless
+  analysis_level: vocabulary_token_types
+  dictionary_source: CEDICT + vocab-derived lexical compounds; pinyin derived with pypinyin
+  enhanced_chinese_added_words: 1484
+  total_vocab_tokens: 64000
+  classified_tokens: 59491
+  strong_valid_tokens: 32880
+  weak_valid_tokens: 24486
+  invalid_tokens: 2125
+  excluded_tokens: 4509
+  coherence_ratio: 0.5527
+  strict_valid_rate: 0.5527
+  inclusive_valid_rate: 0.9643
+  invalid_rate: 0.0357
+  coverage_over_vocab: 0.9295
+  top_reasons:
+    32101: SV: pinyin dictionary hit
+    22488: WV: complete syllable sequence with plausible known-unit decomposition
+    2205: EX: foreign/cased Latin token excluded from pinyin morphology
+    1997: WV: numeric expression followed by a complete measure/time unit
+    1658: IV: cannot parse into complete legal pinyin syllables
+    1392: EX: pure numeric inventory token
+    759: SV: pinyin dictionary hit with digits
+    428: IV: mixed digit+pinyin token without a complete numeric pattern
+    359: EX: punctuation/symbol/empty token
+    343: EX: single Latin inventory letter
+  unit_bucket_counts: {'EX_unit_0': 4013, 'EX_unit_1': 482, 'EX_unit_2': 12, 'EX_unit_3': 1, 'EX_unit_6': 1, 'IV_unit_0': 2042, 'IV_unit_10': 1, 'IV_unit_11': 8, 'IV_unit_2': 4, 'IV_unit_3': 13, 'IV_unit_4': 20, 'IV_unit_5': 14, 'IV_unit_6': 6, 'IV_unit_7': 8, 'IV_unit_8': 2, 'IV_unit_9': 7, 'SV_unit_0': 64, 'SV_unit_1': 2611, 'SV_unit_10': 3, 'SV_unit_11': 1, 'SV_unit_2': 25055, 'SV_unit_3': 3712, 'SV_unit_4': 1085, 'SV_unit_5': 251, 'SV_unit_6': 54, 'SV_unit_7': 36, 'SV_unit_8': 8, 'WV_unit_0': 1786, 'WV_unit_1': 1, 'WV_unit_10': 90, 'WV_unit_11': 42, 'WV_unit_12': 42, 'WV_unit_13': 23, 'WV_unit_14': 6, 'WV_unit_15': 5, 'WV_unit_16': 6, 'WV_unit_17': 1, 'WV_unit_19': 1, 'WV_unit_2': 5569, 'WV_unit_21': 2, 'WV_unit_3': 11248, 'WV_unit_4': 3774, 'WV_unit_5': 899, 'WV_unit_6': 448, 'WV_unit_7': 268, 'WV_unit_8': 148, 'WV_unit_9': 127}
+  sample_strong_valid_tokens:
+    ['zhi shou', 'zheng jie', 'zhuan', 'mian fei', 'kan shang', 'nan yang', 'bu ji', 'luo wang', '1 suo', 'di 1']
+  sample_weak_valid_tokens:
+    ['bing cheng gong', 'zuo wei yu', 'xin de shi', 'fei lv bin de', 'shun shi zhen yu', '84 ren', 'fei fa yi min', 'shu xue shang', 'duo wa', 'yan zhong po huai']
+  sample_invalid_tokens:
+    ['ly', 'lobal', 'ample', 'rn', 'el', 'ser', 'tum', 'al', 'matic', 'sia']
+  sample_excluded_tokens:
+    ['Chur', '�', 'w', 'Gui', '�', 'Th', 'π', 'Se', 'CO', 'Edi']
+
+====================================================================================================
+4D. COMPRESSION EFFICIENCY ANALYSIS
+====================================================================================================
+
+====================================================================================================
+SUMMARY & FINDINGS
+====================================================================================================
+
+Best morphological coherence: custom_pinyin_diacritic_64k
+  Coherence ratio: 0.6533
+
+
+====================================================================================================
+END OF REPORT
+====================================================================================================
