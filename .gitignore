@@ -60,3 +60,21 @@ corpora/*.txt
 
 # Prevent extremely large derived files
 *.jsonl
+
+# ------------------------------------------------------------
+# Training artifacts (very large) — keep code/config/eval data
+# ------------------------------------------------------------
+2.Model trainning/data/raw/*.txt
+2.Model trainning/data/tokenized/
+2.Model trainning/**/data/tokenized/
+2.Model trainning/**/.generator_cache/
+2.Model trainning/outputs/
+2.Model trainning/server_outputs/
+2.Model trainning/**/*.tar.gz
+2.Model trainning/**/*.arrow
+2.Model trainning/**/*.pt
+2.Model trainning/**/*.safetensors
+2.Model trainning/**/checkpoint-*/
+
+# Allow small eval datasets even though we ignore *.jsonl globally
+!2.Model trainning/eval_data/**/*.jsonl

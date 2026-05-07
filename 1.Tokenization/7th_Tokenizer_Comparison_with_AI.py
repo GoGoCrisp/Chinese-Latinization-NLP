@@ -1855,9 +1855,9 @@ Method memory:
         # 3. 运行分析
         # 2026-04-29: temporarily disable 4a/4d to speed up 4b iteration.
         # self.results["fertility"] = self.calculate_fertility()
-        self.results["morphological_coherence"] = (
-            self.calculate_morphological_coherence()
-        )
+        # self.results["morphological_coherence"] = (
+        #     self.calculate_morphological_coherence()
+        # )
         # self.results["compression_efficiency"] = (
         #     self.calculate_compression_efficiency()
         # )

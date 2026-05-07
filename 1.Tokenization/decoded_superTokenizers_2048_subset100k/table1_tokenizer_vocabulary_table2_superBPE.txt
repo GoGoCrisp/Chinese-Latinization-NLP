@@ -8,25 +8,25 @@ SINGLE CJK CHARACTERS consumes 1-character Chinese tokens and single Latin lette
 Pure Latin combinations include non-single-letter Latin tokens such as 1-syllable pinyin forms and Latin fragments.
 Pinyin multi-syllable tokens are grouped only by syllable count; cross-boundary status is not tracked separately.
 
-Token Category                          | Chinese 8K  | Chinese 16K   | Chinese 32K   | Chinese 64K   | Pinyin-Toned 8K | Pinyin-Toned 16K | Pinyin-Toned 32K | Pinyin-Toned 64K
-----------------------------------------+-------------+---------------+---------------+---------------+-----------------+------------------+------------------+-----------------
-Base inventory                          |             |               |               |               |                 |                  |                  |                 
-SINGLE LETTERS (A-Z)                    | 52 (94)     | 52 (104)      | 52 (117)      | 52 (132)      | 52 (161)        | 52 (234)         | 52 (299)         | 52 (342)        
-SINGLE CJK CHARACTERS                   | 2378 (2418) | 3061 (3181)   | 3769 (4021)   | 4515 (4937)   | 0 (0)           | 0 (0)            | 0 (0)            | 0 (0)           
-DIGITS                                  | 155 (185)   | 247 (295)     | 312 (394)     | 558 (696)     | 296 (422)       | 296 (587)        | 315 (825)        | 398 (1217)      
-PUNCTUATION                             | 131 (131)   | 201 (202)     | 308 (309)     | 471 (472)     | 58 (59)         | 62 (65)          | 70 (73)          | 94 (97)         
-PURE LATIN COMBINATIONS                 | 274 (289)   | 713 (785)     | 1541 (1753)   | 3194 (3780)   | 1652 (3268)     | 1699 (4085)      | 2179 (5488)      | 3357 (8005)     
-Multi-syllable / multi-character tokens |             |               |               |               |                 |                  |                  |                 
-2-SYLLABLE / 2-CHAR                     | 3443 (3483) | 7589 (7722)   | 15000 (15320) | 27294 (28053) | 2545 (3326)     | 6043 (8417)      | 11851 (17462)    | 21466 (33203)   
-3-SYLLABLE / 3-CHAR                     | 556 (556)   | 1946 (1949)   | 5345 (5367)   | 13200 (13293) | 258 (295)       | 1224 (1403)      | 3639 (4362)      | 9392 (11660)    
-4-SYLLABLE / 4-CHAR                     | 95 (97)     | 442 (446)     | 1684 (1698)   | 5696 (5739)   | 50 (54)         | 256 (287)        | 973 (1106)       | 3393 (3990)     
-5-SYLLABLE / 5-CHAR                     | 23 (23)     | 100 (100)     | 389 (389)     | 1340 (1343)   | 23 (23)         | 61 (64)          | 248 (263)        | 867 (963)       
-6+-SYLLABLE / 6+-CHAR                   | 40 (42)     | 121 (125)     | 386 (395)     | 1335 (1348)   | 32 (34)         | 102 (106)        | 303 (320)        | 1026 (1098)     
-Mixed tokens                            |             |               |               |               |                 |                  |                  |                 
-MIXED (LATIN + CJK)                     | 5 (5)       | 12 (12)       | 49 (49)       | 157 (161)     | 0 (0)           | 0 (0)            | 0 (0)            | 0 (0)           
-Other                                   |             |               |               |               |                 |                  |                  |                 
-OTHER / UNKNOWN                         | 242 (265)   | 593 (652)     | 1595 (1734)   | 3331 (3545)   | 198 (233)       | 461 (615)        | 1338 (1624)      | 2619 (3180)     
-Total                                   | 7394 (7588) | 15077 (15573) | 30430 (31546) | 61143 (63499) | 5164 (7875)     | 10256 (15863)    | 20968 (31822)    | 42663 (63755)   
+Token Category                          | Chinese 8K  | Chinese 16K   | Chinese 32K   | Chinese 64K   | Pinyin-Toneless 8K | Pinyin-Toneless 16K | Pinyin-Toneless 32K | Pinyin-Toneless 64K | Pinyin-Toned 8K | Pinyin-Toned 16K | Pinyin-Toned 32K | Pinyin-Toned 64K | Pinyin-Diacritic 8K | Pinyin-Diacritic 16K | Pinyin-Diacritic 32K | Pinyin-Diacritic 64K
+----------------------------------------+-------------+---------------+---------------+---------------+--------------------+---------------------+---------------------+---------------------+-----------------+------------------+------------------+------------------+---------------------+----------------------+----------------------+---------------------
+Base inventory                          |             |               |               |               |                    |                     |                     |                     |                 |                  |                  |                  |                     |                      |                      |                     
+SINGLE LETTERS (A-Z)                    | 52 (94)     | 52 (104)      | 52 (117)      | 52 (132)      | 52 (168)           | 52 (237)            | 52 (309)            | 52 (343)            | 52 (161)        | 52 (234)         | 52 (299)         | 52 (342)         | 52 (163)            | 52 (232)             | 52 (301)             | 52 (342)            
+SINGLE CJK CHARACTERS                   | 2378 (2418) | 3061 (3181)   | 3769 (4021)   | 4515 (4937)   | 0 (0)              | 0 (0)               | 0 (0)               | 0 (0)               | 0 (0)           | 0 (0)            | 0 (0)            | 0 (0)            | 0 (0)               | 0 (0)                | 0 (0)                | 0 (0)               
+DIGITS                                  | 155 (185)   | 247 (295)     | 312 (394)     | 558 (696)     | 423 (556)          | 423 (735)           | 425 (985)           | 486 (1392)          | 296 (422)       | 296 (587)        | 315 (825)        | 398 (1217)       | 294 (420)           | 294 (587)            | 314 (826)            | 397 (1215)          
+PUNCTUATION                             | 131 (131)   | 201 (202)     | 308 (309)     | 471 (472)     | 67 (68)            | 67 (70)             | 74 (77)             | 95 (98)             | 58 (59)         | 62 (65)          | 70 (73)          | 94 (97)          | 58 (59)             | 62 (65)              | 70 (73)              | 94 (97)             
+PURE LATIN COMBINATIONS                 | 274 (289)   | 713 (785)     | 1541 (1753)   | 3194 (3780)   | 1447 (2410)        | 1453 (2947)         | 1626 (3817)         | 2757 (5965)         | 1652 (3268)     | 1699 (4085)      | 2179 (5488)      | 3357 (8005)      | 1644 (3256)         | 1692 (4078)          | 2174 (5480)          | 3341 (8003)         
+Multi-syllable / multi-character tokens |             |               |               |               |                    |                     |                     |                     |                 |                  |                  |                  |                     |                      |                      |                     
+2-SYLLABLE / 2-CHAR                     | 3443 (3483) | 7589 (7722)   | 15000 (15320) | 27294 (28053) | 3325 (3901)        | 7099 (8995)         | 12817 (17313)       | 20900 (30400)       | 2545 (3326)     | 6043 (8417)      | 11851 (17462)    | 21466 (33203)    | 2546 (3327)         | 6044 (8418)          | 11851 (17460)        | 21468 (33200)       
+3-SYLLABLE / 3-CHAR                     | 556 (556)   | 1946 (1949)   | 5345 (5367)   | 13200 (13293) | 364 (388)          | 1537 (1680)         | 4880 (5490)         | 12888 (14811)       | 258 (295)       | 1224 (1403)      | 3639 (4362)      | 9392 (11660)     | 259 (296)           | 1226 (1404)          | 3637 (4361)          | 9390 (11658)        
+4-SYLLABLE / 4-CHAR                     | 95 (97)     | 442 (446)     | 1684 (1698)   | 5696 (5739)   | 58 (63)            | 324 (353)           | 1263 (1392)         | 4312 (4807)         | 50 (54)         | 256 (287)        | 973 (1106)       | 3393 (3990)      | 50 (54)             | 256 (287)            | 974 (1107)           | 3393 (3991)         
+5-SYLLABLE / 5-CHAR                     | 23 (23)     | 100 (100)     | 389 (389)     | 1340 (1343)   | 29 (30)            | 77 (79)             | 333 (344)           | 1068 (1145)         | 23 (23)         | 61 (64)          | 248 (263)        | 867 (963)        | 23 (23)             | 61 (64)              | 247 (262)            | 867 (963)           
+6+-SYLLABLE / 6+-CHAR                   | 40 (42)     | 121 (125)     | 386 (395)     | 1335 (1348)   | 36 (39)            | 108 (113)           | 387 (400)           | 1251 (1309)         | 32 (34)         | 102 (106)        | 303 (320)        | 1026 (1098)      | 32 (34)             | 102 (106)            | 302 (319)            | 1026 (1098)         
+Mixed tokens                            |             |               |               |               |                    |                     |                     |                     |                 |                  |                  |                  |                     |                      |                      |                     
+MIXED (LATIN + CJK)                     | 5 (5)       | 12 (12)       | 49 (49)       | 157 (161)     | 0 (0)              | 0 (0)               | 0 (0)               | 0 (0)               | 0 (0)           | 0 (0)            | 0 (0)            | 0 (0)            | 0 (0)               | 0 (0)                | 0 (0)                | 0 (0)               
+Other                                   |             |               |               |               |                    |                     |                     |                     |                 |                  |                  |                  |                     |                      |                      |                     
+OTHER / UNKNOWN                         | 242 (265)   | 593 (652)     | 1595 (1734)   | 3331 (3545)   | 204 (245)          | 479 (647)           | 1359 (1682)         | 2844 (3471)         | 198 (233)       | 461 (615)        | 1338 (1624)      | 2619 (3180)      | 206 (241)           | 469 (623)            | 1346 (1632)          | 2627 (3187)         
+Total                                   | 7394 (7588) | 15077 (15573) | 30430 (31546) | 61143 (63499) | 6001 (7868)        | 11608 (15856)       | 23197 (31809)       | 46602 (63741)       | 5164 (7875)     | 10256 (15863)    | 20968 (31822)    | 42663 (63755)    | 5164 (7873)         | 10258 (15864)        | 20967 (31821)        | 42653 (63754)       
 
 SANITY CHECKS
 ====================================================================================================
@@ -35,10 +35,18 @@ chinese        8000: leaf_total=7588   vocab_size=7588   OK
 chinese       16000: leaf_total=15573  vocab_size=15573  OK
 chinese       32000: leaf_total=31546  vocab_size=31546  OK
 chinese       64000: leaf_total=63499  vocab_size=63499  OK
+pinyin_toneless  8000: leaf_total=7868   vocab_size=7868   OK
+pinyin_toneless 16000: leaf_total=15856  vocab_size=15856  OK
+pinyin_toneless 32000: leaf_total=31809  vocab_size=31809  OK
+pinyin_toneless 64000: leaf_total=63741  vocab_size=63741  OK
 pinyin_toned   8000: leaf_total=7875   vocab_size=7875   OK
 pinyin_toned  16000: leaf_total=15863  vocab_size=15863  OK
 pinyin_toned  32000: leaf_total=31822  vocab_size=31822  OK
 pinyin_toned  64000: leaf_total=63755  vocab_size=63755  OK
+pinyin_diacritic  8000: leaf_total=7873   vocab_size=7873   OK
+pinyin_diacritic 16000: leaf_total=15864  vocab_size=15864  OK
+pinyin_diacritic 32000: leaf_total=31821  vocab_size=31821  OK
+pinyin_diacritic 64000: leaf_total=63754  vocab_size=63754  OK
 
 SAMPLE TOKENS BY LEAF CATEGORY
 ====================================================================================================
@@ -103,6 +111,58 @@ PURE LATIN COMBINATIONS                'er', 'an', 'or', 'in', 'on', 'la', 'ar',
 MIXED (LATIN + CJK)                    'INSEE市镇编码为', '为UTC', '即UTC', '的时区为UTC', '而该地所采用的时区为UTC', '其B1900', '的M', '又名BD'
 OTHER / UNKNOWN                        '\n', ' ', '\x7f', '0年', '1年', '月2', '5年', '4年'
 
+pinyin_toneless 8000
+--------------------------------------------------------------------------------
+SINGLE LETTERS (A-Z)                   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
+DIGITS                                 '0', '1', '2', '3', '4', '5', '6', '7'
+PUNCTUATION                            '!', '"', '#', '$', '%', '&', "'", '('
+PURE LATIN COMBINATIONS                'ng', 'an', 'sh', 'zh', 'ji', 'ang', 'ong', 'xi'
+2-SYLLABLE / 2-CHAR                    ' de yi ', ' shi yi ', 'cheng wei ', ' shi de ', 'mei guo ', ' de shi ', ' yi ji ', ' wei yu '
+3-SYLLABLE / 3-CHAR                    ' de yi ge ', 'gong he guo ', ' wei yuan hui ', 'hua ren min ', 'e luo si ', ' ren kou mi ', 'mian ji wei ', ' shi wei yu '
+4-SYLLABLE / 4-CHAR                    ' ping fang gong li ', ' ping fang qian mi ', 'zheng zhi ren wu ', ' ren kou mi du ', ' de yi bu fen ', ' hai ba gao du ', ' wei yu gai guo ', 'ao lin pi ke '
+5-SYLLABLE / 5-CHAR                    ' de yi ge shi zhen ', ' shi wei yu mei guo ', 'mei guo ren kou pu ', 'ren kou shu liang wei ', ' ren kou mi du wei ', 'mei ping fang gong li ', 'you zheng bian ma wei ', ' shi zhen bian ma wei '
+6+-SYLLABLE / 6+-CHAR                  'hua ren min gong he guo ', ' zhong hua ren min gong he guo ', 'sheng de yi ge shi zhen ', 'wen wu bao hu dan wei ', 'ren kou shu liang wei ren ', ' ren kou mi du mei ping fang gong li ', ' ren kou mi du wei mei ping fang ', 'yu shi de ren kou shu liang wei ren '
+OTHER / UNKNOWN                        '\n', ' ', '\x7f', '  ', '   ', '・', 'ー', 'α'
+
+pinyin_toneless 16000
+--------------------------------------------------------------------------------
+SINGLE LETTERS (A-Z)                   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
+DIGITS                                 '0', '1', '2', '3', '4', '5', '6', '7'
+PUNCTUATION                            '!', '"', '#', '$', '%', '&', "'", '('
+PURE LATIN COMBINATIONS                'ng', 'an', 'sh', 'zh', 'ji', 'ang', 'ong', 'xi'
+2-SYLLABLE / 2-CHAR                    ' de yi ', ' shi yi ', 'cheng wei ', ' shi de ', 'mei guo ', ' de shi ', ' yi ji ', ' wei yu '
+3-SYLLABLE / 3-CHAR                    ' de yi ge ', 'gong he guo ', ' wei yuan hui ', 'hua ren min ', 'e luo si ', ' ren kou mi ', 'mian ji wei ', ' shi wei yu '
+4-SYLLABLE / 4-CHAR                    ' ping fang gong li ', ' ping fang qian mi ', 'zheng zhi ren wu ', ' ren kou mi du ', ' de yi bu fen ', ' hai ba gao du ', ' wei yu gai guo ', 'ao lin pi ke '
+5-SYLLABLE / 5-CHAR                    ' de yi ge shi zhen ', ' shi wei yu mei guo ', 'mei guo ren kou pu ', 'ren kou shu liang wei ', ' ren kou mi du wei ', 'mei ping fang gong li ', 'you zheng bian ma wei ', ' shi zhen bian ma wei '
+6+-SYLLABLE / 6+-CHAR                  'hua ren min gong he guo ', ' zhong hua ren min gong he guo ', 'sheng de yi ge shi zhen ', 'wen wu bao hu dan wei ', 'ren kou shu liang wei ren ', ' ren kou mi du mei ping fang gong li ', ' ren kou mi du wei mei ping fang ', 'yu shi de ren kou shu liang wei ren '
+OTHER / UNKNOWN                        '\n', ' ', '\x7f', '  ', '   ', '・', 'ー', 'α'
+
+pinyin_toneless 32000
+--------------------------------------------------------------------------------
+SINGLE LETTERS (A-Z)                   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
+DIGITS                                 '0', '1', '2', '3', '4', '5', '6', '7'
+PUNCTUATION                            '!', '"', '#', '$', '%', '&', "'", '('
+PURE LATIN COMBINATIONS                'ng', 'an', 'sh', 'zh', 'ji', 'ang', 'ong', 'xi'
+2-SYLLABLE / 2-CHAR                    ' de yi ', ' shi yi ', 'cheng wei ', ' shi de ', 'mei guo ', ' de shi ', ' yi ji ', ' wei yu '
+3-SYLLABLE / 3-CHAR                    ' de yi ge ', 'gong he guo ', ' wei yuan hui ', 'hua ren min ', 'e luo si ', ' ren kou mi ', 'mian ji wei ', ' shi wei yu '
+4-SYLLABLE / 4-CHAR                    ' ping fang gong li ', ' ping fang qian mi ', 'zheng zhi ren wu ', ' ren kou mi du ', ' de yi bu fen ', ' hai ba gao du ', ' wei yu gai guo ', 'ao lin pi ke '
+5-SYLLABLE / 5-CHAR                    ' de yi ge shi zhen ', ' shi wei yu mei guo ', 'mei guo ren kou pu ', 'ren kou shu liang wei ', ' ren kou mi du wei ', 'mei ping fang gong li ', 'you zheng bian ma wei ', ' shi zhen bian ma wei '
+6+-SYLLABLE / 6+-CHAR                  'hua ren min gong he guo ', ' zhong hua ren min gong he guo ', 'sheng de yi ge shi zhen ', 'wen wu bao hu dan wei ', 'ren kou shu liang wei ren ', ' ren kou mi du mei ping fang gong li ', ' ren kou mi du wei mei ping fang ', 'yu shi de ren kou shu liang wei ren '
+OTHER / UNKNOWN                        '\n', ' ', '\x7f', '  ', '   ', '・', 'ー', 'α'
+
+pinyin_toneless 64000
+--------------------------------------------------------------------------------
+SINGLE LETTERS (A-Z)                   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
+DIGITS                                 '0', '1', '2', '3', '4', '5', '6', '7'
+PUNCTUATION                            '!', '"', '#', '$', '%', '&', "'", '('
+PURE LATIN COMBINATIONS                'ng', 'an', 'sh', 'zh', 'ji', 'ang', 'ong', 'xi'
+2-SYLLABLE / 2-CHAR                    ' de yi ', ' shi yi ', 'cheng wei ', ' shi de ', 'mei guo ', ' de shi ', ' yi ji ', ' wei yu '
+3-SYLLABLE / 3-CHAR                    ' de yi ge ', 'gong he guo ', ' wei yuan hui ', 'hua ren min ', 'e luo si ', ' ren kou mi ', 'mian ji wei ', ' shi wei yu '
+4-SYLLABLE / 4-CHAR                    ' ping fang gong li ', ' ping fang qian mi ', 'zheng zhi ren wu ', ' ren kou mi du ', ' de yi bu fen ', ' hai ba gao du ', ' wei yu gai guo ', 'ao lin pi ke '
+5-SYLLABLE / 5-CHAR                    ' de yi ge shi zhen ', ' shi wei yu mei guo ', 'mei guo ren kou pu ', 'ren kou shu liang wei ', ' ren kou mi du wei ', 'mei ping fang gong li ', 'you zheng bian ma wei ', ' shi zhen bian ma wei '
+6+-SYLLABLE / 6+-CHAR                  'hua ren min gong he guo ', ' zhong hua ren min gong he guo ', 'sheng de yi ge shi zhen ', 'wen wu bao hu dan wei ', 'ren kou shu liang wei ren ', ' ren kou mi du mei ping fang gong li ', ' ren kou mi du wei mei ping fang ', 'yu shi de ren kou shu liang wei ren '
+OTHER / UNKNOWN                        '\n', ' ', '\x7f', '  ', '   ', '・', 'ー', 'α'
+
 pinyin_toned 8000
 --------------------------------------------------------------------------------
 SINGLE LETTERS (A-Z)                   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
@@ -154,3 +214,55 @@ PURE LATIN COMBINATIONS                'ng', 'an', 'sh', 'zh', 'ng1', 'ji', 'ng2
 5-SYLLABLE / 5-CHAR                    ' de yi2 ge4 shi4 zhen4 ', ' shi4 wei4 yu2 mei3 guo2 ', 'mei3 guo2 ren2 kou3 pu3 ', ' ren2 kou3 mi4 du4 wei4 ', 'mei3 ping2 fang1 gong1 li3 ', 'you2 zheng4 bian1 ma3 wei4 ', ' shi4 zhen4 bian1 ma3 wei4 ', 'jie1 rang3 de shi4 zhen4 '
 6+-SYLLABLE / 6+-CHAR                  'hua2 ren2 min2 gong4 he2 guo2 ', ' zhong1 hua2 ren2 min2 gong4 he2 guo2 ', 'sheng3 de yi2 ge4 shi4 zhen4 ', 'wen2 wu4 bao3 hu4 dan1 wei4 ', 'ren2 kou3 shu4 liang4 wei4 ren2 ', 'ao4 lin2 pi3 ke4 yun4 dong4 hui4 ', ' ren2 kou3 mi4 du4 mei3 ping2 fang1 gong1 li3 ', ' ren2 kou3 mi4 du4 wei4 mei3'
 OTHER / UNKNOWN                        '\n', ' ', '\x7f', 'i4', 'u4', '  ', 'i2', 'i3'
+
+pinyin_diacritic 8000
+--------------------------------------------------------------------------------
+SINGLE LETTERS (A-Z)                   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
+DIGITS                                 '0', '1', '2', '3', '4', '5', '6', '7'
+PUNCTUATION                            '!', '"', '#', '$', '%', '&', "'", '('
+PURE LATIN COMBINATIONS                'ng', 'à', 'ā', 'á', 'è', 'ǎ', 'é', 'án'
+2-SYLLABLE / 2-CHAR                    'yí gè ', 'měi guó ', ' zhōng guó ', ' wèi yú ', 'bāo kuò', ' tā men', ' gōng lǐ ', 'yán jiū'
+3-SYLLABLE / 3-CHAR                    'gòng hé guó ', 'wěi yuán huì ', 'huá rén mín ', 'é luó sī ', ' rén kǒu mì ', ' de yí gè ', 'miàn jī wèi ', ' shì wèi yú '
+4-SYLLABLE / 4-CHAR                    ' píng fāng gōng lǐ ', ' píng fāng qiān mǐ ', 'zhèng zhì rén wù ', ' rén kǒu mì dù ', ' hǎi bá gāo dù ', ' zhōng huá mín guó ', ' yǒu xiàn gōng sī ', 'ào lín pǐ kè '
+5-SYLLABLE / 5-CHAR                    ' de yí gè shì zhèn ', ' shì wèi yú měi guó ', 'měi guó rén kǒu pǔ ', ' rén kǒu mì dù wèi ', 'měi píng fāng gōng lǐ ', 'yóu zhèng biān mǎ wèi ', ' shì zhèn biān mǎ wèi ', 'jiē rǎng de shì zhèn '
+6+-SYLLABLE / 6+-CHAR                  'huá rén mín gòng hé guó ', ' zhōng huá rén mín gòng hé guó ', 'shěng de yí gè shì zhèn ', 'wén wù bǎo hù dān wèi ', 'rén kǒu shù liàng wèi rén ', 'ào lín pǐ kè yùn dòng huì ', ' rén kǒu mì dù měi píng fāng gōng lǐ ', ' rén kǒu mì dù wèi měi'
+OTHER / UNKNOWN                        '\n', ' ', '\x7f', 'h�', 'ì', 'ī', '  ', 'í'
+
+pinyin_diacritic 16000
+--------------------------------------------------------------------------------
+SINGLE LETTERS (A-Z)                   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
+DIGITS                                 '0', '1', '2', '3', '4', '5', '6', '7'
+PUNCTUATION                            '!', '"', '#', '$', '%', '&', "'", '('
+PURE LATIN COMBINATIONS                'ng', 'à', 'ā', 'á', 'è', 'ǎ', 'é', 'án'
+2-SYLLABLE / 2-CHAR                    'yí gè ', 'měi guó ', ' zhōng guó ', ' wèi yú ', 'bāo kuò', ' tā men', ' gōng lǐ ', 'yán jiū'
+3-SYLLABLE / 3-CHAR                    'gòng hé guó ', 'wěi yuán huì ', 'huá rén mín ', 'é luó sī ', ' rén kǒu mì ', ' de yí gè ', 'miàn jī wèi ', ' shì wèi yú '
+4-SYLLABLE / 4-CHAR                    ' píng fāng gōng lǐ ', ' píng fāng qiān mǐ ', 'zhèng zhì rén wù ', ' rén kǒu mì dù ', ' hǎi bá gāo dù ', ' zhōng huá mín guó ', ' yǒu xiàn gōng sī ', 'ào lín pǐ kè '
+5-SYLLABLE / 5-CHAR                    ' de yí gè shì zhèn ', ' shì wèi yú měi guó ', 'měi guó rén kǒu pǔ ', ' rén kǒu mì dù wèi ', 'měi píng fāng gōng lǐ ', 'yóu zhèng biān mǎ wèi ', ' shì zhèn biān mǎ wèi ', 'jiē rǎng de shì zhèn '
+6+-SYLLABLE / 6+-CHAR                  'huá rén mín gòng hé guó ', ' zhōng huá rén mín gòng hé guó ', 'shěng de yí gè shì zhèn ', 'wén wù bǎo hù dān wèi ', 'rén kǒu shù liàng wèi rén ', 'ào lín pǐ kè yùn dòng huì ', ' rén kǒu mì dù měi píng fāng gōng lǐ ', ' rén kǒu mì dù wèi měi'
+OTHER / UNKNOWN                        '\n', ' ', '\x7f', 'h�', 'ì', 'ī', '  ', 'í'
+
+pinyin_diacritic 32000
+--------------------------------------------------------------------------------
+SINGLE LETTERS (A-Z)                   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
+DIGITS                                 '0', '1', '2', '3', '4', '5', '6', '7'
+PUNCTUATION                            '!', '"', '#', '$', '%', '&', "'", '('
+PURE LATIN COMBINATIONS                'ng', 'à', 'ā', 'á', 'è', 'ǎ', 'é', 'án'
+2-SYLLABLE / 2-CHAR                    'yí gè ', 'měi guó ', ' zhōng guó ', ' wèi yú ', 'bāo kuò', ' tā men', ' gōng lǐ ', 'yán jiū'
+3-SYLLABLE / 3-CHAR                    'gòng hé guó ', 'wěi yuán huì ', 'huá rén mín ', 'é luó sī ', ' rén kǒu mì ', ' de yí gè ', 'miàn jī wèi ', ' shì wèi yú '
+4-SYLLABLE / 4-CHAR                    ' píng fāng gōng lǐ ', ' píng fāng qiān mǐ ', 'zhèng zhì rén wù ', ' rén kǒu mì dù ', ' hǎi bá gāo dù ', ' zhōng huá mín guó ', ' yǒu xiàn gōng sī ', 'ào lín pǐ kè '
+5-SYLLABLE / 5-CHAR                    ' de yí gè shì zhèn ', ' shì wèi yú měi guó ', 'měi guó rén kǒu pǔ ', ' rén kǒu mì dù wèi ', 'měi píng fāng gōng lǐ ', 'yóu zhèng biān mǎ wèi ', ' shì zhèn biān mǎ wèi ', 'jiē rǎng de shì zhèn '
+6+-SYLLABLE / 6+-CHAR                  'huá rén mín gòng hé guó ', ' zhōng huá rén mín gòng hé guó ', 'shěng de yí gè shì zhèn ', 'wén wù bǎo hù dān wèi ', 'rén kǒu shù liàng wèi rén ', 'ào lín pǐ kè yùn dòng huì ', ' rén kǒu mì dù měi píng fāng gōng lǐ ', ' rén kǒu mì dù wèi měi'
+OTHER / UNKNOWN                        '\n', ' ', '\x7f', 'h�', 'ì', 'ī', '  ', 'í'
+
+pinyin_diacritic 64000
+--------------------------------------------------------------------------------
+SINGLE LETTERS (A-Z)                   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'
+DIGITS                                 '0', '1', '2', '3', '4', '5', '6', '7'
+PUNCTUATION                            '!', '"', '#', '$', '%', '&', "'", '('
+PURE LATIN COMBINATIONS                'ng', 'à', 'ā', 'á', 'è', 'ǎ', 'é', 'án'
+2-SYLLABLE / 2-CHAR                    'yí gè ', 'měi guó ', ' zhōng guó ', ' wèi yú ', 'bāo kuò', ' tā men', ' gōng lǐ ', 'yán jiū'
+3-SYLLABLE / 3-CHAR                    'gòng hé guó ', 'wěi yuán huì ', 'huá rén mín ', 'é luó sī ', ' rén kǒu mì ', ' de yí gè ', 'miàn jī wèi ', ' shì wèi yú '
+4-SYLLABLE / 4-CHAR                    ' píng fāng gōng lǐ ', ' píng fāng qiān mǐ ', 'zhèng zhì rén wù ', ' rén kǒu mì dù ', ' hǎi bá gāo dù ', ' zhōng huá mín guó ', ' yǒu xiàn gōng sī ', 'ào lín pǐ kè '
+5-SYLLABLE / 5-CHAR                    ' de yí gè shì zhèn ', ' shì wèi yú měi guó ', 'měi guó rén kǒu pǔ ', ' rén kǒu mì dù wèi ', 'měi píng fāng gōng lǐ ', 'yóu zhèng biān mǎ wèi ', ' shì zhèn biān mǎ wèi ', 'jiē rǎng de shì zhèn '
+6+-SYLLABLE / 6+-CHAR                  'huá rén mín gòng hé guó ', ' zhōng huá rén mín gòng hé guó ', 'shěng de yí gè shì zhèn ', 'wén wù bǎo hù dān wèi ', 'rén kǒu shù liàng wèi rén ', 'ào lín pǐ kè yùn dòng huì ', ' rén kǒu mì dù měi píng fāng gōng lǐ ', ' rén kǒu mì dù wèi měi'
+OTHER / UNKNOWN                        '\n', ' ', '\x7f', 'h�', 'ì', 'ī', '  ', 'í'

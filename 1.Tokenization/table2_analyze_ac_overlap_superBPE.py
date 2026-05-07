@@ -1,18 +1,20 @@
 from __future__ import annotations
 
 """
-64K-only A↔C overlap analysis for SuperBPE tokenizers.
+64K-only A↔B/C/D overlap analysis for SuperBPE tokenizers.
 
 A = Chinese superBPE
+B = Pinyin-Toneless superBPE
 C = Pinyin-Toned superBPE
+D = Pinyin-Diacritic superBPE
 
 Outputs:
-  - table2_ac_overlap_superBPE_report.txt
-  - table2_ac_overlap_superBPE_summary.csv
-  - table2_ac_overlap_superBPE_details.csv
-  - table2_ac_overlap_superBPE_plot.png
+  - decoded_superTokenizers_2048_subset100k/table2/table2_ab_overlap_superBPE_outputs/
+  - decoded_superTokenizers_2048_subset100k/table2/table2_ac_overlap_superBPE_outputs/
+  - decoded_superTokenizers_2048_subset100k/table2/table2_ad_overlap_superBPE_outputs/
 """
 
+import argparse
 import csv
 import json
 import math
@@ -45,21 +47,25 @@ except ImportError:
 
 BASE_DIR = Path(__file__).resolve().parent
 TOKENIZERS_DIR = BASE_DIR / "decoded_superTokenizers_2048_subset100k"
+TABLE2_DIR = TOKENIZERS_DIR / "table2"
 DICTS_DIR = BASE_DIR / "dicts"
 VOCAB_SIZE = 64000
 
 TOKENIZER_FILES = {
     "A": TOKENIZERS_DIR / f"chinese_origin_subset100k_superbpe_{VOCAB_SIZE}_decoded.json",
+    "B": TOKENIZERS_DIR / f"pinyin_toneless_subset100k_superbpe_{VOCAB_SIZE}_decoded.json",
     "C": TOKENIZERS_DIR / f"pinyin_toned_subset100k_superbpe_{VOCAB_SIZE}_decoded.json",
+    "D": TOKENIZERS_DIR / f"pinyin_diacritic_subset100k_superbpe_{VOCAB_SIZE}_decoded.json",
 }
 
-OUTPUT_DIR = TOKENIZERS_DIR / "table2_ac_overlap_superBPE_outputs"
-OUTPUT_REPORT = OUTPUT_DIR / "table2_ac_overlap_superBPE_report.txt"
-OUTPUT_SUMMARY_CSV = OUTPUT_DIR / "table2_ac_overlap_superBPE_summary.csv"
-OUTPUT_DETAILS_CSV = OUTPUT_DIR / "table2_ac_overlap_superBPE_details.csv"
-OUTPUT_PLOT = OUTPUT_DIR / "table2_ac_overlap_superBPE_plot.png"
-OUTPUT_PLOT_SVG = OUTPUT_DIR / "table2_ac_overlap_superBPE_plot.svg"
-OUTPUT_PLOT_PDF = OUTPUT_DIR / "table2_ac_overlap_superBPE_plot.pdf"
+PAIR_ORDER = ("AB", "AC", "AD")
+PAIR_TARGETS = {"AB": "B", "AC": "C", "AD": "D"}
+TOKENIZER_LABELS = {
+    "A": "Chinese superBPE",
+    "B": "Pinyin-Toneless superBPE",
+    "C": "Pinyin-Toned superBPE",
+    "D": "Pinyin-Diacritic superBPE",
+}
 
 SPECIAL_TOKENS = {"[UNK]", "[PAD]", "[CLS]", "[SEP]", "[MASK]"}
 SAMPLE_N_VALUES = (3, 20, 22, 41)
@@ -116,18 +122,99 @@ TONE_MARK_TO_BASE_AND_NUM = {
     "ḿ": ("m", "2"),
 }
 
+BASE_AND_NUM_TO_TONE_MARK = {
+    (base, tone): mark
+    for mark, (base, tone) in TONE_MARK_TO_BASE_AND_NUM.items()
+}
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Run 64K A-B/A-C/A-D SuperBPE overlap analyses."
+    )
+    parser.add_argument(
+        "--pairs",
+        nargs="+",
+        choices=PAIR_ORDER,
+        default=list(PAIR_ORDER),
+        help="Pairs to analyze. Defaults to AB AC AD.",
+    )
+    parser.add_argument(
+        "--overwrite",
+        action="store_true",
+        help="Overwrite an existing pair output folder. By default existing folders are skipped.",
+    )
+    return parser.parse_args()
+
+
+def get_output_paths(pair_id: str) -> dict[str, Path]:
+    stem = f"table2_{pair_id.lower()}_overlap_superBPE"
+    output_dir = TABLE2_DIR / f"{stem}_outputs"
+    return {
+        "dir": output_dir,
+        "report": output_dir / f"{stem}_report.txt",
+        "summary_csv": output_dir / f"{stem}_summary.csv",
+        "details_csv": output_dir / f"{stem}_details.csv",
+        "plot": output_dir / f"{stem}_plot.png",
+        "plot_svg": output_dir / f"{stem}_plot.svg",
+        "plot_pdf": output_dir / f"{stem}_plot.pdf",
+    }
+
+
+def _tone_number_to_diacritic_syllable(syllable: str) -> str:
+    match = re.fullmatch(r"([a-zvü:]+)([1-5])?", syllable.lower())
+    if not match:
+        return syllable
+
+    base = match.group(1).replace("u:", "v").replace("ü", "v")
+    tone = match.group(2)
+    if not tone or tone == "5":
+        return base.replace("v", "ü")
+
+    vowel_positions = [idx for idx, ch in enumerate(base) if ch in "aeiouv"]
+    if not vowel_positions:
+        return base.replace("v", "ü")
+
+    if "a" in base:
+        tone_idx = base.index("a")
+    elif "e" in base:
+        tone_idx = base.index("e")
+    elif "ou" in base:
+        tone_idx = base.index("o")
+    else:
+        tone_idx = vowel_positions[-1]
+
+    chars = list(base)
+    chars[tone_idx] = BASE_AND_NUM_TO_TONE_MARK.get((chars[tone_idx], tone), chars[tone_idx])
+    return "".join(chars).replace("v", "ü")
+
+
+def numbered_to_diacritic(text: str) -> str:
+    return re.sub(
+        r"[A-Za-züÜv:]+[1-5]?",
+        lambda match: _tone_number_to_diacritic_syllable(match.group(0)),
+        text,
+    )
+
+
+def numbered_to_toneless(text: str) -> str:
+    return re.sub(r"[1-5]", "", text)
+
 
 @dataclass
 class AnalysisResult:
+    pair_id: str
+    target_key: str
+    target_label: str
     vocab_size: int
     vocab_a_size: int
-    vocab_c_size: int
+    vocab_target_size: int
     mapped_a_count: int
     one_to_one_source_count: int
     many_to_one_source_count: int
     many_to_one_pair_count: int
     independent_a_count: int
-    independent_c_count: int
+    independent_target_count: int
     max_n: int
     n_to_entries: dict[int, list[tuple[str, list[str]]]]
 
@@ -250,48 +337,87 @@ def clean_token(token: str) -> str:
     return token.replace("##", "").replace("Ġ", "").strip().replace(" ", "")
 
 
+def display_token(token: str) -> str:
+    visible = token.replace("##", "").replace("Ġ", "").strip()
+    return re.sub(r"\s+", " ", visible)
+
+
+def choose_display_token(current: str | None, candidate: str) -> str:
+    if current is None:
+        return candidate
+    if " " in candidate and " " not in current:
+        return candidate
+    if (" " in candidate) == (" " in current) and len(candidate) < len(current):
+        return candidate
+    return current
+
+
 def is_special_token(token: str) -> bool:
     return token in SPECIAL_TOKENS or token.startswith("##") or token == "Ġ"
 
 
-def load_tokenizer_vocab(path: Path) -> dict[str, int]:
+def load_tokenizer_vocab(path: Path) -> tuple[dict[str, int], dict[str, str]]:
     raw_vocab = json.loads(path.read_text(encoding="utf-8"))
     vocab = {}
+    display_tokens: dict[str, str] = {}
     for token, token_id in raw_vocab.items():
         if is_special_token(token):
             continue
         cleaned = clean_token(token)
         if cleaned:
             vocab[cleaned] = token_id
-    return vocab
+            display_tokens[cleaned] = choose_display_token(
+                display_tokens.get(cleaned),
+                display_token(token),
+            )
+    return vocab, display_tokens
 
 
-def build_converter() -> tuple[callable, str]:
+def build_converter(target_key: str) -> tuple[callable, str]:
     if HAS_PYPINYIN:
+        style_by_target = {
+            "B": Style.NORMAL,
+            "C": Style.TONE3,
+            "D": Style.TONE,
+        }
+        style_name_by_target = {
+            "B": "pypinyin.Style.NORMAL(strict=False)",
+            "C": "pypinyin.Style.TONE3(strict=False)",
+            "D": "pypinyin.Style.TONE(strict=False)",
+        }
+
         def convert(text: str) -> str:
             return "".join(
-                piece[0] for piece in pinyin(text, style=Style.TONE3, strict=False)
+                piece[0] for piece in pinyin(text, style=style_by_target[target_key], strict=False)
             )
 
-        return convert, "pypinyin.Style.TONE3(strict=False)"
+        return convert, style_name_by_target[target_key]
 
     fallback = FallbackConverter(
         DICTS_DIR / "cedict_ts.u8",
         DICTS_DIR / "merged_pinyin_dict.json",
     )
-    return fallback.convert, "fallback_dict_converter"
+
+    if target_key == "C":
+        return fallback.convert, "fallback_dict_converter_to_tone3"
+    if target_key == "B":
+        return lambda text: numbered_to_toneless(fallback.convert(text)), "fallback_dict_converter_to_toneless"
+    if target_key == "D":
+        return lambda text: numbered_to_diacritic(fallback.convert(text)), "fallback_dict_converter_to_diacritic"
+    raise ValueError(f"Unsupported target tokenizer key: {target_key}")
 
 
-def analyze_overlap(convert: callable) -> AnalysisResult:
-    vocab_a = load_tokenizer_vocab(TOKENIZER_FILES["A"])
-    vocab_c = load_tokenizer_vocab(TOKENIZER_FILES["C"])
+def analyze_overlap(pair_id: str, convert: callable) -> AnalysisResult:
+    target_key = PAIR_TARGETS[pair_id]
+    vocab_a, display_a = load_tokenizer_vocab(TOKENIZER_FILES["A"])
+    vocab_target, display_target = load_tokenizer_vocab(TOKENIZER_FILES[target_key])
 
     mappings: dict[str, str] = {}
     reverse_mappings: dict[str, list[str]] = defaultdict(list)
 
     for token_a in vocab_a:
         converted = convert(token_a)
-        if converted in vocab_c:
+        if converted in vocab_target:
             mappings[token_a] = converted
             reverse_mappings[converted].append(token_a)
 
@@ -299,13 +425,13 @@ def analyze_overlap(convert: callable) -> AnalysisResult:
     one_to_one_source_count = 0
     many_to_one_source_count = 0
 
-    for token_c, sources in reverse_mappings.items():
+    for target_token, sources in reverse_mappings.items():
         if len(sources) == 1:
             one_to_one_source_count += 1
         else:
-            sorted_sources = sorted(sources)
+            sorted_sources = sorted(display_a[source] for source in sources)
             many_to_one_source_count += len(sorted_sources)
-            n_to_entries[len(sorted_sources)].append((token_c, sorted_sources))
+            n_to_entries[len(sorted_sources)].append((display_target[target_token], sorted_sources))
 
     for entries in n_to_entries.values():
         entries.sort(key=lambda item: (item[0], item[1]))
@@ -313,22 +439,26 @@ def analyze_overlap(convert: callable) -> AnalysisResult:
     many_to_one_pair_count = sum(len(entries) for entries in n_to_entries.values())
 
     return AnalysisResult(
+        pair_id=pair_id,
+        target_key=target_key,
+        target_label=TOKENIZER_LABELS[target_key],
         vocab_size=VOCAB_SIZE,
         vocab_a_size=len(vocab_a),
-        vocab_c_size=len(vocab_c),
+        vocab_target_size=len(vocab_target),
         mapped_a_count=len(mappings),
         one_to_one_source_count=one_to_one_source_count,
         many_to_one_source_count=many_to_one_source_count,
         many_to_one_pair_count=many_to_one_pair_count,
         independent_a_count=len(vocab_a) - len(mappings),
-        independent_c_count=len(vocab_c) - len(reverse_mappings),
+        independent_target_count=len(vocab_target) - len(reverse_mappings),
         max_n=max(n_to_entries.keys(), default=1),
         n_to_entries=dict(sorted(n_to_entries.items())),
     )
 
 
-def write_summary_csv(result: AnalysisResult) -> None:
-    with OUTPUT_SUMMARY_CSV.open("w", encoding="utf-8", newline="") as handle:
+def write_summary_csv(result: AnalysisResult, output_paths: dict[str, Path]) -> None:
+    target_prefix = result.target_key.lower()
+    with output_paths["summary_csv"].open("w", encoding="utf-8", newline="") as handle:
         writer = csv.writer(handle)
         writer.writerow(
             [
@@ -336,13 +466,13 @@ def write_summary_csv(result: AnalysisResult) -> None:
                 "pair_count",
                 "source_token_count",
                 "a_vocab_size",
-                "c_vocab_size",
+                f"{target_prefix}_vocab_size",
                 "mapped_a_count",
                 "one_to_one_source_count",
                 "many_to_one_source_count",
                 "many_to_one_pair_count",
                 "independent_a_count",
-                "independent_c_count",
+                f"independent_{target_prefix}_count",
             ]
         )
         for n_value, entries in result.n_to_entries.items():
@@ -352,25 +482,26 @@ def write_summary_csv(result: AnalysisResult) -> None:
                     len(entries),
                     n_value * len(entries),
                     result.vocab_a_size,
-                    result.vocab_c_size,
+                    result.vocab_target_size,
                     result.mapped_a_count,
                     result.one_to_one_source_count,
                     result.many_to_one_source_count,
                     result.many_to_one_pair_count,
                     result.independent_a_count,
-                    result.independent_c_count,
+                    result.independent_target_count,
                 ]
             )
 
 
-def write_details_csv(result: AnalysisResult) -> None:
-    with OUTPUT_DETAILS_CSV.open("w", encoding="utf-8", newline="") as handle:
+def write_details_csv(result: AnalysisResult, output_paths: dict[str, Path]) -> None:
+    target_prefix = result.target_key.lower()
+    with output_paths["details_csv"].open("w", encoding="utf-8", newline="") as handle:
         writer = csv.writer(handle)
         writer.writerow(
             [
                 "N",
                 "pair_index_within_N",
-                "c_token",
+                f"{target_prefix}_token",
                 "source_token_count_for_pair",
                 "a_tokens_json",
             ]
@@ -388,31 +519,36 @@ def write_details_csv(result: AnalysisResult) -> None:
                 )
 
 
-def build_report(result: AnalysisResult, converter_name: str, y_scale_mode: str) -> str:
+def build_report(
+    result: AnalysisResult,
+    converter_name: str,
+    y_scale_mode: str,
+    output_paths: dict[str, Path],
+) -> str:
     lines: list[str] = []
     lines.append("=" * 100)
-    lines.append("64K A-C OVERLAP ANALYSIS (SUPERBPE)")
+    lines.append(f"64K A-{result.target_key} OVERLAP ANALYSIS (SUPERBPE)")
     lines.append("=" * 100)
     lines.append("")
     lines.append("Legend:")
-    lines.append("  A = Chinese superBPE")
-    lines.append("  C = Pinyin-Toned superBPE")
+    lines.append(f"  A = {TOKENIZER_LABELS['A']}")
+    lines.append(f"  {result.target_key} = {result.target_label}")
     lines.append("")
     lines.append("Method:")
     lines.append("  • Only the 64K tokenizer pair is analyzed.")
-    lines.append("  • Forward mapping follows the A→C logic from the 9th script.")
+    lines.append(f"  • Forward mapping follows A→{result.target_key} conversion before target-vocab lookup.")
     lines.append(f"  • Converter used in this run: {converter_name}")
-    lines.append("  • N对1 pair count = number of C tokens that are each mapped from N A tokens.")
+    lines.append(f"  • N对1 pair count = number of {result.target_key} tokens that are each mapped from N A tokens.")
     lines.append("  • source_token_count = N × pair_count.")
     lines.append(f"  • Plot Y scale mode: {y_scale_mode}")
     lines.append("")
     lines.append("Files:")
-    lines.append(f"  • Output directory: {OUTPUT_DIR.name}")
-    lines.append(f"  • Report: {OUTPUT_REPORT.name}")
-    lines.append(f"  • Summary CSV: {OUTPUT_SUMMARY_CSV.name}")
-    lines.append(f"  • Details CSV: {OUTPUT_DETAILS_CSV.name}")
-    lines.append(f"  • Plot: {OUTPUT_PLOT.name}")
-    lines.append(f"  • Vector plot: {OUTPUT_PLOT_SVG.name}, {OUTPUT_PLOT_PDF.name}")
+    lines.append(f"  • Output directory: {output_paths['dir'].name}")
+    lines.append(f"  • Report: {output_paths['report'].name}")
+    lines.append(f"  • Summary CSV: {output_paths['summary_csv'].name}")
+    lines.append(f"  • Details CSV: {output_paths['details_csv'].name}")
+    lines.append(f"  • Plot: {output_paths['plot'].name}")
+    lines.append(f"  • Vector plot: {output_paths['plot_svg'].name}, {output_paths['plot_pdf'].name}")
     lines.append("")
     lines.append("=" * 100)
     lines.append("SUMMARY")
@@ -420,13 +556,13 @@ def build_report(result: AnalysisResult, converter_name: str, y_scale_mode: str)
     lines.append("")
     lines.append(f"Vocab size: {result.vocab_size}")
     lines.append(f"A vocabulary size: {result.vocab_a_size}")
-    lines.append(f"C vocabulary size: {result.vocab_c_size}")
+    lines.append(f"{result.target_key} vocabulary size: {result.vocab_target_size}")
     lines.append(f"Mapped A tokens: {result.mapped_a_count}")
     lines.append(f"1对1 source count: {result.one_to_one_source_count}")
     lines.append(f"N对1 source count: {result.many_to_one_source_count}")
     lines.append(f"N对1 pair count: {result.many_to_one_pair_count}")
     lines.append(f"Independent A: {result.independent_a_count}")
-    lines.append(f"Independent C: {result.independent_c_count}")
+    lines.append(f"Independent {result.target_key}: {result.independent_target_count}")
     lines.append(f"Max N: {result.max_n}")
     lines.append("")
     lines.append("N-to-1 breakdown:")
@@ -440,9 +576,9 @@ def build_report(result: AnalysisResult, converter_name: str, y_scale_mode: str)
     for n_value, entries in result.n_to_entries.items():
         lines.append("")
         lines.append(f"[{n_value}对1] total pairs = {len(entries)}")
-        for token_c, sources in entries:
+        for target_token, sources in entries:
             lines.append(
-                f"  C: '{token_c}' <- A({len(sources)}): {json.dumps(sources, ensure_ascii=False)}"
+                f"  {result.target_key}: '{target_token}' <- A({len(sources)}): {json.dumps(sources, ensure_ascii=False)}"
             )
 
     return "\n".join(lines)
@@ -553,13 +689,13 @@ def _draw_overlap_context(ax: plt.Axes, result: AnalysisResult) -> None:
             result.vocab_a_size,
         ),
         (
-            "Pinyin-Toned superBPE\nC tokens",
+            f"{result.target_label}\n{result.target_key} tokens",
             [
                 ("1-to-1 mapped", result.one_to_one_source_count),
                 ("N-to-1 mapped", result.many_to_one_pair_count),
-                ("independent", result.independent_c_count),
+                ("independent", result.independent_target_count),
             ],
-            result.vocab_c_size,
+            result.vocab_target_size,
         ),
     ]
 
@@ -587,7 +723,7 @@ def _draw_overlap_context(ax: plt.Axes, result: AnalysisResult) -> None:
                 )
             left += value
         ax.text(
-            total + max(result.vocab_a_size, result.vocab_c_size) * 0.015,
+            total + max(result.vocab_a_size, result.vocab_target_size) * 0.015,
             y_pos,
             f"n={total:,}",
             va="center",
@@ -699,34 +835,26 @@ def _sample_a_tokens(n_value: int, token_c: str, sources: list[str]) -> list[str
     return rng.sample(sources, sample_size)
 
 
-def _is_phrase_source_token(token: str) -> bool:
-    return len(clean_token(token)) > 1
+def _is_two_char_source_token(token: str) -> bool:
+    return len(clean_token(token)) == 2
 
 
 def _select_example_entries(
+    pair_id: str,
     n_value: int,
     entries: list[tuple[str, list[str]]],
 ) -> list[tuple[str, list[str]]]:
     if n_value != 3:
         return entries[:MAX_EXAMPLE_ROWS_PER_N]
 
-    phrase_entries = [
+    rng = random.Random(f"{SAMPLE_RANDOM_SEED}:example_entries:{pair_id}:{n_value}")
+
+    two_char_entries = [
         (token_c, sources)
         for token_c, sources in entries
-        if all(_is_phrase_source_token(source) for source in sources)
+        if all(_is_two_char_source_token(source) for source in sources)
     ]
-    if len(phrase_entries) >= MAX_EXAMPLE_ROWS_PER_N:
-        return phrase_entries[:MAX_EXAMPLE_ROWS_PER_N]
-
-    selected = phrase_entries[:]
-    selected_keys = {token_c for token_c, _sources in selected}
-    for token_c, sources in entries:
-        if token_c in selected_keys:
-            continue
-        selected.append((token_c, sources))
-        if len(selected) >= MAX_EXAMPLE_ROWS_PER_N:
-            break
-    return selected
+    return rng.sample(two_char_entries, min(MAX_EXAMPLE_ROWS_PER_N, len(two_char_entries)))
 
 
 def _draw_example_box_background(
@@ -786,7 +914,7 @@ def _draw_selected_token_examples(
         entries = result.n_to_entries.get(n_value, [])
         examples = []
         if entries:
-            for token_c, sources in _select_example_entries(n_value, entries):
+            for token_c, sources in _select_example_entries(result.pair_id, n_value, entries):
                 sampled_sources = _sample_a_tokens(n_value, token_c, sources)
                 examples.append((token_c, ", ".join(sampled_sources)))
 
@@ -808,7 +936,7 @@ def _draw_selected_token_examples(
             ax.text(
                 x_pos + 0.012,
                 box_top - 0.09,
-                "No matching C token",
+                f"No matching {result.target_key} token",
                 transform=ax.transAxes,
                 ha="left",
                 va="top",
@@ -917,7 +1045,7 @@ def _draw_multiplicity_distribution(
     ax2.spines["bottom"].set_visible(False)
 
     legend_handles = [
-        Patch(facecolor="#D95F02", edgecolor="#6B2D00", alpha=0.92, label="Pinyin-Toned superBPE"),
+        Patch(facecolor="#D95F02", edgecolor="#6B2D00", alpha=0.92, label=result.target_label),
         Patch(facecolor="#4DA3D9", edgecolor="#006DA3", alpha=0.84, label="Chinese superBPE"),
     ]
     ax.legend(
@@ -937,6 +1065,7 @@ def _draw_multiplicity_distribution(
 def create_plot(
     result: AnalysisResult,
     y_scale_mode: str,
+    output_paths: dict[str, Path],
 ) -> None:
     _setup_publication_style()
 
@@ -967,32 +1096,46 @@ def create_plot(
     )
 
     fig.subplots_adjust(left=0.08, right=0.92, bottom=0.06, top=0.89)
-    fig.savefig(OUTPUT_PLOT, bbox_inches="tight", pad_inches=0.03)
-    fig.savefig(OUTPUT_PLOT_SVG, bbox_inches="tight", pad_inches=0.03)
-    fig.savefig(OUTPUT_PLOT_PDF, bbox_inches="tight", pad_inches=0.03)
+    fig.savefig(output_paths["plot"], bbox_inches="tight", pad_inches=0.03)
+    fig.savefig(output_paths["plot_svg"], bbox_inches="tight", pad_inches=0.03)
+    fig.savefig(output_paths["plot_pdf"], bbox_inches="tight", pad_inches=0.03)
     plt.close(fig)
 
 
 def main() -> None:
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    convert, converter_name = build_converter()
-    result = analyze_overlap(convert)
-    y_scale_mode = choose_y_scale(result)
+    args = parse_args()
 
-    write_summary_csv(result)
-    write_details_csv(result)
-    create_plot(result, y_scale_mode)
-    report = build_report(result, converter_name, y_scale_mode)
-    OUTPUT_REPORT.write_text(report, encoding="utf-8")
+    for pair_id in args.pairs:
+        target_key = PAIR_TARGETS[pair_id]
+        output_paths = get_output_paths(pair_id)
+        output_dir = output_paths["dir"]
 
-    print(report)
-    print("")
-    print(f"Saved report: {OUTPUT_REPORT}")
-    print(f"Saved summary csv: {OUTPUT_SUMMARY_CSV}")
-    print(f"Saved details csv: {OUTPUT_DETAILS_CSV}")
-    print(f"Saved plot: {OUTPUT_PLOT}")
-    print(f"Saved vector plot: {OUTPUT_PLOT_SVG}")
-    print(f"Saved vector plot: {OUTPUT_PLOT_PDF}")
+        if output_dir.exists() and not args.overwrite:
+            print(f"Skipping {pair_id}: output folder already exists: {output_dir}")
+            print("Use --overwrite to regenerate this pair.")
+            print("")
+            continue
+
+        output_dir.mkdir(parents=True, exist_ok=True)
+        convert, converter_name = build_converter(target_key)
+        result = analyze_overlap(pair_id, convert)
+        y_scale_mode = choose_y_scale(result)
+
+        write_summary_csv(result, output_paths)
+        write_details_csv(result, output_paths)
+        create_plot(result, y_scale_mode, output_paths)
+        report = build_report(result, converter_name, y_scale_mode, output_paths)
+        output_paths["report"].write_text(report, encoding="utf-8")
+
+        print(report)
+        print("")
+        print(f"Saved report: {output_paths['report']}")
+        print(f"Saved summary csv: {output_paths['summary_csv']}")
+        print(f"Saved details csv: {output_paths['details_csv']}")
+        print(f"Saved plot: {output_paths['plot']}")
+        print(f"Saved vector plot: {output_paths['plot_svg']}")
+        print(f"Saved vector plot: {output_paths['plot_pdf']}")
+        print("")
 
 
 if __name__ == "__main__":

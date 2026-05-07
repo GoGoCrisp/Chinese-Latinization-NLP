@@ -6,7 +6,8 @@ Table 2 vocabulary composition analysis for SuperBPE tokenizers.
 This script produces mutually exclusive counts for the categories used in the
 paper table:
 
-    character-based Chinese BPE vs. Pinyin-Toned BPE
+    character-based Chinese BPE, Pinyin-Toneless BPE,
+    Pinyin-Toned BPE, and Pinyin-Diacritic BPE
     at 8K / 16K / 32K / 64K vocabulary sizes.
 
 Parent rows such as "SUB-SYLLABLE FRAGMENTS" are reported as subtotals. The
@@ -29,7 +30,7 @@ from pathlib import Path
 # ===== Paths / outputs =====
 
 BASE_DIR = Path(__file__).resolve().parent
-TOKENIZERS_DIR = BASE_DIR / "decoded_superTokenizers"
+TOKENIZERS_DIR = BASE_DIR / "decoded_superTokenizers_2048_subset100k"
 
 OUTPUT_TXT = TOKENIZERS_DIR / "table1_tokenizer_vocabulary_table2_superBPE.txt"
 OUTPUT_CSV = TOKENIZERS_DIR / "table1_tokenizer_vocabulary_table2_superBPE.csv"
@@ -74,11 +75,30 @@ TOKENIZER_FILES = {
         size: f"chinese_origin_subset100k_superbpe_{size}_decoded.json"
         for size in VOCAB_SIZES
     },
+    "pinyin_toneless": {
+        size: f"pinyin_toneless_subset100k_superbpe_{size}_decoded.json"
+        for size in VOCAB_SIZES
+    },
     "pinyin_toned": {
         size: f"pinyin_toned_subset100k_superbpe_{size}_decoded.json"
         for size in VOCAB_SIZES
     },
+    "pinyin_diacritic": {
+        size: f"pinyin_diacritic_subset100k_superbpe_{size}_decoded.json"
+        for size in VOCAB_SIZES
+    },
 }
+
+TOKENIZER_ORDER = ["chinese", "pinyin_toneless", "pinyin_toned", "pinyin_diacritic"]
+
+TOKENIZER_LABELS = {
+    "chinese": "Chinese",
+    "pinyin_toneless": "Pinyin-Toneless",
+    "pinyin_toned": "Pinyin-Toned",
+    "pinyin_diacritic": "Pinyin-Diacritic",
+}
+
+PINYIN_SIDES = {"pinyin_toneless", "pinyin_toned", "pinyin_diacritic"}
 
 
 # ===== Category rows =====
@@ -391,8 +411,8 @@ def classify_token(raw_token: str, side: str) -> str:
         if cjk_len >= 6:
             return CAT_SIX_PLUS
 
-    # Pinyin syllable-level categories only apply to the pinyin-toned panel.
-    if side == "pinyin_toned":
+    # Pinyin syllable-level categories only apply to the pinyin panels.
+    if side in PINYIN_SIDES:
         syllables = split_pinyin_syllables(clean)
         if syllables:
             n_syllables = len(syllables)
@@ -464,16 +484,15 @@ def get_row_value(results: dict, side: str, size: int, key: str | None) -> str:
 
 
 def format_markdown_table(results: dict) -> str:
-    headers = [
-        "Token Category",
-        "Chinese 8K", "Chinese 16K", "Chinese 32K", "Chinese 64K",
-        "Pinyin-Toned 8K", "Pinyin-Toned 16K", "Pinyin-Toned 32K", "Pinyin-Toned 64K",
-    ]
+    headers = ["Token Category"]
+    for side in TOKENIZER_ORDER:
+        headers.extend(f"{TOKENIZER_LABELS[side]} {size // 1000}K" for size in VOCAB_SIZES)
+
     rows = []
     for label, key in TABLE_ROWS:
         values = [label]
-        values.extend(get_row_value(results, "chinese", size, key) for size in VOCAB_SIZES)
-        values.extend(get_row_value(results, "pinyin_toned", size, key) for size in VOCAB_SIZES)
+        for side in TOKENIZER_ORDER:
+            values.extend(get_row_value(results, side, size, key) for size in VOCAB_SIZES)
         rows.append(values)
 
     widths = [
@@ -490,18 +509,17 @@ def format_markdown_table(results: dict) -> str:
 
 
 def write_csv(results: dict) -> None:
-    headers = [
-        "Token Category",
-        "Chinese 8K", "Chinese 16K", "Chinese 32K", "Chinese 64K",
-        "Pinyin-Toned 8K", "Pinyin-Toned 16K", "Pinyin-Toned 32K", "Pinyin-Toned 64K",
-    ]
+    headers = ["Token Category"]
+    for side in TOKENIZER_ORDER:
+        headers.extend(f"{TOKENIZER_LABELS[side]} {size // 1000}K" for size in VOCAB_SIZES)
+
     with OUTPUT_CSV.open("w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(headers)
         for label, key in TABLE_ROWS:
             row = [label]
-            row.extend(get_row_value(results, "chinese", size, key) for size in VOCAB_SIZES)
-            row.extend(get_row_value(results, "pinyin_toned", size, key) for size in VOCAB_SIZES)
+            for side in TOKENIZER_ORDER:
+                row.extend(get_row_value(results, side, size, key) for size in VOCAB_SIZES)
             writer.writerow(row)
 
 
@@ -510,7 +528,7 @@ def format_examples(results: dict) -> str:
     lines.append("")
     lines.append("SAMPLE TOKENS BY LEAF CATEGORY")
     lines.append("=" * 100)
-    for side in ["chinese", "pinyin_toned"]:
+    for side in TOKENIZER_ORDER:
         for size in VOCAB_SIZES:
             result = results[side][size]
             lines.append("")
@@ -531,7 +549,7 @@ def format_sanity_checks(results: dict) -> str:
     lines.append("=" * 100)
     lines.append("Table cells are formatted as: unique whitespace-insensitive content (raw vocab entries).")
 
-    for side in ["chinese", "pinyin_toned"]:
+    for side in TOKENIZER_ORDER:
         for size in VOCAB_SIZES:
             result = results[side][size]
             delta = result["leaf_total"] - result["total"]
@@ -548,9 +566,9 @@ def main() -> None:
     print("TABLE 2 VOCABULARY COMPOSITION ANALYSIS - SUPERBPE")
     print("=" * 100)
 
-    results = {"chinese": {}, "pinyin_toned": {}}
+    results = {side: {} for side in TOKENIZER_ORDER}
 
-    for side in ["chinese", "pinyin_toned"]:
+    for side in TOKENIZER_ORDER:
         for size in VOCAB_SIZES:
             path = TOKENIZERS_DIR / TOKENIZER_FILES[side][size]
             print(f"Analyzing {side} {size}: {path.name}")
