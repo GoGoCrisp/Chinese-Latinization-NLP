@@ -23,6 +23,7 @@ from eval2_common import (
     bootstrap_ci,
     choose_device_and_dtype,
     completion_parts,
+    load_model_runs_json,
     load_model,
     project_path,
     score_completion,
@@ -95,7 +96,12 @@ MATCHED_SUBSET_FIELDS = [
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Evaluate Homophone Probe v2.")
     parser.add_argument("--probe-jsonl", default="eval_data/homophone_probe_v2/probe_v2.jsonl")
-    parser.add_argument("--output-dir", default="eval_results/homophone_probe_v2")
+    parser.add_argument("--output-dir", default="eval_results/eval2/homophone_probe_v2")
+    parser.add_argument(
+        "--model-runs-json",
+        default=None,
+        help="Optional JSON manifest with model runs to evaluate. Defaults to the built-in seed42 pair.",
+    )
     parser.add_argument(
         "--aggregate-only",
         action="store_true",
@@ -381,10 +387,12 @@ def main() -> None:
 
     device, dtype, dtype_name = choose_device_and_dtype()
     print(f"device: {device.type}, dtype: {dtype_name}")
+    model_runs = load_model_runs_json(args.model_runs_json, root)
+    print(f"model runs: {', '.join(run.run_name for run in model_runs)}")
 
     all_rows: list[dict[str, Any]] = []
     all_summaries: list[dict[str, Any]] = []
-    for run in MODEL_RUNS:
+    for run in model_runs:
         rows, summaries = evaluate_run(root, run, items, output_dir, device, dtype, dtype_name, args)
         all_rows.extend(rows)
         all_summaries.extend(summaries)

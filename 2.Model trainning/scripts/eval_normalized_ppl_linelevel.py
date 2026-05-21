@@ -13,6 +13,7 @@ import gc
 import json
 import math
 import os
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -25,8 +26,8 @@ from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer
 EXPECTED_VOCAB_SIZE = 32001
 EXPECTED_EOS_ID = 32000
 EXPECTED_PAD_ID = 32000
-DEFAULT_OUTPUT_DIR = Path("eval_results/normalized_ppl_4epoch_linelevel")
-OLD_BLOCK_SUMMARY = Path("eval_results/normalized_ppl_4epoch/summary.csv")
+DEFAULT_OUTPUT_DIR = Path("eval_results/eval1/normalized_ppl_4epoch_linelevel")
+OLD_BLOCK_SUMMARY = Path("eval_results/eval1/normalized_ppl_4epoch/summary.csv")
 
 PER_LINE_COLUMNS = [
     "line_id",
@@ -94,6 +95,44 @@ RUNS: dict[str, EvalRun] = {
 }
 
 
+def load_eval_runs(path_text: str | None, root: Path) -> list[EvalRun]:
+    if path_text is None:
+        return list(RUNS.values())
+    path = as_project_path(root, path_text)
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    records = payload.get("model_runs", payload) if isinstance(payload, dict) else payload
+    runs: list[EvalRun] = []
+    for record in records:
+        model = record.get("model") or record.get("run_name")
+        text_key = record.get("ppl_text_key") or record.get("text_key")
+        if text_key in {"zh", "zh_text"}:
+            text_key = "zh_text"
+        elif text_key in {"diacritic", "diacritic_text"}:
+            text_key = "diacritic_text"
+        elif record.get("script") == "chinese_origin":
+            text_key = "zh_text"
+        else:
+            text_key = "diacritic_text"
+        runs.append(
+            EvalRun(
+                model=model,
+                checkpoint=record["checkpoint"],
+                tokenizer=record["tokenizer"],
+                text_key=text_key,
+                output_json=record.get("output_json") or f"{model}.json",
+            )
+        )
+    if not runs:
+        raise ValueError(f"No Eval 1 runs found in {path}")
+    return runs
+
+
+def per_line_prefix(run: EvalRun, legacy_default_pair: bool) -> str:
+    if legacy_default_pair:
+        return "chinese" if run.text_key == "zh_text" else "diacritic"
+    return re.sub(r"[^0-9A-Za-z_]+", "_", run.model).strip("_")
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
@@ -105,6 +144,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--diacritic-text", default="data/raw/test.diacritic.txt")
     parser.add_argument("--output-dir", default=str(DEFAULT_OUTPUT_DIR))
     parser.add_argument("--old-summary", default=str(OLD_BLOCK_SUMMARY))
+    parser.add_argument(
+        "--model-runs-json",
+        default=None,
+        help="Optional JSON manifest with model runs to evaluate. Defaults to the built-in seed42 pair.",
+    )
     parser.add_argument(
         "--max-lines",
         type=int,
@@ -340,6 +384,7 @@ def evaluate_model(
     cjk_source_chars: int,
     requested_target_chunk_size: int | None,
     show_progress: bool,
+    line_prefix: str,
 ) -> dict[str, Any]:
     checkpoint = as_project_path(root, run.checkpoint)
     tokenizer_path = as_project_path(root, run.tokenizer)
@@ -388,7 +433,7 @@ def evaluate_model(
     for row in iterator:
         if row["skip"]:
             skipped_lines += 1
-            row[f"{run.text_key.split('_')[0]}_total_nll"] = ""
+            row[f"{line_prefix}_total_nll"] = ""
             continue
 
         text = row[run.text_key]
@@ -405,11 +450,10 @@ def evaluate_model(
             target_chunk_size=target_chunk_size,
             device=device,
         )
-        prefix = "chinese" if run.model == "chinese_4epoch" else "diacritic"
-        row[f"{prefix}_total_nll"] = line_nll
-        row[f"{prefix}_num_model_tokens"] = line_model_tokens
-        row[f"{prefix}_num_chunks"] = line_chunks
-        row[f"{prefix}_line_char_nll"] = (
+        row[f"{line_prefix}_total_nll"] = line_nll
+        row[f"{line_prefix}_num_model_tokens"] = line_model_tokens
+        row[f"{line_prefix}_num_chunks"] = line_chunks
+        row[f"{line_prefix}_line_char_nll"] = (
             line_nll / row["zh_num_chars"] if row["zh_num_chars"] > 0 else ""
         )
 
@@ -460,6 +504,7 @@ def evaluate_model(
         "pad_token_id": tokenizer.pad_token_id,
         "max_position_embeddings": max_position_embeddings,
         "target_chunk_size": target_chunk_size,
+        "per_line_prefix": line_prefix,
         "scoring_notes": (
             "Each original aligned raw line is scored independently. Text is tokenized "
             "with add_special_tokens=False, EOS is appended manually, and an EOS/context "
@@ -488,14 +533,30 @@ def evaluate_model(
     return result
 
 
-def write_per_line_csv(output_dir: Path, rows: list[dict[str, Any]]) -> Path:
+def write_per_line_csv(output_dir: Path, rows: list[dict[str, Any]], line_prefixes: list[str]) -> Path:
     output_dir.mkdir(parents=True, exist_ok=True)
     path = output_dir / "per_line_scores.csv"
+    fields = [
+        "line_id",
+        "zh_text",
+        "diacritic_text",
+        "zh_num_chars",
+        "zh_num_utf8_bytes",
+    ]
+    for prefix in line_prefixes:
+        fields.extend(
+            [
+                f"{prefix}_total_nll",
+                f"{prefix}_num_model_tokens",
+                f"{prefix}_num_chunks",
+                f"{prefix}_line_char_nll",
+            ]
+        )
     with path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=PER_LINE_COLUMNS)
+        writer = csv.DictWriter(handle, fieldnames=fields)
         writer.writeheader()
         for row in rows:
-            writer.writerow({column: row.get(column, "") for column in PER_LINE_COLUMNS})
+            writer.writerow({column: row.get(column, "") for column in fields})
     return path
 
 
@@ -559,6 +620,8 @@ def main() -> None:
     output_dir = as_project_path(root, args.output_dir)
     zh_path = as_project_path(root, args.zh_text)
     diacritic_path = as_project_path(root, args.diacritic_text)
+    eval_runs = load_eval_runs(args.model_runs_json, root)
+    legacy_default_pair = args.model_runs_json is None
     require_path(zh_path, "Chinese raw held-out text")
     require_path(diacritic_path, "Diacritic raw held-out text")
 
@@ -591,22 +654,28 @@ def main() -> None:
     if args.max_lines is not None:
         print(f"DEBUG/SMOKE PARTIAL EVAL: max_lines={args.max_lines}")
 
-    results = [
-        evaluate_model(
-            root=root,
-            run=run,
-            rows=rows,
-            output_dir=output_dir,
-            total_source_chars=total_source_chars,
-            total_source_bytes=total_source_bytes,
-            cjk_source_chars=cjk_source_chars,
-            requested_target_chunk_size=args.target_chunk_size,
-            show_progress=not args.no_progress,
+    results = []
+    line_prefixes = []
+    print(f"model runs: {', '.join(run.model for run in eval_runs)}")
+    for run in eval_runs:
+        prefix = per_line_prefix(run, legacy_default_pair)
+        line_prefixes.append(prefix)
+        results.append(
+            evaluate_model(
+                root=root,
+                run=run,
+                rows=rows,
+                output_dir=output_dir,
+                total_source_chars=total_source_chars,
+                total_source_bytes=total_source_bytes,
+                cjk_source_chars=cjk_source_chars,
+                requested_target_chunk_size=args.target_chunk_size,
+                show_progress=not args.no_progress,
+                line_prefix=prefix,
+            )
         )
-        for run in RUNS.values()
-    ]
 
-    per_line_path = write_per_line_csv(output_dir, rows)
+    per_line_path = write_per_line_csv(output_dir, rows, line_prefixes)
     summary_path = write_summary_csv(output_dir, results)
     diagnostics_path = output_dir / "alignment_diagnostics.json"
     diagnostics_payload = {

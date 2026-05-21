@@ -1,0 +1,52 @@
+{
+  "run": {
+    "run_name": "chinese_125m_b1024_matched_token_seed44",
+    "script": "chinese_origin",
+    "checkpoint": "server_outputs/robustness/unpacked/chinese_125m_b1024_matched_token_seed44/outputs/chinese_125m_b1024_matched_token_seed44/checkpoint-27176",
+    "tokenizer": "tokenizers/chinese_origin_32k_eos"
+  },
+  "summary": [
+    {
+      "model_run": "chinese_125m_b1024_matched_token_seed44",
+      "script": "chinese_origin",
+      "scoring_mode": "candidate_only",
+      "primary": false,
+      "n_items": 1000,
+      "n_valid": 1000,
+      "invalid_control_collision_count": 0,
+      "accuracy": 0.92,
+      "mean_margin": 5.67657649117813,
+      "median_margin": 5.673877239227295,
+      "mean_gold_score": -5.858423206329229,
+      "mean_distractor_score": -11.53499969750736,
+      "accuracy_ci_low": 0.902,
+      "accuracy_ci_high": 0.935,
+      "mean_margin_ci_low": 5.4414906689911495,
+      "mean_margin_ci_high": 5.93548654321125,
+      "device": "cpu",
+      "dtype": "fp32",
+      "notes": "Non-homophone control; candidate_plus_suffix is primary."
+    },
+    {
+      "model_run": "chinese_125m_b1024_matched_token_seed44",
+      "script": "chinese_origin",
+      "scoring_mode": "candidate_plus_suffix",
+      "primary": true,
+      "n_items": 1000,
+      "n_valid": 1000,
+      "invalid_control_collision_count": 0,
+      "accuracy": 0.97,
+      "mean_margin": 0.4023745473863027,
+      "median_margin": 0.18345623045587267,
+      "mean_gold_score": -3.6856751686639386,
+      "mean_distractor_score": -4.0880497160502385,
+      "accuracy_ci_low": 0.959,
+      "accuracy_ci_high": 0.98,
+      "mean_margin_ci_low": 0.3628780850920441,
+      "mean_margin_ci_high": 0.44268876450553457,
+      "device": "cpu",
+      "dtype": "fp32",
+      "notes": "Non-homophone control; candidate_plus_suffix is primary."
+    }
+  ]
+}

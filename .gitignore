@@ -37,6 +37,13 @@ ENV/
 # Logs
 *.log
 
+# Local runtime/cache artifacts
+.pytest_cache/
+.mypy_cache/
+2.Model trainning/.matplotlib-cache/
+2.Model trainning/.pycache_check/
+superbpe/superbpe_venv/
+
 # Jupyter
 .ipynb_checkpoints/
 *.ipynb
@@ -75,6 +82,12 @@ corpora/*.txt
 2.Model trainning/**/*.pt
 2.Model trainning/**/*.safetensors
 2.Model trainning/**/checkpoint-*/
+2.Model trainning/robustness_training_plan/*.tar.gz
+
+# Large detailed evaluation outputs; keep summaries/reports instead.
+2.Model trainning/eval_results/**/per_line_scores.csv
+2.Model trainning/eval_results/**/item_scores.csv
+2.Model trainning/eval_results/eval4_chinese_blimp_style/subtype_analysis/ZhoBLiMP/
 
 # Allow small eval datasets even though we ignore *.jsonl globally
 !2.Model trainning/eval_data/**/*.jsonl

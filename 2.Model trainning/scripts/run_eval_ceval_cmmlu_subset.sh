@@ -10,12 +10,12 @@ python3 scripts/eval_ceval_cmmlu_subset.py "$@"
 
 echo
 echo "summary_overall.csv"
-cat eval_results/mcq_subset/summary_overall.csv
+cat eval_results/eval3/mcq_subset/summary_overall.csv
 
 echo
 echo "label_bias_diagnostics.csv"
-cat eval_results/mcq_subset/label_bias_diagnostics.csv
+cat eval_results/eval3/mcq_subset/label_bias_diagnostics.csv
 
 echo
 echo "chinese_vs_diacritic_comparison.csv"
-cat eval_results/mcq_subset/chinese_vs_diacritic_comparison.csv
+cat eval_results/eval3/mcq_subset/chinese_vs_diacritic_comparison.csv

@@ -29,7 +29,7 @@ MAX_SEQ_LEN = 1024
 LABELS = ["A", "B", "C", "D"]
 SCORING_MODES = ["label_scoring", "option_text_scoring"]
 DEFAULT_OUTPUT_DATA = "eval_data/mcq_subset"
-DEFAULT_OUTPUT_RESULTS = "eval_results/mcq_subset"
+DEFAULT_OUTPUT_RESULTS = "eval_results/eval3/mcq_subset"
 
 
 @dataclass(frozen=True)

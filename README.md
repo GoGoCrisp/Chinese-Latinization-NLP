@@ -1,163 +1,249 @@
 # Chinese Latinization NLP
 
-一个专注于中文拉丁化（拼音转换）的自然语言处理项目，包含多种拼音表示形式的tokenizer比较分析。
+中文拉丁化与拼音表示对语言模型的影响研究。This repository studies how Chinese surface writing and Latinized Pinyin representations change tokenizer behavior, corpus ambiguity, and downstream language-model evaluation.
 
-## 项目概概述
+## 中文版
 
-本项目用于建立和比较中文原始文本与各种拼音表示形式（无声调拼音、带数字声调拼音、带声调符号拼音）之间的tokenizer，并分析它们的重叠率、多音字现象等。
+### 项目概述
 
-## 目录结构
+本项目围绕一个核心问题展开：当中文文本被转换成拼音，尤其是带声调符号的拼音时，分词器、训练语料、语言模型困惑度、同音词判断和语法最小对评测会发生什么变化？
 
-```
+仓库包含三类工作：
+
+- Tokenization：从中文维基语料出发，构造中文原文、无声调拼音、数字声调拼音、声调符号拼音等表示，训练并分析 BPE/SuperBPE tokenizer。
+- Model training：构建中文原文模型和拼音声调符号模型的训练配置、数据处理脚本、服务器运行脚本和复现实验配置。
+- Evaluation：评估归一化 PPL、同音词 probe、非同音 control、CEVAL/CMMLU 子集、C3 对话选项、ZhoBLiMP 风格中文最小对、CHID 成语填空和多 seed robustness。
+
+### 研究对象
+
+主要比较两种模型输入表示：
+
+- `Chinese-Origin`：原始中文字符序列。
+- `Pinyin-Diacritic`：带声调符号的拼音序列，例如 `zhōng guó`。
+
+Tokenizer 层面还分析：
+
+- `pinyin_toneless`：无声调拼音。
+- `pinyin_toned`：数字声调拼音。
+- `pinyin_diacritic`：声调符号拼音。
+- SuperBPE 不同参数、不同 vocabulary size 和不同 K 值设置。
+
+### 仓库结构
+
+```text
 Chinese_Latinization_NLP/
-├── 1.Tokenization/              # 主要的tokenization代码和分析
-│   ├── 1st_Clean_wiki.py       # 第一步：清理Wikipedia数据
-│   ├── 2nd_Segment&token.py    # 第二步：分词和tokenization
-│   ├── 3rd_Pinyin_4corpus.py   # 第三步：生成拼音语料
-│   ├── 4th_Tokenization_Trainning.py  # 第四步：训练tokenizer
-│   ├── 5th_Analyzation.py      # 第五步：分析
-│   ├── 6th_Compare with AI.py   # 第六步：与AI tokenizer对比
-│   ├── 7th_Tokenizer_Comparison_with_AI.py  # 深度对比分析
-│   ├── 9th_compare_tokenizers_overlap.py    # **新增**：多对1映射和多音字检测
-│   ├── cleaned_wiki.jsonl       # 清理后的Wikipedia数据
-│   ├── corpora/                 # 各种拼音格式的语料库
-│   ├── dicts/                   # CC-CEDICT字典文件
-│   ├── tokenizers/              # 训练好的tokenizer文件（64K vocab）
-│   └── extracted/               # 提取的数据
+├── 1.Tokenization/
+│   ├── 1st_Clean_wiki.py
+│   ├── 2nd_Segment&token.py
+│   ├── 3rd_v2_Pinyin_4corpus.py
+│   ├── 4th_v2_superBPE.py
+│   ├── 7th_Tokenizer_Comparison_with_AI.py
+│   ├── 9th_compare_tokenizers_overlap_superBPE.py
+│   ├── 10th_decode_superTokenizers.py
+│   ├── 11th_semantic_dispersion_collision_embeddings.py
+│   ├── decoded_superTokenizers*/
+│   ├── superTokenizers_BPE*/
+│   └── dicts/
+├── 2.Model trainning/
+│   ├── configs/
+│   ├── configs/robustness/
+│   ├── eval_data/
+│   ├── eval_results/
+│   ├── figures/
+│   ├── scripts/
+│   ├── scripts/robustness/
+│   ├── tokenizers/
+│   └── robustness_training_plan/
+├── superbpe
+├── .gitignore
 └── README.md
 ```
 
-## Tokenizer类型
+说明：目录名 `2.Model trainning` 沿用了原始拼写。大语料、训练 checkpoint、模型权重、tokenized Arrow 数据、服务器输出包、缓存和逐行/逐题大明细不纳入 Git。
 
-项目中包含4种主要的tokenizer（64K vocabulary）：
+### 主要流程
 
-| 类型 | 文件名 | 示例 | 说明 |
-|------|--------|------|------|
-| **A** | chinese_origin_64k_train90.json | 中文原始 | 原始中文字符 |
-| **B** | pinyin_toneless_64k_train90.json | "zhongguo" | 无声调拼音 |
-| **C** | pinyin_toned_64k_train90.json | "zhong1guo2" | 带数字声调 |
-| **D** | pinyin_diacritic_64k_train90.json | "zhōngguó" | 带声调符号 |
+1. 清理和切分维基语料。
+2. 将中文语料转换为多种拼音表示。
+3. 训练和解码 BPE/SuperBPE tokenizer。
+4. 分析 tokenizer fertility、词表重叠、同音 collapse、形态一致性和语义分散。
+5. 训练中文原文模型与拼音声调符号模型。
+6. 在 PPL、homophone probe、control probe、多项选择、语法最小对、成语填空等任务上比较两类表示。
+7. 通过 seed 43/44 等 robustness run 检查结果稳定性。
 
-## 核心功能
+### 评估任务
 
-### 1. Tokenizer对比分析（9th_compare_tokenizers_overlap.py）
+| 任务 | 目的 | 主要输出 |
+| --- | --- | --- |
+| Eval1 normalized PPL | 比较字符归一化困惑度 | `eval_results/**/summary.csv` |
+| Eval2 homophone probe | 测试同音/近音候选区分能力 | `eval_results/eval2/eval2_integrated_report.md` |
+| Eval2 controls | 排除非同音随机或困难候选造成的假差异 | `homophone_vs_control_gap.csv` |
+| Eval3 CEVAL/CMMLU subset | 多项选择知识/推理子集 | `eval_results/eval3/` |
+| Eval3b C3 dialogue | 对话选项打分 | `eval_results/eval3b_c3_dialogue_option_text/` |
+| Eval4 ZhoBLiMP-style | 中文语法最小对 | `eval_results/eval4_chinese_blimp_style/` |
+| Eval5 CHID | 成语完形填空 | `eval_results/eval5_chid_idiom_cloze/` |
+| Robustness | 多 seed、多训练 regime 汇总 | `eval_results/robustness_134m_eval/summary/` |
 
-主要功能：
-- **正向映射（1对N）**：检测同一个词汇对应多个目标词汇的情况
-- **反向映射（N对1）**：检测多个不同词汇映射到同一个目标词汇的情况（多音字现象）
-- **进度条显示**：实时显示比较进度
-- **详细统计**：生成完整的统计报告
+### 当前结果摘要
 
-### 2. 主要发现
+Eval2 4-epoch 主分析使用 `candidate_plus_suffix`。在 noncollapsed homophone subset 上，中文模型为 95.98%，拼音声调符号模型为 88.20%，差距为 +7.78 pp。Hard control 差距为 +6.00 pp，Easy control 差距为 +5.40 pp，说明 homophone 场景中的差距高于普通 control。
 
-#### A vs B（中文 ↔ 无声调拼音）
-- **1对1映射**：43,147个 (67.4%)
-- **多对1映射**：3,733个 (5.8%)
-  - 2对1: 2,300个
-  - 3对1: 672个
-  - 最多169对1
+Eval4 ZhoBLiMP 风格任务显示，不同语法现象对拼音化的敏感度不同。`fci_licensing`、`npi_licensing`、`verb_phrase`、`BA` 等现象中中文模型优势较大；`question`、`classifier`、`quantifiers` 等现象中拼音声调符号模型在当前设置下并不总是落后。
 
-**例子**：多个中文词映射到同一个拼音
-```
-"bujin" ← ["不尽", "不仅"]
-"jinxing" ← ["进行", "金星"]
-"mushi" ← ["墓室", "牧师", "模式"]
-```
+Robustness 汇总中，matched-token seed 43/44 的整体趋势保持一致：中文原文模型在 Eval1 字符级 PPL、Eval2 controls/homophone 和 Eval4 overall 上通常优于拼音声调符号模型；拼音模型在部分语法现象和特定 scoring 条件下仍有可分析的局部优势。
 
-#### B vs C（无声调 ↔ 带数字声调）
-- **1对1**：100个
-- **1对2**：93个 - 两个声调的词
-- **1对3**：149个 - 三个声调的词
-- **1对4**：313个 - 四个声调的词
+### 如何复现
 
-**例子**：多音字检测
-```
-"xie" → ["xie1", "xie4", "xie2", "xie3"]
-"sheng" → ["sheng1", "sheng4", "sheng2", "sheng3"]
-```
-
-## 使用方法
-
-### 环境设置
+建议使用 Python 3.10+，并在项目根目录创建虚拟环境：
 
 ```bash
-# 创建虚拟环境
-python -m venv venv
-source venv/bin/activate
-
-# 安装依赖
-pip install -r requirements.txt
+python -m venv .venv
+source .venv/bin/activate
+pip install -r "2.Model trainning/requirements.txt"
 ```
 
-### 运行分析
+运行 tokenizer 分析示例：
 
 ```bash
 cd 1.Tokenization
-
-# 比较tokenizer重叠率和多音字现象
-python 9th_compare_tokenizers_overlap.py
-
-# 输出：
-# - 进度条显示6对比较的进度
-# - 生成 tokenizers/tokenizer_overlap_analysis.txt 报告
-# - 包含正向和反向映射的详细分析和示例
+python 9th_compare_tokenizers_overlap_superBPE.py
+python 7th_Tokenizer_Comparison_with_AI.py
 ```
 
-### 输出结果
+运行评估示例：
 
+```bash
+cd "2.Model trainning"
+bash scripts/run_eval_normalized_ppl_linelevel.sh
+bash scripts/run_homophone_probe_v2.sh
+bash scripts/run_nonhomophone_control_v2.sh
+bash scripts/run_eval4_chinese_blimp_style.sh
+bash scripts/run_eval5_chid_idiom_cloze.sh
 ```
-SUMMARY TABLE
-Pair            | 1对1      | 1对多        | 多对1        | 独立(1)    | 总覆盖
-A_vs_B          | 43147    | 0          | 3733       | 20848    | 46880
-A_vs_C          | 39050    | 0          | 2174       | 24945    | 41224
-...
+
+Robustness 相关入口：
+
+```bash
+cd "2.Model trainning"
+python scripts/robustness/validate_robustness_configs.py
+bash scripts/robustness/run_robustness_evaluation.sh
+python scripts/robustness/summarize_robustness_eval.py
 ```
 
-## 关键脚本说明
+### Git 中包含与排除的内容
 
-### `9th_compare_tokenizers_overlap.py`（主要分析脚本）
+包含：
 
-**功能**：
-- 加载4个64K的tokenizer
-- 使用CC-CEDICT字典建立汉字→拼音映射
-- 比较所有6对tokenizer的重叠情况
-- 检测多音字和同音词现象
+- 源代码、运行脚本、训练配置、评估配置。
+- 小型 tokenizer 文件、字典文件和元数据。
+- 评估 summary、report、diagnostics、表格和图。
+- 服务器运行说明与 robustness 计划文档。
 
-**比较规则**：
-- **A→B**: 汉字查字典转无声调拼音
-- **A→C**: 汉字查字典转带数字拼音
-- **A→D**: 汉字查字典转带声调符号拼音
-- **B→C**: 拼音添加1-4声调
-- **B→D**: 无声调拼音对应带声调
-- **C→D**: 去掉数字转声调符号
+排除：
 
-**输出**：
-- `tokenizers/tokenizer_overlap_analysis.txt` - 完整的分析报告
+- 维基原始 dump、清理后大语料、拼音大语料。
+- tokenized Arrow 数据、checkpoint、模型权重、optimizer state。
+- `.tar.gz` 训练包和服务器输出包。
+- `.matplotlib-cache`、虚拟环境、日志、系统文件。
+- `per_line_scores.csv`、`item_scores.csv` 等可再生成的大型逐行/逐题明细。
 
-## 数据来源
+### 数据与许可
 
-- **Wikipedia**：中文Wikipedia语料库
-- **CC-CEDICT**：CC-CEDICT汉字-拼音字典（121,106个字符）
+本项目使用公开中文维基语料、CC-CEDICT/Unihan 相关字典资源，以及公开评测数据的派生构造。请在复现实验时遵守各数据源原始许可。代码默认按 MIT License 使用；如后续添加第三方数据或模型权重，请以其原始许可证为准。
 
-## 依赖
+## English
 
-- Python 3.7+
-- tokenizers（HuggingFace）
-- transformers
-- tqdm
-- regex
-- pypinyin（某些脚本需要）
-- jieba（分词用）
+### Overview
 
-## 文献
+This project investigates how Latinizing Chinese into Pinyin, especially tone-marked Pinyin, changes tokenization, lexical ambiguity, language-model training, and downstream evaluation.
 
-- [HuggingFace Tokenizers](https://github.com/huggingface/tokenizers)
-- [CC-CEDICT](https://cedict.org/)
+The repository covers:
 
-## 许可证
+- Tokenization: building Chinese, toneless Pinyin, numbered-tone Pinyin, and diacritic-tone Pinyin corpora and BPE/SuperBPE tokenizers.
+- Model training: data preparation, tokenizer packaging, model configs, server scripts, and robustness training plans for Chinese-origin and Pinyin-diacritic language models.
+- Evaluation: normalized PPL, homophone probes, non-homophone controls, CEVAL/CMMLU subsets, C3 dialogue option scoring, ZhoBLiMP-style Chinese minimal pairs, CHID idiom cloze, and multi-seed robustness analysis.
 
-MIT License
+### Representations
 
-## 联系方式
+The main model-level comparison is between:
 
-如有问题或建议，欢迎提issue。
+- `Chinese-Origin`: the original Chinese character surface form.
+- `Pinyin-Diacritic`: tone-marked Pinyin, such as `zhōng guó`.
+
+Tokenizer-level analyses also include toneless Pinyin, numbered-tone Pinyin, multiple SuperBPE vocabulary sizes, and several SuperBPE parameter settings.
+
+### Pipeline
+
+1. Clean and split Chinese Wikipedia text.
+2. Convert Chinese text into multiple Pinyin representations.
+3. Train and decode BPE/SuperBPE tokenizers.
+4. Measure fertility, vocabulary overlap, homophone collapse, morphological coherence, and semantic dispersion.
+5. Train Chinese-origin and Pinyin-diacritic language models.
+6. Evaluate the models on PPL, homophone probes, controls, multiple-choice tasks, grammatical minimal pairs, and idiom cloze.
+7. Aggregate robustness runs across random seeds and training regimes.
+
+### Key Results
+
+In the 4-epoch Eval2 `candidate_plus_suffix` setting, the Chinese model reaches 95.98% on the noncollapsed homophone subset, while the Pinyin-diacritic model reaches 88.20%, a +7.78 pp Chinese advantage. The hard-control gap is +6.00 pp and the easy-control gap is +5.40 pp, so the homophone setting shows an additional degradation beyond ordinary controls.
+
+In Eval4 ZhoBLiMP-style minimal pairs, the effect is phenomenon-specific. Chinese is substantially stronger on phenomena such as `fci_licensing`, `npi_licensing`, `verb_phrase`, and `BA`, while the Pinyin-diacritic model is competitive or better on some categories such as `question`, `classifier`, and `quantifiers` under the current setup.
+
+The robustness summaries across matched-token seeds 43/44 preserve the same broad pattern: Chinese-origin models usually outperform Pinyin-diacritic models on character-level PPL, Eval2 probes/controls, and Eval4 overall accuracy, while localized Pinyin advantages remain worth analyzing by phenomenon and scoring mode.
+
+### Reproduction
+
+Create an environment from the repository root:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r "2.Model trainning/requirements.txt"
+```
+
+Tokenizer analysis:
+
+```bash
+cd 1.Tokenization
+python 9th_compare_tokenizers_overlap_superBPE.py
+python 7th_Tokenizer_Comparison_with_AI.py
+```
+
+Evaluation:
+
+```bash
+cd "2.Model trainning"
+bash scripts/run_eval_normalized_ppl_linelevel.sh
+bash scripts/run_homophone_probe_v2.sh
+bash scripts/run_nonhomophone_control_v2.sh
+bash scripts/run_eval4_chinese_blimp_style.sh
+bash scripts/run_eval5_chid_idiom_cloze.sh
+```
+
+Robustness utilities:
+
+```bash
+cd "2.Model trainning"
+python scripts/robustness/validate_robustness_configs.py
+bash scripts/robustness/run_robustness_evaluation.sh
+python scripts/robustness/summarize_robustness_eval.py
+```
+
+### What Is Tracked
+
+Tracked:
+
+- Source code, shell scripts, configs, tokenizer metadata, small tokenizer assets.
+- Evaluation summaries, reports, diagnostics, tables, and figures.
+- Server handoff notes and robustness training plans.
+
+Excluded:
+
+- Raw Wikipedia dumps, cleaned large corpora, generated Pinyin corpora.
+- Tokenized Arrow datasets, checkpoints, model weights, optimizer states.
+- Server output bundles and `.tar.gz` training packages.
+- Local caches, virtual environments, logs, and OS metadata.
+- Regenerable large detail files such as `per_line_scores.csv` and `item_scores.csv`.
+
+### Citation and License Notes
+
+The project uses public Chinese Wikipedia text, CC-CEDICT/Unihan-style lexical resources, and derived public evaluation data. Follow the licenses of the upstream datasets when reproducing experiments. Project code is intended for MIT-style use unless a file or upstream asset states otherwise.

@@ -1,0 +1,46 @@
+{
+  "run": {
+    "run_name": "chinese_4epoch",
+    "script": "chinese_origin",
+    "checkpoint": "/Users/crisp/Desktop/code_field/python/Chinese_Latinization_NLP/2.Model trainning/server_outputs/4epoch/outputs/chinese_125m_b1024_4epoch_seed42/checkpoint-27176",
+    "tokenizer": "tokenizers/chinese_origin_32k_eos",
+    "device": "mps",
+    "dtype": "fp32",
+    "parameter_count": 134107392,
+    "scoring": "option_text_scoring_only_raw_option_text_no_eos"
+  },
+  "summary": {
+    "model": "chinese_4epoch",
+    "n_items": 1000,
+    "accuracy": 0.285,
+    "random_baseline": 0.25,
+    "gap_vs_baseline": 0.034999999999999976,
+    "mean_margin_gold_minus_best_wrong": -1.1989445791943434,
+    "median_margin_gold_minus_best_wrong": -1.0004931688308716,
+    "n_skipped": 0,
+    "bootstrap_acc_ci_low": 0.258,
+    "bootstrap_acc_ci_high": 0.312
+  },
+  "skipped": [],
+  "dataset": {
+    "source": "datasets.load_dataset(\"c3\", \"dialog\")",
+    "split_used": "loaded_dialogue_config_all_splits(train,test,validation)",
+    "raw_count": 8140,
+    "filtered_count": 6645,
+    "evaluated_count": 1000,
+    "filter_report": {
+      "normalized_question_items": 9571,
+      "after_exactly_4_options": 7908,
+      "after_nonempty_fields": 7908,
+      "after_question_len_le_50": 7908,
+      "after_option_len_le_40": 7908,
+      "context_length_filter_steps": [
+        {
+          "context_len_limit": 250,
+          "count": 6645
+        }
+      ],
+      "final_filtered": 6645
+    }
+  }
+}

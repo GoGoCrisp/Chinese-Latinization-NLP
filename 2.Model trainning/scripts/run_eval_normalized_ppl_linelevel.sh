@@ -3,7 +3,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
-OUTPUT_DIR="${OUTPUT_DIR:-eval_results/normalized_ppl_4epoch_linelevel}"
+OUTPUT_DIR="${OUTPUT_DIR:-eval_results/eval1/normalized_ppl_4epoch_linelevel}"
 LOG_FILE="${LOG_FILE:-${OUTPUT_DIR}/run_eval_normalized_ppl_linelevel.log}"
 
 cd "${PROJECT_ROOT}"

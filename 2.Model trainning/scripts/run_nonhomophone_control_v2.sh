@@ -11,8 +11,8 @@ python3 scripts/eval_nonhomophone_control_v2.py
 
 echo
 echo "summary_by_model_and_scoring.csv"
-cat eval_results/nonhomophone_control_v2/summary_by_model_and_scoring.csv
+cat eval_results/eval2/nonhomophone_control_v2/summary_by_model_and_scoring.csv
 
 echo
 echo "homophone_vs_control_gap.csv"
-cat eval_results/nonhomophone_control_v2/homophone_vs_control_gap.csv
+cat eval_results/eval2/nonhomophone_control_v2/homophone_vs_control_gap.csv

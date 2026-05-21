@@ -1,0 +1,54 @@
+{
+  "run": {
+    "run_name": "chinese_4epoch",
+    "script": "chinese_origin",
+    "checkpoint": "/Users/crisp/Desktop/code_field/python/Chinese_Latinization_NLP/2.Model trainning/server_outputs/4epoch/outputs/chinese_125m_b1024_4epoch_seed42/checkpoint-27176",
+    "tokenizer": "tokenizers/chinese_origin_32k_eos",
+    "device": "mps",
+    "dtype": "fp32",
+    "parameter_count": 134107392,
+    "scoring": "option_text_scoring_no_labels_no_eos_add_special_tokens_false"
+  },
+  "summary": {
+    "model": "chinese_4epoch",
+    "scoring_mode": "option_text_scoring",
+    "n_items": 1000,
+    "accuracy": 0.272,
+    "random_baseline": 0.25,
+    "gap_vs_baseline": 0.02200000000000002,
+    "mean_margin_gold_minus_best_wrong": -1.1936114494258616,
+    "median_margin_gold_minus_best_wrong": -1.0836593111356096,
+    "n_collapse_affected": 0,
+    "collapse_affected_rate": 0.0,
+    "accuracy_noncollapsed": 0.272,
+    "accuracy_collapse_affected": "",
+    "n_skipped": 0,
+    "bootstrap_acc_ci_low": 0.243975,
+    "bootstrap_acc_ci_high": 0.3
+  },
+  "skipped": [],
+  "dataset": {
+    "source": "datasets.load_dataset(\"clue\", \"chid\")",
+    "split_used": "validation",
+    "raw_count_selected_split": 3218,
+    "raw_count_all_loaded_splits": 91374,
+    "valid_blank_level_item_count": 23011,
+    "after_4choice_filtering": 23011,
+    "final_4choice_item_count_before_max_items": 22123,
+    "evaluated_count": 1000,
+    "context_length_filter_steps": [
+      {
+        "context_len_limit": 300,
+        "count": 22123
+      }
+    ],
+    "blank_normalization_stats": {
+      "raw_rows": 3218,
+      "raw_placeholders": 23011,
+      "valid_blank_level_items": 23011
+    },
+    "choice_filter_stats": {
+      "after_4choice_filtering": 23011
+    }
+  }
+}

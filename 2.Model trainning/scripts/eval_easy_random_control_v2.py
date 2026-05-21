@@ -7,10 +7,9 @@ import argparse
 from pathlib import Path
 from typing import Any
 
-from eval2_common import read_csv
+from eval2_common import load_model_runs_json, read_csv
 from eval_nonhomophone_control_v2 import (
     ITEM_SCORE_FIELDS,
-    MODEL_RUNS,
     SCORING_MODES,
     SUMMARY_FIELDS,
     choose_device_and_dtype,
@@ -42,14 +41,19 @@ THREE_PROBE_FIELDS = [
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Evaluate Easy Random Non-Homophone Control v2.")
     parser.add_argument("--control-jsonl", default="eval_data/easy_random_control_v2/easy_random_control_v2.jsonl")
-    parser.add_argument("--output-dir", default="eval_results/easy_random_control_v2")
+    parser.add_argument("--output-dir", default="eval_results/eval2/easy_random_control_v2")
+    parser.add_argument(
+        "--model-runs-json",
+        default=None,
+        help="Optional JSON manifest with model runs to evaluate. Defaults to the built-in seed42 pair.",
+    )
     parser.add_argument(
         "--homophone-matched-summary",
-        default="eval_results/homophone_probe_v2/summary_matched_subsets.csv",
+        default="eval_results/eval2/homophone_probe_v2/summary_matched_subsets.csv",
     )
     parser.add_argument(
         "--hard-control-summary",
-        default="eval_results/nonhomophone_control_v2/summary_by_model_and_scoring.csv",
+        default="eval_results/eval2/nonhomophone_control_v2/summary_by_model_and_scoring.csv",
     )
     parser.add_argument("--bootstrap-samples", type=int, default=1000)
     parser.add_argument("--seed", type=int, default=42)
@@ -88,6 +92,17 @@ def build_three_probe_comparison(
 
     rows: list[dict[str, Any]] = []
     for mode in SCORING_MODES:
+        required = [
+            (homophone, (mode, "chinese_4epoch")),
+            (homophone, (mode, "diacritic_matched_token_4epoch")),
+            (hard, (mode, "chinese_4epoch")),
+            (hard, (mode, "diacritic_matched_token_4epoch")),
+            (easy, (mode, "chinese_4epoch")),
+            (easy, (mode, "diacritic_matched_token_4epoch")),
+        ]
+        if not all(key in table for table, key in required):
+            print(f"WARNING: skipping default three-probe comparison for {mode}; default seed42 pair is absent")
+            continue
         h_ch = homophone[(mode, "chinese_4epoch")]
         h_di = homophone[(mode, "diacritic_matched_token_4epoch")]
         hard_ch = hard[(mode, "chinese_4epoch")]
@@ -135,10 +150,12 @@ def main() -> None:
     print(f"invalid control collisions: {invalid_count}")
     device, dtype, dtype_name = choose_device_and_dtype()
     print(f"device: {device.type}, dtype: {dtype_name}")
+    model_runs = load_model_runs_json(args.model_runs_json, root)
+    print(f"model runs: {', '.join(run.run_name for run in model_runs)}")
 
     all_rows: list[dict[str, Any]] = []
     all_summaries: list[dict[str, Any]] = []
-    for run in MODEL_RUNS:
+    for run in model_runs:
         rows, summaries = evaluate_run(root, run, items, output_dir, device, dtype, dtype_name, args)
         all_rows.extend(rows)
         all_summaries.extend(summaries)

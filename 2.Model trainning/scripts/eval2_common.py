@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import csv
+import json
 import math
 import random
 from dataclasses import dataclass
@@ -44,6 +45,33 @@ MODEL_RUNS = [
         "tokenizers/pinyin_diacritic_32k_eos",
     ),
 ]
+
+
+def load_model_runs_json(path: str | Path | None, root: Path | None = None) -> list[ModelRun]:
+    if path is None:
+        return list(MODEL_RUNS)
+    manifest_path = Path(path)
+    if root is not None and not manifest_path.is_absolute():
+        manifest_path = root / manifest_path
+    payload = json.loads(manifest_path.read_text(encoding="utf-8"))
+    records = payload.get("model_runs", payload) if isinstance(payload, dict) else payload
+    runs: list[ModelRun] = []
+    for record in records:
+        script = record.get("script")
+        if script is None:
+            text_key = str(record.get("text_key", ""))
+            script = "chinese_origin" if text_key in {"zh", "zh_text"} else "pinyin_diacritic"
+        runs.append(
+            ModelRun(
+                run_name=record.get("run_name") or record.get("model"),
+                script=script,
+                checkpoint=record["checkpoint"],
+                tokenizer=record["tokenizer"],
+            )
+        )
+    if not runs:
+        raise ValueError(f"No model runs found in {manifest_path}")
+    return runs
 
 
 def project_path(root: Path, value: str | Path) -> Path:

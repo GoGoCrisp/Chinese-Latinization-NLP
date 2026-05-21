@@ -1,7 +1,7 @@
 """
 Tokenizer Comparison: 2048 SuperBPE 64K Custom Tokenizers vs. Production LLM Tokenizers
 对比内容：
-- 4a. Fertility (肥沃度): tokens-per-sentence, tokens-per-character
+- 4a. Fertility (肥沃度): tokens-per-aligned-line, tokens-per-character
 - 4b. Morphological coherence (形态学连贯性): BPE merges是否对应有意义的词素
 - 4d. Compression efficiency (压缩效率): bits-per-character, bytes-per-token
 
@@ -227,6 +227,7 @@ class TokenizerComparison:
                 print("  Note: Qwen models may require specific access.")
 
     def _load_text_file(self, path: str, max_lines: int = None) -> List[str]:
+        """Load non-empty corpus lines. Each item is an aligned line, not a sentence split."""
         texts = []
         if not os.path.exists(path):
             print(f"✗ Test file not found: {path}")
@@ -258,7 +259,7 @@ class TokenizerComparison:
         for path in unique_files:
             texts = self._load_text_file(path, max_lines=max_lines)
             self.test_data_by_file[path] = texts
-            print(f"✓ Loaded {len(texts)} test sentences from: {path}")
+            print(f"✓ Loaded {len(texts)} aligned lines from: {path}")
             if texts:
                 print(f"  Sample: {texts[0][:50]}...")
 
@@ -303,7 +304,7 @@ class TokenizerComparison:
     def calculate_fertility(self) -> Dict:
         """
         4a. Fertility分析
-        计算tokens-per-sentence和tokens-per-character
+        计算tokens-per-aligned-line和tokens-per-character
         """
         print("\n" + "=" * 80)
         print("4a. FERTILITY ANALYSIS")
@@ -313,7 +314,7 @@ class TokenizerComparison:
 
         for tokenizer_key in self.tokenizers.keys():
             test_data = self.get_test_data_for_tokenizer(tokenizer_key)
-            tokens_per_sentence = []
+            tokens_per_aligned_line = []
             tokens_per_char = []
             total_chars = 0
             total_tokens = 0
@@ -321,26 +322,27 @@ class TokenizerComparison:
             for text in tqdm(
                 test_data,
                 desc=f"Fertility {tokenizer_key}",
-                unit="sent",
+                unit="line",
                 leave=True,
             ):
                 tokens = self.tokenize_text(text, tokenizer_key)
                 char_count = len(text)
 
                 if char_count > 0:
-                    tokens_per_sentence.append(len(tokens))
+                    tokens_per_aligned_line.append(len(tokens))
                     tokens_per_char.append(len(tokens) / char_count)
                     total_chars += char_count
                     total_tokens += len(tokens)
 
-            if tokens_per_sentence:
-                avg_tps = np.mean(tokens_per_sentence)
-                std_tps = np.std(tokens_per_sentence)
+            if tokens_per_aligned_line:
+                avg_tpl = np.mean(tokens_per_aligned_line)
+                std_tpl = np.std(tokens_per_aligned_line)
                 avg_tpc = np.mean(tokens_per_char)
 
                 results[tokenizer_key] = {
-                    "avg_tokens_per_sentence": round(avg_tps, 4),
-                    "std_tokens_per_sentence": round(std_tps, 4),
+                    "num_aligned_lines": len(tokens_per_aligned_line),
+                    "avg_tokens_per_aligned_line": round(avg_tpl, 4),
+                    "std_tokens_per_aligned_line": round(std_tpl, 4),
                     "avg_tokens_per_char": round(avg_tpc, 4),
                     "total_tokens": total_tokens,
                     "total_chars": total_chars,
@@ -351,7 +353,7 @@ class TokenizerComparison:
 
                 print(
                     f"\n{tokenizer_key}:"
-                    f"\n  Avg tokens/sentence: {avg_tps:.2f} (±{std_tps:.2f})"
+                    f"\n  Avg tokens/aligned line: {avg_tpl:.2f} (±{std_tpl:.2f})"
                     f"\n  Avg tokens/char: {avg_tpc:.4f}"
                     f"\n  Compression ratio (chars/token): {results[tokenizer_key]['compression_ratio']:.4f}"
                 )
@@ -1095,7 +1097,7 @@ class TokenizerComparison:
             for text in tqdm(
                 test_data,
                 desc=f"Compression {tokenizer_key}",
-                unit="sent",
+                unit="line",
                 leave=True,
             ):
                 tokens = self.tokenize_text(text, tokenizer_key)
@@ -1248,7 +1250,9 @@ class TokenizerComparison:
             "inclusive_valid_rate",
             "invalid_rate",
             "coverage_over_vocab",
-            "avg_tokens_per_sentence",
+            "num_aligned_lines",
+            "avg_tokens_per_aligned_line",
+            "std_tokens_per_aligned_line",
             "avg_tokens_per_char",
             "compression_ratio",
             "bits_per_char",
@@ -1327,7 +1331,8 @@ This folder stores the standalone 4.3 fertility outputs in addition to the full 
 
 Method memory:
 - Fertility is an occurrence-level tokenization efficiency metric.
-- The script tokenizes each tokenizer-specific test file and reports tokens per sample, tokens per surface character, total tokens, total characters, and chars/token.
+- The script tokenizes each tokenizer-specific test file and reports tokens per aligned corpus line, tokens per surface character, total tokens, total characters, and chars/token.
+- Each sample is one non-empty aligned line loaded from the corpus file; the script does not perform natural sentence segmentation.
 - Earlier discussion noted that pinyin and Chinese surface strings have different character lengths, so 4.3 is useful for within-representation efficiency and should be read carefully for cross-representation claims.
 - In the current fast 4B iteration run, 4.3 is intentionally disabled in run_full_analysis(); this folder may therefore contain only this README unless 4A is re-enabled.
 """
@@ -1715,17 +1720,21 @@ Method memory:
             test_file = self.get_test_file_for_tokenizer(tokenizer_key)
             texts = self.get_test_data_for_tokenizer(tokenizer_key)
             total_chars = sum(len(t) for t in texts)
-            avg_sentence_length = total_chars / len(texts) if texts else 0
+            avg_aligned_line_length = total_chars / len(texts) if texts else 0
             report.append(f"{tokenizer_key}:")
             report.append(f"  Test file: {test_file}")
-            report.append(f"  Number of test sentences: {len(texts)}")
+            report.append(f"  Number of aligned lines: {len(texts)}")
             report.append(f"  Total characters: {total_chars}")
-            report.append(f"  Average sentence length: {avg_sentence_length:.2f} chars")
+            report.append(
+                f"  Average aligned line length: {avg_aligned_line_length:.2f} chars"
+            )
         report.append("")
 
         # Fertility分析
         report.append("=" * 100)
-        report.append("4A. FERTILITY ANALYSIS (Tokens-per-sentence & Tokens-per-character)")
+        report.append(
+            "4A. FERTILITY ANALYSIS (Tokens-per-aligned-line & Tokens-per-character)"
+        )
         report.append("=" * 100)
         report.append("")
 

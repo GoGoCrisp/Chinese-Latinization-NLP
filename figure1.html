@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Chinese vs Pinyin-Diacritic Figure</title>
+<style>
+  :root {
+    --blue: #1f5fbf;
+    --blue-light: #eef5ff;
+    --orange: #e35d1f;
+    --orange-light: #fff4ed;
+    --gray: #4f5965;
+    --text: #1e2430;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 24px;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    background: #ffffff;
+    color: var(--text);
+  }
+
+  .figure {
+    width: 1400px;
+    margin: 0 auto;
+  }
+
+  .top-box {
+    width: 620px;
+    margin: 0 auto 28px auto;
+    border: 2px solid #bfc7d2;
+    border-radius: 18px;
+    background: #fafbfc;
+    text-align: center;
+    padding: 20px 24px 18px 24px;
+  }
+
+  .top-label {
+    display: inline-block;
+    background: #5b6573;
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+    padding: 6px 16px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+  }
+
+  .top-zh {
+    font-size: 54px;
+    font-weight: 700;
+    margin: 4px 0 8px 0;
+    letter-spacing: 1px;
+  }
+
+  .top-en {
+    font-size: 28px;
+    font-weight: 500;
+    color: #333;
+    margin: 0 0 8px 0;
+  }
+
+  .top-sub {
+    font-size: 18px;
+    color: #59616d;
+    margin-top: 6px;
+  }
+
+  .split-area {
+    position: relative;
+    height: 42px;
+    margin-top: -8px;
+    margin-bottom: 6px;
+  }
+
+  .split-line {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 2px;
+    height: 22px;
+    background: #768090;
+    transform: translateX(-50%);
+  }
+
+  .branch-left,
+  .branch-right {
+    position: absolute;
+    top: 20px;
+    width: 28%;
+    height: 18px;
+    border-top: 3px solid #768090;
+  }
+
+  .branch-left {
+    left: 23%;
+    border-left: 3px solid #768090;
+    border-top-left-radius: 16px;
+  }
+
+  .branch-right {
+    right: 23%;
+    border-right: 3px solid #768090;
+    border-top-right-radius: 16px;
+  }
+
+  .arrow-tip-left,
+  .arrow-tip-right {
+    position: absolute;
+    top: 31px;
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+  }
+
+  .arrow-tip-left {
+    left: calc(23% - 6px);
+    border-right: 12px solid #768090;
+  }
+
+  .arrow-tip-right {
+    right: calc(23% - 6px);
+    border-left: 12px solid #768090;
+  }
+
+  .middle-row {
+    display: grid;
+    grid-template-columns: 1fr 220px 1fr;
+    gap: 24px;
+    align-items: stretch;
+    margin-bottom: 26px;
+  }
+
+  .panel {
+    border-radius: 22px;
+    padding: 18px 18px 14px 18px;
+    border: 3px solid;
+    background: white;
+    min-height: 520px;
+  }
+
+  .panel.blue {
+    border-color: var(--blue);
+    background: linear-gradient(to bottom, #ffffff 0%, var(--blue-light) 100%);
+  }
+
+  .panel.orange {
+    border-color: var(--orange);
+    background: linear-gradient(to bottom, #ffffff 0%, var(--orange-light) 100%);
+  }
+
+  .panel-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 10px;
+  }
+
+  .icon-circle {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+
+  .blue .icon-circle { background: var(--blue); }
+  .orange .icon-circle { background: var(--orange); }
+
+  .panel-title {
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+
+  .blue .panel-title { color: var(--blue); }
+  .orange .panel-title { color: var(--orange); }
+
+  .divider {
+    border-top: 2px dashed;
+    margin: 10px 0 16px 0;
+  }
+
+  .blue .divider { border-color: #7da5e5; }
+  .orange .divider { border-color: #f0a27e; }
+
+  .tag-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .tag {
+    flex: 1;
+    border: 2px solid;
+    border-radius: 12px;
+    padding: 10px 10px;
+    background: rgba(255,255,255,0.75);
+    font-size: 15px;
+    line-height: 1.25;
+    text-align: center;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+  }
+
+  .blue .tag { border-color: #7da5e5; color: #244f9d; }
+  .orange .tag { border-color: #f0a27e; color: #a44718; }
+
+  .section-title {
+    font-size: 18px;
+    font-weight: 800;
+    margin: 4px 0 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .blue .section-title { color: #1f4fa0; }
+  .orange .section-title { color: #cc4a12; }
+
+  .box-area {
+    border: 2px dashed;
+    border-radius: 18px;
+    padding: 14px 14px 10px 14px;
+    background: rgba(255,255,255,0.65);
+  }
+
+  .blue .box-area { border-color: #a5c1ef; }
+  .orange .box-area { border-color: #f0b08c; }
+
+  .tile-row {
+    display: flex;
+    gap: 14px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+
+  .tile {
+    border: 2px solid;
+    border-radius: 12px;
+    min-width: 92px;
+    padding: 10px 12px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    background: white;
+  }
+
+  .blue .tile { border-color: #88ace8; }
+  .orange .tile { border-color: #f0a27e; }
+
+  .thin-sep {
+    border-top: 2px dashed;
+    margin: 10px 0 14px 0;
+  }
+
+  .blue .thin-sep { border-color: #b7cef3; }
+  .orange .thin-sep { border-color: #f3c2a7; }
+
+  .merge-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .merge-left {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: nowrap;
+  }
+
+  .merge-left .tile {
+    min-width: 86px;
+  }
+
+  .merge-arrow {
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--orange);
+    margin: 0 4px;
+  }
+
+  .merged-tile {
+    border: 2px solid #f0a27e;
+    border-radius: 12px;
+    background: white;
+    padding: 10px 18px;
+    min-width: 128px;
+    text-align: center;
+    font-size: 26px;
+    font-weight: 800;
+    color: #2f2f2f;
+  }
+
+  .note {
+    margin-top: 10px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .blue .note { color: #2b518d; }
+  .orange .note { color: #ad4314; }
+
+  .note-bullet {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    color: white;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+  }
+
+  .blue .note-bullet { background: var(--blue); }
+  .orange .note-bullet { background: var(--orange); }
+
+  .center-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #3d4652;
+    font-size: 20px;
+    line-height: 1.45;
+    position: relative;
+  }
+
+  .center-note::before,
+  .center-note::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    width: 72px;
+    border-top: 3px dashed #7b8594;
+  }
+
+  .center-note::before { left: 8px; }
+  .center-note::after { right: 8px; }
+
+  .center-note .arrow-left,
+  .center-note .arrow-right {
+    position: absolute;
+    top: calc(50% - 8px);
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+  }
+
+  .center-note .arrow-left {
+    left: 0;
+    border-right: 12px solid #7b8594;
+  }
+
+  .center-note .arrow-right {
+    right: 0;
+    border-left: 12px solid #7b8594;
+  }
+
+  .center-text {
+    padding: 0 36px;
+    background: white;
+  }
+
+  .results-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+
+  .metric-card {
+    border: 2px solid #9ea8b7;
+    border-radius: 18px;
+    background: #ffffff;
+    overflow: hidden;
+  }
+
+  .metric-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px 10px 14px;
+    font-size: 20px;
+    font-weight: 800;
+    border-bottom: 2px solid #d4dae3;
+  }
+
+  .metric-num {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--blue);
+    color: white;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .metric-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .metric-col {
+    padding: 12px 14px 18px 14px;
+    text-align: center;
+  }
+
+  .metric-col:first-child {
+    border-right: 2px solid #d4dae3;
+  }
+
+  .metric-name {
+    font-size: 16px;
+    font-weight: 800;
+    margin-bottom: 14px;
+  }
+
+  .blue-text { color: var(--blue); }
+  .orange-text { color: var(--orange); }
+
+  .metric-value {
+    font-size: 40px;
+    font-weight: 900;
+    line-height: 1;
+  }
+
+  .metric-sub {
+    font-size: 14px;
+    margin-top: 8px;
+    color: #687384;
+    font-weight: 600;
+  }
+</style>
+</head>
+
+<body>
+  <div class="figure">
+
+    <div class="top-box">
+      <div class="top-zh">他和她都有权利</div>
+      <div class="top-en">He and she both have rights.</div>
+    </div>
+
+    <div class="split-area">
+      <div class="split-line"></div>
+      <div class="branch-left"></div>
+      <div class="branch-right"></div>
+      <div class="arrow-tip-left"></div>
+      <div class="arrow-tip-right"></div>
+    </div>
+
+    <div class="middle-row">
+      <div class="panel blue">
+        <div class="panel-header">
+          <div class="icon-circle">汉</div>
+          <div class="panel-title">Chinese-Origin</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="tag-row">
+          <div class="tag">32K SuperBPE</div>
+          <div class="tag">134M decoder-only<br>Transformer</div>
+          <div class="tag">4 epochs /<br>1.78B seen tokens</div>
+        </div>
+
+        <div class="section-title">🛡 Orthographic distinctions preserved</div>
+
+        <div class="box-area">
+          <div class="tile-row">
+            <div class="tile">全力</div>
+            <div class="tile">权利</div>
+            <div class="tile">权力</div>
+          </div>
+
+          <div class="thin-sep"></div>
+
+          <div class="tile-row" style="margin-bottom: 6px;">
+            <div class="tile">他</div>
+            <div class="tile">她</div>
+            <div class="tile">它</div>
+          </div>
+        </div>
+
+        <div class="note">
+          <span class="note-bullet">✓</span>
+          <span>distinct forms remain distinguishable</span>
+        </div>
+      </div>
+
+      <div class="center-note">
+        <div class="arrow-left"></div>
+        <div class="arrow-right"></div>
+        <div class="center-text">
+          Controlled<br>
+          comparison:<br>
+          same model size,<br>
+          same corpus<br>
+          content, same<br>
+          training budget
+        </div>
+      </div>
+
+      <div class="panel orange">
+        <div class="panel-header">
+          <div class="icon-circle">ā</div>
+          <div class="panel-title">Pinyin-Diacritic</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="tag-row">
+          <div class="tag">32K SuperBPE</div>
+          <div class="tag">same 134M<br>Transformer</div>
+          <div class="tag">same 4 epochs /<br>1.78B seen tokens</div>
+        </div>
+
+        <div class="section-title">⚠ Distinct Chinese forms may collapse after Latinization</div>
+
+        <div class="box-area">
+          <div class="merge-row">
+            <div class="merge-left">
+              <div class="tile">全力</div>
+              <div class="tile">权利</div>
+              <div class="tile">权力</div>
+            </div>
+            <div class="merge-arrow">→</div>
+            <div class="merged-tile">quán lì</div>
+          </div>
+
+          <div class="thin-sep"></div>
+
+          <div class="merge-row" style="margin-bottom: 6px;">
+            <div class="merge-left">
+              <div class="tile">他</div>
+              <div class="tile">她</div>
+              <div class="tile">它</div>
+            </div>
+            <div class="merge-arrow">→</div>
+            <div class="merged-tile">tā</div>
+          </div>
+        </div>
+
+        <div class="note">
+          <span class="note-bullet">!</span>
+          <span>representation-level ambiguity</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="results-row">
+      <div class="metric-card">
+        <div class="metric-head">
+          <div class="metric-num">1</div>
+          <div>Tokenizer fertility ↓</div>
+        </div>
+        <div class="metric-table">
+          <div class="metric-col">
+            <div class="metric-name blue-text">Chinese-Origin</div>
+            <div class="metric-value blue-text">312.82</div>
+            <div class="metric-sub">tokens/sentence</div>
+          </div>
+          <div class="metric-col">
+            <div class="metric-name orange-text">Pinyin-Diacritic</div>
+            <div class="metric-value orange-text">343.01</div>
+            <div class="metric-sub">tokens/sentence</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-head">
+          <div class="metric-num">2</div>
+          <div>Per-character PPL ↓</div>
+        </div>
+        <div class="metric-table">
+          <div class="metric-col">
+            <div class="metric-name blue-text">Chinese-Origin</div>
+            <div class="metric-value blue-text">9.14</div>
+          </div>
+          <div class="metric-col">
+            <div class="metric-name orange-text">Pinyin-Diacritic</div>
+            <div class="metric-value orange-text">10.51</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-head">
+          <div class="metric-num">3</div>
+          <div>ZhoBLiMP ↑</div>
+        </div>
+        <div class="metric-table">
+          <div class="metric-col">
+            <div class="metric-name blue-text">Chinese-Origin</div>
+            <div class="metric-value blue-text">68.71%</div>
+          </div>
+          <div class="metric-col">
+            <div class="metric-name orange-text">Pinyin-Diacritic</div>
+            <div class="metric-value orange-text">60.25%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,52 @@
+{
+  "run": {
+    "run_name": "chinese_4epoch",
+    "script": "chinese_origin",
+    "checkpoint": "server_outputs/4epoch/outputs/chinese_125m_b1024_4epoch_seed42/checkpoint-27176",
+    "tokenizer": "tokenizers/chinese_origin_32k_eos"
+  },
+  "summary": [
+    {
+      "model_run": "chinese_4epoch",
+      "script": "chinese_origin",
+      "scoring_mode": "candidate_only",
+      "primary": false,
+      "n_items": 1000,
+      "n_valid": 1000,
+      "invalid_control_collision_count": 0,
+      "accuracy": 0.932,
+      "mean_margin": 5.6323487468097975,
+      "median_margin": 5.435754060745239,
+      "mean_gold_score": -5.8740744277318,
+      "mean_distractor_score": -11.5064231745416,
+      "accuracy_ci_low": 0.915,
+      "accuracy_ci_high": 0.947,
+      "mean_margin_ci_low": 5.381982861228364,
+      "mean_margin_ci_high": 5.909663042408531,
+      "device": "cpu",
+      "dtype": "fp32",
+      "notes": "Non-homophone control; candidate_plus_suffix is primary."
+    },
+    {
+      "model_run": "chinese_4epoch",
+      "script": "chinese_origin",
+      "scoring_mode": "candidate_plus_suffix",
+      "primary": true,
+      "n_items": 1000,
+      "n_valid": 1000,
+      "invalid_control_collision_count": 0,
+      "accuracy": 0.977,
+      "mean_margin": 0.4069243416672445,
+      "median_margin": 0.1771027761835049,
+      "mean_gold_score": -3.6839083216468462,
+      "mean_distractor_score": -4.090832663314088,
+      "accuracy_ci_low": 0.967,
+      "accuracy_ci_high": 0.986,
+      "mean_margin_ci_low": 0.367075945841635,
+      "mean_margin_ci_high": 0.448090077179211,
+      "device": "cpu",
+      "dtype": "fp32",
+      "notes": "Non-homophone control; candidate_plus_suffix is primary."
+    }
+  ]
+}
