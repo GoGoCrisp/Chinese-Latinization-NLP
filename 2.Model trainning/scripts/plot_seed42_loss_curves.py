@@ -45,7 +45,7 @@ RUNS = [
         0.6,
     ),
     RunSpec(
-        "Pinyin-Diacritic (matched data)",
+        "Pinyin-Diacritic (matched source)",
         MODEL_DIR
         / "server_outputs/robustness/unpacked/diacritic_125m_b1024_matched_data_4epoch_seed42/outputs/diacritic_125m_b1024_matched_data_4epoch_seed42/train_log.jsonl",
         "#2ca02c",
