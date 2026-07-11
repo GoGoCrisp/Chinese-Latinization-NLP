@@ -7,7 +7,7 @@ changed for this diagnostic.
 The new source preparation work starts in:
 
 ```text
-experiments/korean_khdb_magazine_audit/
+4.Korean/korean_khdb_magazine_audit/
 ```
 
 That experiment audits KHDB / 한국사데이터베이스 근현대잡지자료, limited to the
@@ -37,7 +37,7 @@ Legacy numbered tokenizer outputs in this folder are not the active first step
 for the KHDB corpus source. The active first-step outputs are:
 
 ```text
-experiments/korean_khdb_magazine_audit/
+4.Korean/korean_khdb_magazine_audit/
   scripts/
     00_inspect_khdb_html.py
     01_discover_khdb_magazines.py
@@ -67,23 +67,23 @@ experiments/korean_khdb_magazine_audit/
 Run these from the repository workspace root:
 
 ```bash
-python experiments/korean_khdb_magazine_audit/scripts/00_inspect_khdb_html.py
+python 4.Korean/korean_khdb_magazine_audit/scripts/00_inspect_khdb_html.py
 ```
 
 ```bash
-python experiments/korean_khdb_magazine_audit/scripts/01_discover_khdb_magazines.py \
+python 4.Korean/korean_khdb_magazine_audit/scripts/01_discover_khdb_magazines.py \
   --root-url https://db.history.go.kr/modern/level.do?itemId=ma \
-  --output-dir experiments/korean_khdb_magazine_audit/data/index \
-  --cache-dir experiments/korean_khdb_magazine_audit/data/raw_html \
+  --output-dir 4.Korean/korean_khdb_magazine_audit/data/index \
+  --cache-dir 4.Korean/korean_khdb_magazine_audit/data/raw_html \
   --delay 1.0 \
   --debug
 ```
 
 ```bash
-python experiments/korean_khdb_magazine_audit/scripts/02_download_khdb_articles.py \
-  --magazines-index experiments/korean_khdb_magazine_audit/data/index/magazines.jsonl \
-  --output-index experiments/korean_khdb_magazine_audit/data/index/articles_index.jsonl \
-  --cache-dir experiments/korean_khdb_magazine_audit/data/raw_html \
+python 4.Korean/korean_khdb_magazine_audit/scripts/02_download_khdb_articles.py \
+  --magazines-index 4.Korean/korean_khdb_magazine_audit/data/index/magazines.jsonl \
+  --output-index 4.Korean/korean_khdb_magazine_audit/data/index/articles_index.jsonl \
+  --cache-dir 4.Korean/korean_khdb_magazine_audit/data/raw_html \
   --delay 1.0 \
   --max-magazines 1 \
   --max-pages-per-magazine 50 \
@@ -93,10 +93,10 @@ python experiments/korean_khdb_magazine_audit/scripts/02_download_khdb_articles.
 For extraction debugging with known public article pages:
 
 ```bash
-python experiments/korean_khdb_magazine_audit/scripts/02_download_khdb_articles.py \
-  --magazines-index experiments/korean_khdb_magazine_audit/data/index/magazines.jsonl \
-  --output-index experiments/korean_khdb_magazine_audit/data/index/articles_index.jsonl \
-  --cache-dir experiments/korean_khdb_magazine_audit/data/raw_html \
+python 4.Korean/korean_khdb_magazine_audit/scripts/02_download_khdb_articles.py \
+  --magazines-index 4.Korean/korean_khdb_magazine_audit/data/index/magazines.jsonl \
+  --output-index 4.Korean/korean_khdb_magazine_audit/data/index/articles_index.jsonl \
+  --cache-dir 4.Korean/korean_khdb_magazine_audit/data/raw_html \
   --delay 1.0 \
   --max-magazines 0 \
   --seed-article-url https://db.history.go.kr/id/ma_002_0050_0330 \
@@ -106,19 +106,19 @@ python experiments/korean_khdb_magazine_audit/scripts/02_download_khdb_articles.
 ```
 
 ```bash
-python experiments/korean_khdb_magazine_audit/scripts/03_extract_khdb_article_text.py \
-  --articles-index experiments/korean_khdb_magazine_audit/data/index/articles_index.jsonl \
-  --output-jsonl experiments/korean_khdb_magazine_audit/data/extracted/articles_extracted.jsonl \
-  --output-samples experiments/korean_khdb_magazine_audit/results/samples/extraction_samples.md \
+python 4.Korean/korean_khdb_magazine_audit/scripts/03_extract_khdb_article_text.py \
+  --articles-index 4.Korean/korean_khdb_magazine_audit/data/index/articles_index.jsonl \
+  --output-jsonl 4.Korean/korean_khdb_magazine_audit/data/extracted/articles_extracted.jsonl \
+  --output-samples 4.Korean/korean_khdb_magazine_audit/results/samples/extraction_samples.md \
   --max-articles 50 \
   --debug
 ```
 
 ```bash
-python experiments/korean_khdb_magazine_audit/scripts/04_filter_mixed_script_articles.py \
-  --input-jsonl experiments/korean_khdb_magazine_audit/data/extracted/articles_extracted.jsonl \
-  --output-dir experiments/korean_khdb_magazine_audit/data/filtered \
-  --report experiments/korean_khdb_magazine_audit/results/reports/mixed_script_filter_report.md
+python 4.Korean/korean_khdb_magazine_audit/scripts/04_filter_mixed_script_articles.py \
+  --input-jsonl 4.Korean/korean_khdb_magazine_audit/data/extracted/articles_extracted.jsonl \
+  --output-dir 4.Korean/korean_khdb_magazine_audit/data/filtered \
+  --report 4.Korean/korean_khdb_magazine_audit/results/reports/mixed_script_filter_report.md
 ```
 
 ## Dependencies
