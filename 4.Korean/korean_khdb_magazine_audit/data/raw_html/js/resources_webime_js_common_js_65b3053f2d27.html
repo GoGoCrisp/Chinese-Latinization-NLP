@@ -1,0 +1,818 @@
+	
+	var intValue = '0123456789.';
+	var upperValue = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	var lowerValue = 'abcdefghijklmnopqrstuvwxyz';
+	var etcValue = ' ~`!@#$%%^&*()-_=+\|[{]};:\'\",<.>/?';
+	var beforeTime = 0;
+	var curTime = 0;
+	var setTimeId;
+	
+	// 숫자와 "-" 포함되어있는지 Check (전화번호, 이동전화번호) (이세연)
+	function isDigitOrBar( str ) {
+		for (var i = 0; i < str.length; i++) {
+			var ch = str.charAt(i);
+			if ((ch < "0" || ch > "9") && ch!="-") {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	// 한 글자가 영문 대문자인지 체크
+	function isUpper(value) {
+		var i;
+		for (i = 0; i < upperValue.length; i++) {
+			if (value == upperValue.charAt(i)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	// 한 글자가 영문 소문자인지 체크
+	function isLower(value) {
+		var i;
+		for (i = 0; i < lowerValue.length; i++) {
+			if (value == lowerValue.charAt(i)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	// 한 글자가 숫자인지 체크
+	function isInt(value) {
+		var j;
+		for (j = 0; j < intValue.length; j++) {
+			if (value == intValue.charAt(j)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	// 한 글자가 특수문자인지 체크
+	function isEtc(value) {
+		var j;
+		for(j = 0; j < etcValue.length; j++) {
+			if (value == etcValue.charAt(j)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	// 숫자로 구성된 문자열 체크
+	function isIntStr(no) {
+		var i;
+		var str = null;
+		str = new String(no);
+		if (str == null || str.length == 0) {
+			return false;
+		}
+		for (i = 0; i < str.length; i++) {
+			if (!isInt(str.charAt(i))) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	// 문자열 좌측의 공백 제거 처리 함수
+	function ltrim(para) {
+		while (para.substring(0, 1) == ' ' || para.substring(0, 1) == '\t' || para.substring(0, 1) == '\r' || para.substring(0, 1) == '\n') {
+			para = para.substring(1, para.length);
+		}
+		return para;
+	}
+	// 문자열 우측의 공백 제거 처리 함수
+	function rtrim(para) {
+		while (para.substring(para.length - 1, para.length) == ' ' || para.substring(para.length - 1, para.length) == '\t' || para.substring(para.length - 1, para.length) == '\r' || para.substring(para.length-1, para.length) == '\n') {
+			para = para.substring(0, para.length - 1);
+		}
+		return para;
+	}
+	// 문자열 좌우측의 공백 제거 처리 함수
+	function trim(para) {
+		return rtrim(ltrim(para));
+	}
+	
+	// 블랭크스페이스(" ") 자동 삭제 (이세연)
+	function delBlank(Name) {
+		var x, ch;
+		var i = 0;
+		var newVal = "";
+		for (x = 0; x < Name.value.length; x++) {
+			ch = Name.value.substring(x, x + 1);
+			if( ch != " ") {
+				newVal += ch;
+			}
+		}
+		Name.value =  newVal;
+		return true;
+	}
+	
+	// 문자열의 값을 바이트수로 변환하여 리턴
+	function getBytes(str) {
+		var i, ch, bytes;
+		var app, isNe = 0;
+		if (str == '') {
+			return 0;
+		}
+		app = navigator.appName;
+		if (app == 'Netscape') {
+			isNe = 1;
+		}
+		for (i = 0, bytes = 0; i < str.length; i++) {
+			ch = str.charAt(i);
+			if (isInt(ch)) {
+				bytes++;
+			} else if(isLower(ch)) {
+				bytes++;
+			} else if(isUpper(ch)) {
+				bytes++;
+			} else if(isEtc(ch)) {
+				bytes++;
+			} else {
+				bytes += 2;
+				if (isNe) {
+					i++;
+				}
+			}
+		}
+		return bytes;
+	}
+
+	// 숫자인지 확인하는 메소드
+	function isNumber(value) {
+		var result = true;
+		for (j = 0; result && (j < value.length); j++) {
+			if ((value.substring(j, j + 1) < "0") || (value.substring(j, j + 1) > "9")) {
+				result = false;
+			}
+		}
+		return result;
+	}
+	
+	function monthArray(m0, m1, m2, m3, m4, m5, m6, m7, m8, m9, m10, m11) {
+		this[0] = m0; this[1] = m1; this[2] = m2; this[3] = m3;
+		this[4] = m4; this[5] = m5; this[6] = m6; this[7] = m7;
+		this[8] = m8; this[9] = m9; this[10] = m10; this[11] = m11;
+	}
+	
+	function isDay(yyyy, mm, value) {
+		var result = false;
+		var monthDay = new monthArray(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
+		
+		var im = (new Function('return ' + mm))() - 1;
+		
+		if (value.length != 2) {
+			return false;
+		}
+		
+		if (!isNumber(value)) {
+			return false;
+		}
+		
+		if (((yyyy % 4 == 0) && (yyyy % 100 != 0)) || (yyyy % 400 == 0)) {
+			monthDay[1] = 29;
+		}
+		
+		var dd = (new Function('return ' + value))();
+		
+		if ((0 < dd) && (dd <= monthDay[im])) {
+			result = true;
+		}
+		
+		return result;
+	}
+	
+	function isMonth(value) {
+		//return((value.length > 0) && (isNumber(value)) && (0 < eval(value)) && (eval(value) < 13));
+		return ((value.length > 0) && (isNumber(value)) && (0 < ( new Function( 'return ' + value ) )()) && (( new Function( 'return ' + value ) )() < 13));
+	}
+	
+	function isYear(value) {
+		return ((value.length == 4) && (isNumber(value)) && (value != "0000"));
+	}
+	
+	function isDate(value) {
+		var year = value.substring(0, 4);
+		var month = value.substring(4, 6);
+		var day = value.substring(6, 8);
+		
+		return (isYear(year) && isMonth(month) && isDay(year, month, day));
+	}
+	
+	// 시간분 유효 Check (이세연)
+	function isHHMMSS(value) {
+		var hh = value.substring(0, 2);
+		var mm = value.substring(2, 4);
+		var ss = value.substring(4, 6);
+		
+		if (!isNumber(hh)) {
+			return false;
+		}
+		
+		if (hh > 23 || hh < 0) {
+			return false;
+		}
+		
+		if (!isNumber(mm)) {
+			return false;
+		}
+		
+		if (mm > 59 || mm < 0) {
+			return false;
+		}
+		
+		if (!isNumber(ss)) {
+			return false;
+		}
+		
+		if (ss > 59 || ss < 0) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	// 시간분초 유효 Check (이세연)
+	function isHHMM(value) {
+		var hh = value.substring(0, 2);
+		var mm = value.substring(2, 4);
+		
+		if (!isNumber(hh)) {
+			return false;
+		}
+		
+		if (hh > 23 || hh < 0) {
+			return false;
+		}
+		
+		if (!isNumber(mm)) {
+			return false;
+		}
+		
+		if (mm > 59 || mm < 0) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	// 시간 체크 (이성우)
+	function isHour(value) {
+		if (!isNumber(value)) {
+			return false;
+		}
+		
+		if (value > 23 || value < 0) {
+			return false;
+		}
+		
+		if (getBytes(value) != 2) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	// 분 체크 (이성우)
+	function isMinute(value) {
+		if (!isNumber(value)) {
+			return false;
+		}
+		
+		if (value > 59 || value < 0) {
+			return false;
+		}
+		
+		if (getBytes(value) != 2) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	function isFloat(value) {
+		var count = 0;
+		var ch;
+		for (i = 0; i < value.length; i++) {
+			ch = value.charAt(i);
+			if (isNaN(ch)) {
+				if (ch == ".") {
+					count++;
+				} else {
+					return false;
+				}
+			}
+		}
+		
+		if (count > 1) {
+			return false;
+		} else {
+			return true;
+		}
+		
+		return result;
+	}
+	
+	// 주민등록번호 유효체크
+	function  ResidentNO_Check(para) {
+		var IDAdd = "234567892345";
+		var i = 0;
+		var iDtot = 0;
+		var IDTemp = "";
+		
+		if (para.length != 13 || !IsIntStr(para)) {
+			return(false);
+		}
+		
+		for (i = 0; i < 12; i ++) {
+			iDtot = iDtot + para.substr(i, 1) * IDAdd.substr(i, 1);
+		}
+		
+		iDtot = 11 - (iDtot % 11);
+		
+		if (iDtot == 10) {
+			iDtot = 0;
+		} else if (iDtot == 11) {
+			iDtot = 1;
+		}
+		
+		if (para.substr(12, 1) == iDtot) {
+			return(true);
+		} else {
+			return(false);
+		}
+	}
+	
+	function Chk_Digit_Point(str) {
+		for (var i = 0; i < str.length; i++) {
+			var ch= str.charAt(i);
+			if (ch < "0" || ch > "9") {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	function isValidEmailAddress(str) {
+		if (str == '' ) return false;
+		
+		// @, '.' 검사
+		if (str.charAt('@') < 1 || str.charAt('.') < 3) return false;
+		
+		var id = str.substring(0, str.indexOf('@'));
+		var host = str.substring(str.indexOf('@') + 1, str.indexOf('.'));
+		var a_ext = str.substring(str.indexOf('.') + 1);
+		
+		var h_ext = "";
+		var t_ext = "";
+		
+		if (a_ext.indexOf('.') > 1) {
+			h_ext = a_ext.substring(0, a_ext.indexOf('.'));
+			t_ext = a_ext.substring(a_ext.indexOf('.') + 1);
+		} else {
+			h_ext = a_ext;
+			t_ext = 'N/A';
+		}
+		
+		if (id == '' || host == '') return false;
+		
+		if (h_ext.length < 3 && (h_ext.length < 2 || t_ext.length < 2)) return false;
+		
+		return true;
+	}
+
+// 해당폼의 체크박스들의 체크된 개수를 반환한다.
+function cntCheckBox(tForm) {
+	var cnt = 0;
+	for (i = 0; i < tForm.elements.length; i++) {
+		if (tForm.elements[i].type == "checkbox" && tForm.elements[i].checked == true) {
+			cnt++;
+		}
+	}
+	return cnt;
+}
+
+// 해당폼의 체크박스들을 모두 체크 시킨다.
+function checkAllCheckBox(tForm) {
+	for (i = 0; i < tForm.elements.length; i++) {
+		if (tForm.elements[i].type=="checkbox") {
+			tForm.elements[i].checked = true;
+		}
+	}
+}
+
+// 해당폼의 체크박스들을 모두 체크 해제 시킨다.
+function uncheckAllCheckBox(tForm) {
+	for (i = 0; i < tForm.elements.length; i++) {
+		if (tForm.elements[i].type == "checkbox") {
+			tForm.elements[i].checked = false;
+		}
+	}
+}
+
+function gourl(url) {
+	document.location.href = url;
+}
+
+////////////////////////////////////////////////////////////
+
+if (typeof console === "undefined") {
+	console = { log: function() { return; } }
+}
+
+function removetag(s) {
+	var r = s.replace(/<\/?[^>]+>/gi, '');
+	r = r.replace(/\n/g, '');
+	return r;
+}
+
+function split_kccode(str) {
+	var re = /(KC|KS)([0-9]{5})/g, match, idx = 0, wl = [];
+	try {
+		var len = str.length;
+		while (match = re.exec(str)) {
+			var occur = re.lastIndex - (match[0].length);
+			if (occur > idx)
+				wl.push(str.substring( idx, occur));
+			wl.push(match[0]);
+			idx = re.lastIndex;
+		}
+		if (idx != len)
+			wl.push(str.substring(idx));
+	} catch ( err ) {
+		alert("split_kccode:" + err.message);
+	}
+	return wl;
+}
+
+function kccode2img(str, url) {
+	var folder = "";
+	if (str.length == 7) {
+		var gubun = str.substring(0, 2);
+		if ("KC" == gubun) {
+			folder = str.substring(0, 4);
+		} else if ("KS" == gubun || "OH" == gubun) {
+			folder = str.substring(0, 2) + "00";
+		}
+	} else if (str.length == 6) {
+		folder = str.substring(0, 3);
+	}
+
+//	if( url != undefined && url.length > 0) {
+//		return "<img class='newchar' src='" + url + "/newchar/fontimg/" + str + "_48.GIF' data-src='"+str+"'>";
+//	} else {
+//		return "<img class='newchar' src='http://www.koreanhistory.or.kr/newchar/fontimg/" + str + "_48.GIF' data-src='"+str+"'>";
+//	}
+	var imghost = getContextPath() + "/images/newchar_images/" + folder;
+	return "<img class='newchar' src='" + imghost  +  "/" + str + "_48.GIF' data-src='" + str + "'>";
+}
+
+function checkKccode(str) {
+	var re = /^(KC|KS)([0-9]{5})$/;
+	return re.test(str);
+}
+
+function getHtmlFromstr(s, url) {
+	s = s.split("&amp;").join("&");
+	s = s.split("&nbsp;").join(" ");
+	
+	var wl = split_kccode(s);
+	var wl2 = [];
+	for (var i = 0; i < wl.length; i++) {
+		if (checkKccode(wl[i]))
+			if (url != undefined) {
+				wl2.push( kccode2img(wl[i], url));
+			} else {
+				wl2.push( kccode2img(wl[i]));
+			}
+		else
+			wl2.push( "<span class='newbatang'>" + wl[i] + "</span>" );
+	}
+	
+	return wl2.join("");
+}
+
+function _WIME() {
+	if (_WIME.caller != _WIME.getInstance)
+		throw new Error('There is no public constructor for _WIME');
+	
+	this._editor = {};
+	this.getEd = function(ed_name) {
+		return this._editor[ed_name];
+	}
+	this.setEd = function(ed_name, ed) {
+		this._editor[ed_name] = ed;
+	}
+	this.nodewalk = function (node, cl) {
+		var chl = node.childNodes;
+		for (var i = 0; i < chl.length; i++) {
+			this.nodeproc(chl[i], cl);
+			this.nodewalk(chl[i], cl);
+		}
+	}
+	this.nodeHtml = function (node, cl) {
+		var chl = node.childNodes;
+		for (var i = 0; i < chl.length; i++) {
+			this.nodeprocHTML(chl[i], cl);
+			this.nodeHtml(chl[i], cl);
+		}
+	}
+	this.nodeprocHTML = function(node, cl) {
+		if (node.nodeType == 1)	{	//Element
+			if (node.nodeName == "IMG") {
+				try {
+					var imageHTML = kccode2img(node.getAttribute("data-src"));
+					cl.push(imageHTML);
+				} catch (err) {
+					
+				}
+			}
+		} else if (node.nodeType == 3) {	//Text
+			try {
+				cl.push(node.nodeValue);
+			} catch (err) {
+				
+			}
+		}
+	}
+	this.nodeproc = function(node, cl) {
+		if (node.nodeType == 1) {	//Element
+			if (node.nodeName == "IMG") {
+				try {
+					cl.push(node.getAttribute("data-src"));
+				} catch (err) {
+					
+				}
+			}
+		} else if (node.nodeType == 3) {	//Text
+			try {
+				cl.push(node.nodeValue);
+			} catch (err) {
+				
+			}
+		}
+	}
+	this.setText0 = function(ed_name, rawstr, url) {
+		var sHtml;
+		if (url != undefined) {
+			sHtml = getHtmlFromstr(rawstr, url);
+		} else {
+			sHtml = getHtmlFromstr(rawstr);
+		}
+		var _ed = this.getEd(ed_name);
+		if (_ed.initialized) {
+			_ed.setContent(sHtml, {format: 'raw'});
+		} else {
+			_ed.onInit.add(function(_ed) {
+				_ed.setContent(sHtml, {format: 'raw'});
+			});
+		}
+	}
+	this.setText = function(ed_name, rawstr, url) {
+		if (!rawstr)
+			return;
+		var _ed = this.getEd(ed_name);
+		if (_ed) {
+			this.setText0(ed_name, rawstr, url);
+		} else {
+			tinyMCE.onAddEditor.add(function(mgr, ed) {
+				if (ed.id == ed_name)
+					Wime.setText0(ed_name, rawstr, url);
+			});
+		}
+	}
+	this.insertText = function(ed_name, rawstr, url) {
+		var sHtml;
+		if (url != undefined) {
+			sHtml = getHtmlFromstr(rawstr, url);
+		} else {
+			sHtml = getHtmlFromstr(rawstr);
+		}
+		var _ed = this.getEd(ed_name);
+		_ed.execCommand('mceInsertContent', false, sHtml);
+		_ed.execCommand('mceCleanup');
+	}
+	this.getText = function(ed_name) {
+		if (ed_name == "")
+			return "";
+		var cl = [];
+		this.nodewalk(this.getEd(ed_name).getBody(), cl);
+		return cl.join("");
+	}
+	this.getHTMLText = function(ed_name) {
+		if (ed_name == "")
+			return "";
+		var cl = [];
+		this.nodeHtml(this.getEd(ed_name).getBody(), cl);
+		return cl.join("");
+	}
+	this.getTextNode = function(node) {
+		return "";
+	}
+	this.embedIme = function(conf) {
+		//console.log("common.js embedIme");
+		var _imeid = conf.imeid;
+		var _skin = conf.skin || "default";
+		var _value = conf.value;
+		var _url = conf.url;
+		
+		tinyMCE.init({
+			nowrap : true,
+			mode : "exact",
+			elements : _imeid,
+			theme : "simple",
+			skin : _skin,
+			plugins : "paste",
+			forced_root_block : false,
+			handle_event_callback : wi_handle_callback,
+			paste_preprocess : function(pl, o) {
+				o.content = getHtmlFromstr(removetag(o.content, _url));
+			},
+			paste_postprocess : function(pl, o) {
+				o.node.innerHTML;
+			},
+			force_p_newlines : 0,
+			setup : function(ed) {
+				Wime.setEd(_imeid, ed);
+				Wime.setText(_imeid, _value, _url);
+				ed.onKeyDown.add(function(ed, e) {
+					if (e.keyCode == 13 || e.which == 13) {
+						var event = document.createEvent("KeyboardEvent");
+						var initMethod = typeof event.initKeyboardEvent !== 'undefined' ? "initKeyboardEvent" : "initKeyEvent";
+						//event.initKeyboardEvent("keydown",true,true,window,false,false,false,false,13,13);
+						event[initMethod](
+								"keydown", // event type : keydown, keyup, keypress
+								true,     // bubbles
+								true,     // cancelable
+								window,   // viewArg: should be window
+								false,    // ctrlKeyArg
+								false,    // altKeyArg
+								false,    // shiftKeyArg
+								false,    // metaKeyArg
+								13,       // keyCodeArg : unsigned long the virtual key code, else 0
+								13        // charCodeArgs : unsigned long the Unicode character associated with the depressed key, else 0
+						);
+						document.getElementById(_imeid).dispatchEvent(event);
+					} else if (e.keyCode == 40 || e.which == 40 || e.keyCode == 38 || e.which == 38) {	// 40 : Arrow Down, 38 : Arrow Up
+						/*if ($("#autoComplete").find(">li").length > 0) {
+							if (e.keyCode == 40 || e.which == 40) {
+								if (dq_acLine < $("#autoComplete").find(">li").length) {
+									dq_acLine++;
+								}
+							} else {
+								if (dq_acLine > 0) {
+									dq_acLine--;
+								}
+							}
+							$("#autoComplete li").each(function(index) {
+								if ((index + 1) == dq_acLine) {
+									$(this).find("a").addClass("on");
+									setImevar("totalWord", $(this).find("a").data("value"));
+									setImevar("totalWord_ime", $(this).find("a").data("value"));
+									$("#totalWord").val($(this).find("a").data("value"));
+								} else {
+									$(this).find("a").removeClass("on");
+								}
+							});
+						}*/
+					}
+			    });
+				ed.onKeyUp.add(function(ed, e) {
+					if (_imeid != "totalWord") return;
+					
+					/*if (e.keyCode == 13 || e.which == 13 || e.keyCode == 40 || e.which == 40 || e.keyCode == 38 || e.which == 38) {
+						
+					}*/
+					if (e.keyCode == 13 || e.which == 13) {
+						
+					} else if (e.keyCode == 40 || e.which == 40 || e.keyCode == 38 || e.which == 38) {	// 40 : Arrow Down, 38 : Arrow Up
+						if ($("#autoComplete").find(">li").length > 0) {
+							if (e.keyCode == 40 || e.which == 40) {
+								if (dq_acLine < $("#autoComplete").find(">li").length) {
+									dq_acLine++;
+								}
+							} else {
+								if (dq_acLine > 0) {
+									dq_acLine--;
+								}
+							}
+							$("#autoComplete li").each(function(index) {
+								if ((index + 1) == dq_acLine) {
+									$(this).find("a").addClass("on");
+									setImevar("totalWord", $(this).find("a").data("value"));
+									setImevar("totalWord_ime", $(this).find("a").data("value"));
+									$("#totalWord").val($(this).find("a").data("value"));
+								} else {
+									$(this).find("a").removeClass("on");
+								}
+							});
+						} else {
+							dq_acLine = 0;
+							if (beforeTime == 0) {
+								beforeTime = new Date();
+							}
+							
+							curTime = new Date();
+							if ((curTime.getTime() - beforeTime.getTime()) > 700) {
+								beforeTime = curTime;
+								autoComplete(getImevar("totalWord"));
+							} else {
+								beforeTime = curTime;
+							}
+							
+							clearInterval(setTimeId);
+							setTimeId = setTimeout(function() {
+								autoComplete(getImevar("totalWord"));
+								beforeTime = 0;
+							}, 700);
+						}
+					//} else {
+					} else if (e.keyCode != 229) {
+						dq_acLine = 0;
+						if (beforeTime == 0) {
+							beforeTime = new Date();
+						}
+						
+						curTime = new Date();
+						if ((curTime.getTime() - beforeTime.getTime()) > 700) {
+							beforeTime = curTime;
+							autoComplete(getImevar("totalWord"));
+						} else {
+							beforeTime = curTime;
+						}
+						
+						clearInterval(setTimeId);
+						setTimeId = setTimeout(function() {
+							autoComplete(getImevar("totalWord"));
+							beforeTime = 0;
+						}, 700);
+					}
+				});
+				ed.onInit.add(function(ed, e) {
+					tinymce.dom.Event.add(ed.getBody(), "focus", function(e) {
+						//console.log("focus _imeid=" + _imeid + " : " + $("#" + _imeid).length);
+						$("body").data("lastFocus", $("#" + _imeid));
+						//$("#" + _imeid).focus();
+					});
+				});
+				ed.onInit.add(function(ed, e) {
+					tinymce.dom.Event.add(ed.getBody(), "blur", function(e) {
+						//console.log("blur _imeid=" + _imeid);
+						lastRng = ed.selection.getRng();
+						lastFocusimeid = _imeid;
+						lastFocusimePoniter = lastRng.startOffset;
+					});
+				});
+			},
+			oninit : function() {
+				
+			},
+			init_instance_callback : function(ed) {
+				if (conf.init_instance_callback)
+					conf.init_instance_callback(ed);
+			}
+		});
+	}
+	this.setFocus0 = function(ed_name) {
+		try {
+			var _ed = this.getEd(ed_name);
+			if (_ed.initialized) {
+				_ed.focus();
+			} else {
+				_ed.onInit.add(function(_ed) {
+					_ed.focus();
+				});
+			}
+		} catch (err) {
+			
+		}
+	}
+	this.setFocus = function(ed_name) {
+		try {
+			var _ed = this.getEd(ed_name);
+			if (_ed) {
+				this.setFocus0(ed_name);
+			} else {
+				tinyMCE.onAddEditor.add(function(mgr, ed) {
+					if (ed.id == ed_name)
+						Wime.setFocus0(ed_name);
+				});
+			}
+		} catch ( err ) {
+			
+		}
+	}
+}
+
+_WIME.getInstance = function() {
+	if (this._instance == null)
+		this._instance = new _WIME();
+	return this._instance;
+}
+if (Wime == null)
+	var Wime = _WIME.getInstance();

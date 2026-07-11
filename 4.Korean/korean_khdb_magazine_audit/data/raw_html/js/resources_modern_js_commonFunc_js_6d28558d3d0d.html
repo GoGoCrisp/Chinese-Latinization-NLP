@@ -1,0 +1,104 @@
+
+/* 공통으로 사용할 함수 모음 */
+
+// obj param으로 한 redirect
+function redirectPage( obj , path ) {
+	let pathName = (!path) ? location.pathname : path;
+	let host = location.origin + pathName;
+	let html = "";
+	let mapSize = obj.size;
+	let i = 1;
+	let amp = "&";
+	for (let key of obj.keys()) {
+		if (i == mapSize) amp = "";
+		html += key + "=" + obj.get(key) + amp;
+		i++;
+	}
+	location.href = host + "?" + html;
+}
+
+// 모바일인지 체크  Mobile() 모바일일시  true / else : false
+function Mobile() {
+	return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+// 원문 전자사료 팝업
+function openPopupPage(type, data) {
+	//console.log(data);
+	var dataArr = data.split("/");
+	var href = dataArr[2];
+	var parameter = dataArr[dataArr.length - 1];
+	var systemIdParameter = parameter.split("=")[1];
+	var SystemIdArr = systemIdParameter.split("|");
+	
+	// 원문
+	if (type == 'wonMoon') {
+		dataArr[dataArr.length - 1] = dataArr[dataArr.length - 1].replace(SystemIdArr[1], "").replace("|", "");
+		//console.log(dataArr.join("/"));
+		var url = dataArr.join("/");
+		var option = "width=1000, height=800, top=100, left=200, location=no";
+		window.open(url, "원문 팝업", option);
+	}
+	// 전자사료관
+	else if (type == 'junjaSaryo') {
+		//console.log('http://' + href + "/id/" + SystemIdArr[1]);
+		var url = 'http://' + href + "/id/" + SystemIdArr[1];
+		window.open(url, '_blank');
+	}
+	// 지리정보
+	else if (type == 'jiriInfo') {
+		//https://db.history.go.kr/hgis/mod_g1/main.do?ID=jnm_011_0010_0010
+		//console.log('http://' + href + "/id/" + SystemIdArr[0]);
+		var url = data;
+		window.open(url, '_blank');
+	}
+}
+
+// 서지팝업
+function seoji(levelId) {
+	var url = "/modern/getSeojiPopup.do?levelId=" + levelId;
+	window.open(url, "", "width=825, height=630, top=20, left=50, scrollbars=0, resizable=no");
+}
+
+// 해제팝업
+function haejae(levelId) {
+	var url = "/modern/getHaejaePopup.do?levelId=" + levelId;
+	window.open(url, "", "width=825, height=630, top=20, left=50, scrollbars=0, resizable=no");
+}
+
+function parseQueryStringToMap(queryString) {
+	let query = queryString.replaceAll("?", "");
+	let queryArr = query.split("&");
+	let map = new Map();
+	for (i of queryArr) {
+		let tmpArr = i.split("=");
+		if (!isEmpty(tmpArr[1])) {
+			map.set(tmpArr[0],tmpArr[1]);
+		}
+	}
+	return map;
+}
+
+function modernViewPage(levelId, url) {
+	let map = parseQueryStringToMap(decodeURI(location.search));
+	map.set("levelId",levelId);
+	redirectPage(map, url);
+}
+
+function settingParam(obj) {
+	$("select[name='" + obj.name + "']").val(obj.value);
+}
+
+// 자료소개 팝업
+function jaryoIntroduction(itemId) {
+	if (itemId == "sa") {	// 한국사료총서(sa)
+		window.open('/introduction/diachronic/intro_' + itemId + '.html', 'popup_data', 'width=1000px, height=700px, scrollbars=yes');
+	}
+	// 동학농민혁명자료총서(prd), 동학농민혁명사일지(pry), 동학농민혁명연표(prc), 동학농민혁명증언록(prw), 동학농민혁명사논저목록(prb)
+	else if (itemId == "prd" || itemId == "pry" || itemId == "prc" || itemId == "prw" || itemId == "prb") {
+		window.open('/introduction/joseon/intro_' + itemId + '.html', 'popup_data', 'width=1000px, height=700px, scrollbars=yes');
+	} else {
+		window.open('/introduction/modern/intro_' + itemId + '.html', 'popup_data', 'width=1000px, height=700px, scrollbars=yes');
+	}
+	return false;
+}

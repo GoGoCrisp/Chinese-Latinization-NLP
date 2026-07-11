@@ -1,0 +1,6695 @@
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="ko">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+
+<title>
+	근현대잡지자료 &lt;
+	
+		
+		
+	
+	한국 근대 사료 DB
+</title>
+
+<link rel="shortcut icon" href="/resources/images/nikh_icon.ico">
+
+<link rel="stylesheet" type="text/css" href="/resources/fonts/NotoSans.css?ver=1.0">
+<link rel="stylesheet" type="text/css" href="/resources/fonts/nanumsquare.css">
+<link rel="stylesheet" type="text/css" href="/resources/css/reset.css?ver=1.1">
+
+<link rel="stylesheet" type="text/css" href="/resources/modern/css/common.css?ver=3.2">
+<link rel="stylesheet" type="text/css" href="/resources/modern/css/sub.css?ver=3.0">
+
+<script type="text/javascript" src="/resources/js/makePCookie.js"></script>
+
+<script src="/resources/js/lib/jquery-3.7.1.min.js"></script>
+<script src="/resources/js/lib/clipboard.min.js"></script>
+<script src="/resources/js/lib/sweetalert.min.js"></script>
+<script src="/resources/js/nikhhdb.js?ver=1.2"></script>
+<script src="/resources/modern/js/common.js?ver=1.8"></script>
+<script src="/resources/modern/js/commonFunc.js?ver=1.5"></script>
+<script src="/resources/modern/js/sub.js?ver=1.5"></script>
+
+<body>
+<!--바로가기-->
+<div id="accessibility"><a href="#gnb">주메뉴 바로가기</a><a href="#container">내용 바로가기</a><a href="#footer">하단 바로가기</a></div>
+<!--//바로가기-->
+
+<!-- wrap -->
+<div id="wrap">
+	<!-- header -->
+	
+
+
+
+
+
+<header id="header">
+	<div class="header-inner">
+		<div class="header-top">
+			<div class="header-logo">
+				<a href="/modern/main.do" class="logo">
+					<div class="symbol"><img src="/resources/modern/images/header_logo_modern.svg" alt="한국사데이터베이스 근대사" /></div>
+					<div class="home"><img src="/resources/modern/images/cmn_logo_modern_m.svg" alt="한국 근대 사료 DB Home" /></div>
+					<div class="type1">한국 근대<br />사료 DB</div>
+				</a>
+				<div class="type2">
+					
+						
+						
+						
+						
+						
+						
+							
+								
+								
+								
+								
+								
+								
+								
+									
+									<a href="/modern/level.do?itemId=ma&amp;types=">
+										근현대잡지자료
+									</a>
+								
+								
+							
+							<a href="javascript:;" onclick="jaryoIntroduction('ma')" class="popup-data">자료소개</a>
+						
+					
+				</div>
+			</div>
+			<div class="link-wrap">
+				<div class="link-box link-box1">
+					<a href="https://www.history.go.kr/" target="_blank"><img src="/resources/modern/images/header_logo_history.svg" alt="국사편찬위원회" title="국사편찬위원회" /></a>
+					<a href="/">한국사데이터베이스</a>
+				</div>
+				<div class="link-box link-box2">
+					<a href="javascript:;" class="popup-info"><img src="/resources/modern/images/header_ico_info.svg" alt="사이트 소개" title="사이트 소개" /></a>
+					<!-- <a href="/help/e_help.html"><img src="/resources/modern/images/header_ico_help.svg" alt="도움말" title="도움말" />도움말</a> -->
+					<a href="/modern/notice/noticeList.do"><img src="/resources/modern/images/header_ico_notice.svg" alt="공지사항" /></a>
+				</div>
+			</div>
+			<div class="util-mob">
+				<ul>
+					<li><a href="javascript:;" class="btn-search">검색</a></li>
+					
+					<li><a href="javascript:;" class="btn-menu2">기타메뉴</a></li>
+				</ul>
+			</div>
+		</div>
+
+		<div id="gnb" class="position-fixed">
+			<div class="header-fixed-inner">
+				<div class="header-nav">
+					<div class="menu-list">
+						<a href="javascript:;" onclick="return false;">
+							<span>사료<br />목록</span>
+							<div class="bar"><span></span><span></span><span></span></div>
+						</a>
+					</div>
+					<div class="search-form">
+						<fieldset>
+							<legend>검색</legend>
+							<div class="box">
+								
+									
+									
+									
+										<div class="check-option">
+											<div class="item-checkbox">
+												<input type="checkbox" id="searchItemId_t" value="ma" />
+												<label for="searchItemId_t">자료 내 검색</label>
+											</div>
+										</div>
+									
+								
+								<div class="input-wrap">
+									<label>
+										<input type="text" id="totalWord" autocomplete="off" placeholder="검색어를 입력하세요" onkeydown="handleEnter(event);" />
+										<script type="text/javascript">
+											$(document).ready(function() { embedIme("totalWord"); });
+										</script>
+									</label>
+									<div class="btn-wrap">
+										<a href="javascript:;" class="popup-language" onclick="OpenHanjaInput('totalWord'); return false;">
+											<img src="/resources/modern/images/header_ico_languages.svg" alt="다국어 입력기" title="다국어 입력기" />
+										</a>
+										<button onclick="fnSearchResultTotal('totalWord'); return false;">
+											<picture>
+												<source media="(max-width: 767px)" srcset="/resources/modern/images/header_ico_magnifier_bk.svg">
+												<img src="/resources/modern/images/header_ico_magnifier.svg" alt="검색" title="검색" />
+											</picture>
+										</button>
+									</div>
+								</div>
+							</div>
+						</fieldset>
+					</div>
+					<div class="search-type search-type-detail1">
+						<a href="javascript:;">
+							<span>상세<br />검색</span>
+							<div class="bar"><span></span><span></span></div>
+						</a>
+					</div>
+					
+						<div class="search-type search-type-detail2">
+							<a href="javascript:;">
+								<span>자료<br />상세검색</span>
+								<div class="bar"><span></span><span></span></div>
+							</a>
+						</div>
+					
+					<div class="search-type search-type-thesaurus">
+						<a href="javascript:;">
+							<span>시소러스<br />검색</span>
+							<div class="bar"><span></span><span></span></div>
+						</a>
+					</div>
+				</div>
+
+				<!-- 서브메뉴 : 사료목록-->
+				<div class="submenu submenu-menulist">
+					<div class="inner">
+						<div class="scroll-wrap">
+							<div class="tab-menu">
+								<a href="javascript:;" class="selected" onclick="return false;">주제순</a>
+								<a href="javascript:;" onclick="return false;">가나다순</a>
+							</div>
+							<div class="cont">
+								<div class="item-wrap active">
+									
+										<div class="item">
+											<div class="tit">
+												<span>
+													민족운동<br>·<br>사회운동
+												</span>
+											</div>
+											<div class="list">
+												<ul>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=had" >
+																
+																	
+																		국내 항일운동 자료 :<br>경성지방법원 검사국 문서
+																	
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=haf" >
+																
+																	
+																		국외 항일운동 자료 :<br>일본 외무성기록
+																	
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=ij" >
+																
+																	
+																	
+																		대한민국임시정부자료집
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="https://hgis.history.go.kr/samil/" target="_blank">
+																
+																	
+																	
+																		삼일운동데이터베이스
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=pro" >
+																
+																	
+																		소요사건에 관한<br>도장관 보고철
+																	
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=jssy" >
+																
+																	
+																	
+																		조선소요사건관계서류
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=kd" >
+																
+																	
+																	
+																		한국독립운동사자료
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=hdsr" >
+																
+																	
+																	
+																		한민족독립운동사
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+																
+															
+															<a href="/modern/level.do?itemId=hd&types=o" >
+																
+																	
+																	
+																		한민족독립운동사자료집
+																	
+																
+															</a>
+														</li>
+													
+												</ul>
+											</div>
+										</div>
+									
+										<div class="item">
+											<div class="tit">
+												<span>
+													인물·단체
+												</span>
+											</div>
+											<div class="list">
+												<ul>
+													
+														<li>
+															
+															
+															<a href="/modern/im/level.do" >
+																
+																	
+																	
+																		근현대인물자료
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/hs/level.do" >
+																
+																	
+																	
+																		근현대회사조합자료
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/ia/level.do" >
+																
+																	
+																	
+																		일제감시대상인물카드
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/jw/level.do" >
+																
+																	
+																	
+																		직원록자료
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/sea/level.do" >
+																
+																	
+																	
+																		사회단체DB
+																	
+																
+															</a>
+														</li>
+													
+												</ul>
+											</div>
+										</div>
+									
+										<div class="item">
+											<div class="tit">
+												<span>
+													관보
+												</span>
+											</div>
+											<div class="list">
+												<ul>
+													
+														<li>
+															
+															
+															<a href="/modern/gb/level.do?itemId=gbdh" >
+																
+																	
+																	
+																		조선·대한제국 관보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/gb/level.do?itemId=gbtg" >
+																
+																	
+																	
+																		통감부 공보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/gb/level.do?itemId=gb" >
+																
+																	
+																	
+																		조선총독부 관보
+																	
+																
+															</a>
+														</li>
+													
+												</ul>
+											</div>
+										</div>
+									
+										<div class="item">
+											<div class="tit">
+												<span>
+													신문
+												</span>
+											</div>
+											<div class="list">
+												<ul>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=npgr" >
+																
+																	
+																	
+																		공립신보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=npda" >
+																
+																	
+																	
+																		동아일보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=npbs" >
+																
+																	
+																	
+																		부산일보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=npsd" >
+																
+																	
+																	
+																		시대일보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=npsh" >
+																
+																	
+																	
+																		신한민보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=npjs" >
+																
+																	
+																	
+																		조선시보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=npjj" >
+																
+																	
+																	
+																		조선중앙일보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=npja" >
+																
+																	
+																	
+																		중앙일보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=npjo" >
+																
+																	
+																	
+																		중외일보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=npsc" >
+																
+																	
+																	
+																		신문스크랩자료
+																	
+																
+															</a>
+														</li>
+													
+												</ul>
+											</div>
+										</div>
+									
+										<div class="item">
+											<div class="tit">
+												<span>
+													잡지
+												</span>
+											</div>
+											<div class="list">
+												<ul>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=ma" >
+																
+																	
+																	
+																		근현대잡지자료
+																	
+																
+															</a>
+														</li>
+													
+												</ul>
+											</div>
+										</div>
+									
+										<div class="item">
+											<div class="tit">
+												<span>
+													편년자료<br>·<br>문서
+												</span>
+											</div>
+											<div class="list">
+												<ul>
+													
+														<li>
+															
+															
+																
+															
+															<a href="/modern/level.do?itemId=jh&types=r" >
+																
+																	
+																		주한일본공사관기록·<br>통감부문서
+																	
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=ju" >
+																
+																	
+																	
+																		중추원조사자료
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=su" >
+																
+																	
+																	
+																		일제침략하한국36년사
+																	
+																
+															</a>
+														</li>
+													
+												</ul>
+											</div>
+										</div>
+									
+										<div class="item">
+											<div class="tit">
+												<span>
+													지도·지리
+												</span>
+											</div>
+											<div class="list">
+												<ul>
+													
+														<li>
+															
+															
+															<a href="https://hgis.history.go.kr/" target="_blank">
+																
+																	
+																	
+																		역사지리정보데이터베이스
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=jnm" >
+																
+																	
+																	
+																		한국근대지도자료
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="https://hgis.history.go.kr/mod_g1/main.do" target="_blank">
+																
+																	
+																	
+																		한국근대지리정보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=jng" >
+																
+																	
+																	
+																		한국근대지지자료
+																	
+																
+															</a>
+														</li>
+													
+												</ul>
+											</div>
+										</div>
+									
+										<div class="item">
+											<div class="tit">
+												<span>
+													목록·총서
+												</span>
+											</div>
+											<div class="list">
+												<ul>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=smla" >
+																
+																	
+																	
+																		근대한일외교자료
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/fl/level.do" >
+																
+																	
+																	
+																		사진유리필름자료
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=wj" >
+																
+																	
+																		일본군 ‘위안부’·<br>전쟁범죄 자료집
+																	
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=gsdc" >
+																
+																	
+																		일제강점기 경성지방법원<br>기록 해제
+																	
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=smlb" >
+																
+																	
+																	
+																		일제시기 희귀자료
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=mh" >
+																
+																	
+																	
+																		한국근대사기초자료집
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+																
+															
+															<a href="/modern/level.do?itemId=hk&types=o" >
+																
+																	
+																	
+																		한국근대사자료집성
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=sa" >
+																
+																	
+																	
+																		한국사료총서
+																	
+																
+															</a>
+														</li>
+													
+												</ul>
+											</div>
+										</div>
+									
+										<div class="item">
+											<div class="tit">
+												<span>
+													근대 전환기 자료
+												</span>
+											</div>
+											<div class="list">
+												<ul>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=mk" >
+																
+																	
+																	
+																		각사등록 근대편
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+																
+															
+															<a href="/modern/level.do?itemId=gj&types=o" >
+																
+																	
+																	
+																		고종시대사
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+																
+															
+															<a href="/modern/level.do?itemId=sk&types=r" >
+																
+																	
+																	
+																		사료 고종시대사
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+																
+															
+															<a href="/modern/level.do?itemId=prd&types=o" >
+																
+																	
+																	
+																		동학농민혁명자료총서
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=pry" >
+																
+																	
+																	
+																		동학농민혁명사일지
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=prc" >
+																
+																	
+																	
+																		동학농민혁명연표
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=prw" >
+																
+																	
+																	
+																		동학농민혁명증언록
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=prb" >
+																
+																	
+																	
+																		동학농민혁명사논저목록
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=ykc" >
+																
+																	
+																	
+																		유길준 자료 DB
+																	
+																
+															</a>
+														</li>
+													
+												</ul>
+											</div>
+										</div>
+									
+								</div>
+								<div class="item-wrap">
+									
+										<div class="item">
+											<div class="tit">
+												<span>
+													가
+												</span>
+											</div>
+											<div class="list">
+												<ul>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=mk" >
+																
+																	
+																	
+																		각사등록 근대편
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+																
+															
+															<a href="/modern/level.do?itemId=gj&types=o" >
+																
+																	
+																	
+																		고종시대사
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=npgr" >
+																
+																	
+																	
+																		공립신보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=had" >
+																
+																	
+																		국내 항일운동 자료 :<br>경성지방법원 검사국 문서
+																	
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=haf" >
+																
+																	
+																		국외 항일운동 자료 :<br>일본 외무성기록
+																	
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=smla" >
+																
+																	
+																	
+																		근대한일외교자료
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/im/level.do" >
+																
+																	
+																	
+																		근현대인물자료
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=ma" >
+																
+																	
+																	
+																		근현대잡지자료
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/hs/level.do" >
+																
+																	
+																	
+																		근현대회사조합자료
+																	
+																
+															</a>
+														</li>
+													
+												</ul>
+											</div>
+										</div>
+									
+										<div class="item">
+											<div class="tit">
+												<span>
+													다
+												</span>
+											</div>
+											<div class="list">
+												<ul>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=ij" >
+																
+																	
+																	
+																		대한민국임시정부자료집
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=npda" >
+																
+																	
+																	
+																		동아일보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=prb" >
+																
+																	
+																	
+																		동학농민혁명사논저목록
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=pry" >
+																
+																	
+																	
+																		동학농민혁명사일지
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=prc" >
+																
+																	
+																	
+																		동학농민혁명연표
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+																
+															
+															<a href="/modern/level.do?itemId=prd&types=o" >
+																
+																	
+																	
+																		동학농민혁명자료총서
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=prw" >
+																
+																	
+																	
+																		동학농민혁명증언록
+																	
+																
+															</a>
+														</li>
+													
+												</ul>
+											</div>
+										</div>
+									
+										<div class="item">
+											<div class="tit">
+												<span>
+													바
+												</span>
+											</div>
+											<div class="list">
+												<ul>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=npbs" >
+																
+																	
+																	
+																		부산일보
+																	
+																
+															</a>
+														</li>
+													
+												</ul>
+											</div>
+										</div>
+									
+										<div class="item">
+											<div class="tit">
+												<span>
+													사
+												</span>
+											</div>
+											<div class="list">
+												<ul>
+													
+														<li>
+															
+															
+																
+															
+															<a href="/modern/level.do?itemId=sk&types=r" >
+																
+																	
+																	
+																		사료 고종시대사
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/fl/level.do" >
+																
+																	
+																	
+																		사진유리필름자료
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/sea/level.do" >
+																
+																	
+																	
+																		사회단체DB
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="https://hgis.history.go.kr/samil/" target="_blank">
+																
+																	
+																	
+																		삼일운동데이터베이스
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=pro" >
+																
+																	
+																		소요사건에 관한<br>도장관 보고철
+																	
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=npsd" >
+																
+																	
+																	
+																		시대일보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=npsc" >
+																
+																	
+																	
+																		신문스크랩자료
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=npsh" >
+																
+																	
+																	
+																		신한민보
+																	
+																
+															</a>
+														</li>
+													
+												</ul>
+											</div>
+										</div>
+									
+										<div class="item">
+											<div class="tit">
+												<span>
+													아
+												</span>
+											</div>
+											<div class="list">
+												<ul>
+													
+														<li>
+															
+															
+															<a href="https://hgis.history.go.kr/" target="_blank">
+																
+																	
+																	
+																		역사지리정보데이터베이스
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=ykc" >
+																
+																	
+																	
+																		유길준 자료 DB
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=wj" >
+																
+																	
+																		일본군 ‘위안부’·<br>전쟁범죄 자료집
+																	
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/ia/level.do" >
+																
+																	
+																	
+																		일제감시대상인물카드
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=gsdc" >
+																
+																	
+																		일제강점기 경성지방법원<br>기록 해제
+																	
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=smlb" >
+																
+																	
+																	
+																		일제시기 희귀자료
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=su" >
+																
+																	
+																	
+																		일제침략하한국36년사
+																	
+																
+															</a>
+														</li>
+													
+												</ul>
+											</div>
+										</div>
+									
+										<div class="item">
+											<div class="tit">
+												<span>
+													자
+												</span>
+											</div>
+											<div class="list">
+												<ul>
+													
+														<li>
+															
+															
+															<a href="/modern/gb/level.do?itemId=gbdh" >
+																
+																	
+																	
+																		조선·대한제국 관보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=jssy" >
+																
+																	
+																	
+																		조선소요사건관계서류
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=npjs" >
+																
+																	
+																	
+																		조선시보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=npjj" >
+																
+																	
+																	
+																		조선중앙일보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/gb/level.do?itemId=gb" >
+																
+																	
+																	
+																		조선총독부 관보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+																
+															
+															<a href="/modern/level.do?itemId=jh&types=r" >
+																
+																	
+																		주한일본공사관기록·<br>통감부문서
+																	
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=npja" >
+																
+																	
+																	
+																		중앙일보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=npjo" >
+																
+																	
+																	
+																		중외일보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=ju" >
+																
+																	
+																	
+																		중추원조사자료
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/jw/level.do" >
+																
+																	
+																	
+																		직원록자료
+																	
+																
+															</a>
+														</li>
+													
+												</ul>
+											</div>
+										</div>
+									
+										<div class="item">
+											<div class="tit">
+												<span>
+													타
+												</span>
+											</div>
+											<div class="list">
+												<ul>
+													
+														<li>
+															
+															
+															<a href="/modern/gb/level.do?itemId=gbtg" >
+																
+																	
+																	
+																		통감부 공보
+																	
+																
+															</a>
+														</li>
+													
+												</ul>
+											</div>
+										</div>
+									
+										<div class="item">
+											<div class="tit">
+												<span>
+													하
+												</span>
+											</div>
+											<div class="list">
+												<ul>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=mh" >
+																
+																	
+																	
+																		한국근대사기초자료집
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+																
+															
+															<a href="/modern/level.do?itemId=hk&types=o" >
+																
+																	
+																	
+																		한국근대사자료집성
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=jnm" >
+																
+																	
+																	
+																		한국근대지도자료
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="https://hgis.history.go.kr/mod_g1/main.do" target="_blank">
+																
+																	
+																	
+																		한국근대지리정보
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=jng" >
+																
+																	
+																	
+																		한국근대지지자료
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=kd" >
+																
+																	
+																	
+																		한국독립운동사자료
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=sa" >
+																
+																	
+																	
+																		한국사료총서
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+															<a href="/modern/level.do?itemId=hdsr" >
+																
+																	
+																	
+																		한민족독립운동사
+																	
+																
+															</a>
+														</li>
+													
+														<li>
+															
+															
+																
+															
+															<a href="/modern/level.do?itemId=hd&types=o" >
+																
+																	
+																	
+																		한민족독립운동사자료집
+																	
+																
+															</a>
+														</li>
+													
+												</ul>
+											</div>
+										</div>
+									
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- 서브메뉴 : 상세검색-->
+				<div id="detailSearchArea" class="submenu submenu-search-type-detail submenu-search-type-detail1">
+					
+
+
+
+
+<div class="inner">
+	<div class="scroll-wrap">
+		<div class="submenu-title">
+			<div class="txt">상세검색</div>
+			<div class="util">
+				<a href="javascript:;" class="popup-language" onclick="OpenHanjaInputDetail(); return false;">
+					다국어입력기<img src="/resources/modern/images/header_ico_languages.svg" alt="다국어입력기" title="다국어입력기" />
+				</a>
+			</div>
+		</div>
+		<div class="submenu-cont">
+			<form id="detailSearchForm" name="detailSearchForm">
+				<div class="item-wrap">
+					<div class="item">
+						<div class="tit">이체자/유의어</div>
+						<div class="cont">
+							<div class="type-check">
+								<div class="item-checkbox">
+									<input type="checkbox" id="synonym_d" value="on" />
+									<label for="synonym_d">유의어 확장</label>
+								</div>
+								<div class="item-checkbox">
+									<input type="checkbox" id="chinessChar_d" value="on" checked="checked" />
+									<label for="chinessChar_d">이체자 적용</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="item">
+						<div class="tit">전체검색</div>
+						<div class="cont">
+							<div class="type-input">
+								<label>
+									<input type="text" id="totalWord_d" class="detail_input" autocomplete="off" placeholder="*연산자: &(and 검색), |(or 검색)"
+										style="height: 44px;" onkeydown="detail_handleEnter(event, this.id);" />
+								</label>
+							</div>
+						</div>
+						<div class="tit tab10">기사제목</div>
+						<div class="cont">
+							<div class="type-input">
+								<label>
+									<input type="text" id="titleWord_d" class="detail_input" autocomplete="off" placeholder="검색어를 입력하세요"
+										style="height: 44px;" onkeydown="detail_handleEnter(event, this.id);" />
+								</label>
+							</div>
+						</div>
+						<div class="tit">기사본문</div>
+						<div class="cont">
+							<div class="type-select-input">
+								<select id="contentsConjunction_d" title="기사본문 AND/OR 선택">
+									<option value="AND">AND</option>
+									<option value="OR">OR</option>
+								</select>
+								<label>
+									<input type="text" id="contentsWord_d" class="detail_input" autocomplete="off" placeholder="검색어를 입력하세요"
+										style="height: 44px;" onkeydown="detail_handleEnter(event, this.id);" />
+								</label>
+							</div>
+						</div>
+						<div class="tit tab10">저자/편자/<br />발·수신자</div>
+						<div class="cont">
+							<div class="type-select-input">
+								<select id="creatorConjunction_d" title="저자/편자/발·수신자 AND/OR 선택">
+									<option value="AND">AND</option>
+									<option value="OR">OR</option>
+								</select>
+								<label>
+									<input type="text" id="creatorWord_d" class="detail_input" autocomplete="off" placeholder="검색어를 입력하세요"
+										style="height: 44px;" onkeydown="detail_handleEnter(event, this.id);" />
+								</label>
+							</div>
+						</div>
+					</div>
+					<div class="item">
+						<div class="tit">대상기간</div>
+						<div class="cont" style="width: calc(100% - 128px);">
+							<div class="type-input2">
+								<label>
+									<input type="text" id="startDate_year" class="detail_input onlyNumber" maxlength="4" autocomplete="off" placeholder="YYYY" />
+								</label>년
+								<label>
+									<input type="text" id="startDate_month" class="detail_input onlyNumber" maxlength="2" autocomplete="off" placeholder="MM" />
+								</label>월
+								<label>
+									<input type="text" id="startDate_day" class="detail_input onlyNumber" maxlength="2" autocomplete="off" placeholder="DD" />
+								</label>일
+								<span style="margin: 0 5px;">~</span>
+								<label>
+									<input type="text" id="endDate_year" class="detail_input onlyNumber" maxlength="4" autocomplete="off" placeholder="YYYY" />
+								</label>년
+								<label>
+									<input type="text" id="endDate_month" class="detail_input onlyNumber" maxlength="2" autocomplete="off" placeholder="MM" />
+								</label>월
+								<label>
+									<input type="text" id="endDate_day" class="detail_input onlyNumber" maxlength="2" autocomplete="off" placeholder="DD" />
+								</label>일
+							</div>
+						</div>
+						<div class="tit">분류</div>
+						<div class="cont">
+							<div class="type-select">
+								<select id="subjectItemIds_d" title="분류 선택" onchange="fnSelectSubject(this); return false;">
+									<option value="">전체</option>
+									
+										
+										
+											
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+										<option value="had;haf;ij;sun;pro;jssy;kd;hdsr;hd">
+											민족운동·사회운동
+										</option>
+									
+										
+										
+											
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+										<option value="im;hs;ia;jw;sea">
+											인물·단체
+										</option>
+									
+										
+										
+											
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+										<option value="gbdh;gbtg;gb">
+											관보
+										</option>
+									
+										
+										
+											
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+										<option value="npgr;npda;npbs;npsd;npsh;npjs;npjj;npja;npjo;npsc">
+											신문
+										</option>
+									
+										
+										
+											
+												
+													
+											
+										
+										<option value="ma">
+											잡지
+										</option>
+									
+										
+										
+											
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+										<option value="jh;ju;su">
+											편년자료·문서
+										</option>
+									
+										
+										
+											
+										
+											
+												
+													
+											
+										
+											
+										
+											
+												
+													
+												
+													
+											
+										
+										<option value="jnm;jng">
+											지도·지리
+										</option>
+									
+										
+										
+											
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+										<option value="smla;fl;wj;gsdc;smlb;mh;hk;sa">
+											목록·총서
+										</option>
+									
+										
+										
+											
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+											
+												
+													
+												
+													
+											
+										
+										<option value="mk;gj;sk;prd;pry;prc;prw;prb;ykc">
+											근대 전환기 자료
+										</option>
+									
+								</select>
+							</div>
+						</div>
+						<div class="tit tab10">자료</div>
+						<div class="cont">
+							<div class="type-input-button">
+								<label>
+									<input type="text" id="searchItemNames_d" readonly="readonly" placeholder="자료를 선택하세요." />
+									<input type="hidden" id="searchItemIds_d" /> <!-- 01.15 placeholder="자료를 선택하세요."  삭제 -->
+								</label>
+								<button type="button" class="button btn-lp-data-select">
+									목록보기<img src="/resources/modern/images/ico_circle_plus.svg" alt="+" />
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+			<script type="text/javascript">
+				$(document).ready(function() {
+					embedIme("totalWord_d");
+					embedIme("titleWord_d");
+					embedIme("contentsWord_d");
+					embedIme("creatorWord_d");
+				});
+			</script>
+			<div class="btn-wrap">
+				<button type="button" class="submit" onclick="fnSearchResultDetail(); return false;">검색</button>
+				<button type="button" class="reset" onclick="fnInitDetailSearchForm(); return false;">다시 쓰기</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+// 분류 선택
+function fnSelectSubject(obj) {
+	var subjectItemIds = $(obj).val();
+	if (subjectItemIds) {
+		var subjectItemIdArr = subjectItemIds.split(";");
+		$("#detail_search_item_ul li").each(function(index, element) {
+			$(this).hide();
+		});
+		$.each(subjectItemIdArr, function(index, element) {
+			$("#detail_search_item_li_" + element).show();
+		});
+	} else {
+		$("#detail_search_item_ul li").each(function(index, element) {
+			$(this).show();
+		});
+	}
+}
+
+</script>
+
+				</div>
+
+                <!-- 서브메뉴 : 자료상세검색-->
+                <div id="itemDetailSearchArea" class="submenu submenu-search-type-detail submenu-search-type-detail2">
+                </div>
+
+                <!-- 서브메뉴 : 시소러스검색-->
+                <div class="submenu submenu-search-type-thesaurus">
+                    <div class="inner">
+                        <div class="scroll-wrap">
+                            <div class="input-box">
+                                <label><input type="text" id="thesaurusKeyword" /></label>
+                                <button onclick="fnSearchThesaurusResult('thesaurusKeyword'); return false;">검색</button>
+                            </div>
+                            <div class="guide">본 사이트의 시소러스 검색은 한국역사용어시소러스 검색엔진을 이용합니다.</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 모바일기타메뉴서브메뉴 -->
+        <div class="menu2-submenu-mob">
+            <ul>
+                <li><a href="javascript:;" class="popup-info">사이트소개</a></li>
+                <!-- <li><a href="javascript:;">도움말</a></li> -->
+                <li><a href="/modern/notice/noticeList.do">공지사항</a></li>
+                <li><a href="https://www.history.go.kr/" target="_blank">국사편찬위원회<img src="/resources/modern/images/ico_linkSite.svg" alt="국사편찬위원회 바로가기" title="국사편찬위원회 바로가기" /></a></li>
+                <li><a href="/">한국사데이터베이스<img src="/resources/modern/images/ico_linkSite.svg" alt="한국사데이터베이스 바로가기" title="한국사데이터베이스 바로가기" /></a></li>
+            </ul>
+        </div>
+    </div>
+</header>
+
+
+
+
+
+
+<form id="totalSearchForm" name="totalSearchForm" method="post" action="/modern/search/searchTotalResult.do">
+	<input type="hidden" name="pageIndex" value="1" />
+	<input type="hidden" name="pageUnit" value="20" />
+	<input type="hidden" name="pageSize" value="1" />
+	<input type="hidden" name="orderColumn" value="levelId" />
+	<input type="hidden" name="orderDir" value="ASC" />
+
+	<input type="hidden" name="synonym" value="off" />
+	<input type="hidden" name="chinessChar" value="on" />
+	<input type="hidden" name="wordImages" value='' />
+	<input type="hidden" name="totalWord" value="" />
+	<input type="hidden" name="titleWord" value="" />
+	<input type="hidden" name="titleConjunction" value="AND" />
+	<input type="hidden" name="contentsWord" value="" />
+	<input type="hidden" name="contentsConjunction" value="AND" />
+	<input type="hidden" name="creatorWord" value="" />
+	<input type="hidden" name="creatorConjunction" value="AND" />
+	<input type="hidden" name="startDate" value="" />
+	<input type="hidden" name="endDate" value="" />
+
+	<input type="hidden" name="searchItemIds" value="" />
+</form>
+
+<form id="itemSearchForm" name="itemSearchForm" method="post" action="/modern/search/searchResultList.do">
+	<input type="hidden" name="pageIndex" value="1" />
+	<input type="hidden" name="pageUnit" value="20" />
+	<input type="hidden" name="pageSize" value="1" />
+	<input type="hidden" name="orderColumn" value="levelId" />
+	<input type="hidden" name="orderDir" value="ASC" />
+
+	<input type="hidden" name="synonym" value="off" />
+	<input type="hidden" name="chinessChar" value="on" />
+	<input type="hidden" name="wordImages" value='' />
+	<input type="hidden" name="totalWord" value="" />
+	<input type="hidden" name="titleWord" value="" />
+	<input type="hidden" name="titleConjunction" value="AND" />
+	<input type="hidden" name="contentsWord" value="" />
+	<input type="hidden" name="contentsConjunction" value="AND" />
+	<input type="hidden" name="creatorWord" value="" />
+	<input type="hidden" name="creatorConjunction" value="AND" />
+	<input type="hidden" name="startDate" value="" />
+	<input type="hidden" name="endDate" value="" />
+
+	<input type="hidden" name="itemOnlyYn" value="N" />
+	<input type="hidden" name="searchItemIds" value="" />
+	<input type="hidden" name="searchItemId" value="" />
+	<input type="hidden" name="searchLevel1Id" value="" />
+	<input type="hidden" name="searchTypes" value="" />
+	<input type="hidden" name="searchSujectClass1" value="" />
+	<input type="hidden" name="itemSearchCount" value="" />
+
+	
+</form>
+
+<form id="thesaurusForm" name="thesaurusForm" method="post" action="/modern/search/thesaurusResult.do">
+	<input type="hidden" id="searchword" name="searchword" value="" />
+	<input type="hidden" id="oid" name="oid" />
+</form>
+
+<script type="text/javascript" src="/resources/webime/js/search.js"></script>
+<script type="text/javascript" src="/resources/webime/js/common.js"></script>
+<!-- <script type="text/javascript" src="/resources/webime/js/detailSearch.js"></script>
+<script type="text/javascript" src="/resources/webime/js/detailCommon.js"></script> -->
+<script type="text/javascript" src="/resources/webime/js/tiny_mce_src.js?ver=1.1"></script>
+<script type="text/javascript" src="/resources/webime/js/jquery.blockUI.js"></script>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+	// 숫자만 입력
+	$(".onlyNumber").on("keyup", function() {
+		if (!(event.keyCode >= 37 && event.keyCode <= 40)) {
+			$(this).val($(this).val().replace(/[^0-9]/g, ''));
+		}
+	}).on("blur", function() {
+		if (!(event.keyCode >= 37 && event.keyCode <= 40)) {
+			$(this).val($(this).val().replace(/[^0-9]/g, ''));
+		}
+	});
+
+	// 통합 검색어 input 엔터 이벤트
+	$("#totalWord").on("keypress", function(e) {
+		if (e.keyCode == 13) {
+			$(this).val($.trim($(this).val()));
+			if ($.trim($(this).val()) != "") {
+				e.preventDefault();
+				fnSearchResultTotal($(this).attr("id"));
+			} else {
+				alert("검색어를 입력해주세요.");
+				e.preventDefault();
+			}
+		}
+	});
+
+	// 상세 검색어 input 엔터 이벤트
+	$(".detail_input").on("keypress", function(e) {
+		if (e.keyCode == 13) {
+			if ($.trim($(this).val()) != "") {
+				e.preventDefault();
+				fnSearchResultDetail();
+			} else {
+				alert("검색어를 입력해주세요.");
+				e.preventDefault();
+			}
+		}
+	});
+
+	// 시소러스 검색어 input 엔터 이벤트
+	if ($("#thesaurusKeyword").length > 0) {
+		$("#thesaurusKeyword").on("keypress", function(e) {
+			if (e.keyCode == 13) {
+				if ($.trim($(this).val()) != "") {
+					e.preventDefault();
+					fnSearchThesaurusResult($(this).attr("id"));
+				}
+			}
+		});
+	}
+	// 시소러스 검색결과 검색어 input 엔터 이벤트
+	if ($("#thesaurusKeyword_r").length > 0) {
+		$("#thesaurusKeyword_r").on("keypress", function(e) {
+			if (e.keyCode == 13) {
+				if ($.trim($(this).val()) != "") {
+					e.preventDefault();
+					fnSearchThesaurusResult($(this).attr("id"));
+				}
+			}
+		});
+	}
+
+	$(".newchar").each(function() {
+		//console.log("" + $(this).parent().prop('tagName'))
+		if ("li" !== $(this).parent().prop('tagName') && "LI" !== $(this).parent().prop('tagName')) {
+			$(this).css("vertical-align", "middle");
+			$(this).css("width", "18px");
+		}
+	});
+});
+
+// 통합 검색어 Enter키 검색
+function handleEnter(e) {	// 검색입력 이벤트 체크
+	if (e.keyCode == 0 || e.keyCode == 13) {
+		fnSearchResultTotal("totalWord");
+		return false;
+	} else {
+		return true;
+	}
+}
+// 상세 검색어 Enter키 검색
+function detail_handleEnter(e, inputId) {	// 검색입력 이벤트 체크
+	if (e.keyCode == 0 || e.keyCode == 13) {
+		var searchTerm = getImevar(inputId);
+		if ($.trim(searchTerm)) {
+			fnSearchResultDetail();
+        } else {
+            alert("검색어를 입력해주세요.");
+        }
+		return false;
+	} else {
+		return true;
+	}
+}
+// 자료 상세 검색어 Enter키 검색
+function detailItem_handleEnter(e, inputId) {	// 검색입력 이벤트 체크
+	if (e.keyCode == 0 || e.keyCode == 13) {
+		var searchTerm = getImevar(inputId);
+		if ($.trim(searchTerm)) {
+			fnSearchResultDetailItem();
+        } else {
+            alert("검색어를 입력해주세요.");
+        }
+		return false;
+	} else {
+		return true;
+	}
+}
+
+// 통합 검색
+function fnSearchResultTotal(textId) {
+	if (textId) {
+		var searchTerm = getImevar(textId);
+		$("#" + textId).val(searchTerm);
+		
+		var reSearchInResultYn = "N";	// 결과 내 검색 여부
+		var searchItemOnlyYn = "N";		// 자료 내 검색 여부
+
+		if ($("#reSearchInResultYn").length && $("#reSearchInResultYn").is(":checked")) {
+			reSearchInResultYn = "Y";
+		} else if ($("#searchItemId_t").length && $("#searchItemId_t").is(":checked")) {
+			searchItemOnlyYn = "Y";
+
+			// 자료 내 검색인 경우 아이템 검색 조건 초기화
+			fnInitItemSearchForm();
+		} else {
+			// 결과 내 검색이 아닌 경우 통합 검색 조건 초기화
+			fnInitTotalSearchForm();
+		}
+
+		var keyword = $.trim($("#" + textId).val());
+		keyword = removeSpecialChar(keyword);
+		if (keyword) {
+			var wordImages = getImevarHTML(textId, "").replace(/\'/gi, "\"");
+			var reg1 = /[\S] [/][wn][0-9]{1,7} [\S]/ig;	// 정상
+			var reg2 = /[/][wn] /ig;					// 비정상
+
+			var check1 = reg1.test(wordImages);
+			var check2 = reg2.test(wordImages);
+			if (!check1 && check2) {
+				alert("인접검색 방식이 잘못 되었습니다!");
+				return;
+			} else {
+				var totalWord = keyword;
+
+				if (reSearchInResultYn == "Y" || searchItemOnlyYn == "Y") {	// 결과 내 검색 또는 자료 내 검색
+					if ($('#itemSearchForm input[name="wordImages"]').val() != "") {
+						wordImages = $('#itemSearchForm input[name="wordImages"]').val() + "&nbsp;AND&nbsp;" + wordImages;
+					}
+					if ($('#itemSearchForm input[name="totalWord"]').val() != "") {
+						totalWord = $('#itemSearchForm input[name="totalWord"]').val() + " AND " + totalWord;
+					}
+					$('#itemSearchForm input[name="wordImages"]').val(wordImages);
+					$('#itemSearchForm input[name="totalWord"]').val(totalWord);
+				} else {
+					$('#totalSearchForm input[name="wordImages"]').val(wordImages);
+					$('#totalSearchForm input[name="totalWord"]').val(totalWord);
+				}
+			}
+		} else {
+			alert("검색어를 입력해주세요.");
+			return;
+		}
+
+		if (reSearchInResultYn == "Y") {		// 결과 내 검색
+			$("#itemSearchForm").submit();
+		} else if (searchItemOnlyYn == "Y") {	// 자료 내 검색
+			$('#itemSearchForm input[name="itemOnlyYn"]').val("Y");
+
+			var searchItemId_t = $("#searchItemId_t").val();
+			$('#itemSearchForm input[name="searchItemIds"]').val(searchItemId_t);
+			$('#itemSearchForm input[name="searchItemId"]').val(searchItemId_t);
+
+			$("#itemSearchForm").submit();
+		} else {
+			$("#totalSearchForm").submit();
+		}
+	} else {
+		$("#totalSearchForm").submit();
+	}
+}
+
+// 통합 검색 초기화
+function fnInitTotalSearchForm() {
+	$('#totalSearchForm input[name="pageIndex"]').val("1");
+	$('#totalSearchForm input[name="pageUnit"]').val("20");
+	$('#totalSearchForm input[name="pageSize"]').val("1");
+	$('#totalSearchForm input[name="orderColumn"]').val("levelId");
+	$('#totalSearchForm input[name="orderDir"]').val("ASC");
+	$('#totalSearchForm input[name="synonym"]').val("off");
+	$('#totalSearchForm input[name="chinessChar"]').val("on");
+	$('#totalSearchForm input[name="wordImages"]').val("");
+	$('#totalSearchForm input[name="totalWord"]').val("");
+	$('#totalSearchForm input[name="titleWord"]').val("");
+	$('#totalSearchForm input[name="titleConjunction"]').val("AND");
+	$('#totalSearchForm input[name="contentsWord"]').val("");
+	$('#totalSearchForm input[name="contentsConjunction"]').val("AND");
+	$('#totalSearchForm input[name="creatorWord"]').val("");
+	$('#totalSearchForm input[name="creatorConjunction"]').val("AND");
+	$('#totalSearchForm input[name="startDate"]').val("");
+	$('#totalSearchForm input[name="endDate"]').val("");
+
+	$('#totalSearchForm input[name="searchItemIds"]').val("");
+}
+
+// 아이템 검색 초기화
+function fnInitItemSearchForm() {
+	$('#itemSearchForm input[name="pageIndex"]').val("1");
+	$('#itemSearchForm input[name="pageUnit"]').val("20");
+	$('#itemSearchForm input[name="pageSize"]').val("1");
+	$('#itemSearchForm input[name="orderColumn"]').val("levelId");
+	$('#itemSearchForm input[name="orderDir"]').val("ASC");
+	$('#itemSearchForm input[name="synonym"]').val("off");
+	$('#itemSearchForm input[name="chinessChar"]').val("on");
+	$('#itemSearchForm input[name="wordImages"]').val("");
+	$('#itemSearchForm input[name="totalWord"]').val("");
+	$('#itemSearchForm input[name="titleWord"]').val("");
+	$('#itemSearchForm input[name="titleConjunction"]').val("AND");
+	$('#itemSearchForm input[name="contentsWord"]').val("");
+	$('#itemSearchForm input[name="contentsConjunction"]').val("AND");
+	$('#itemSearchForm input[name="creatorWord"]').val("");
+	$('#itemSearchForm input[name="creatorConjunction"]').val("AND");
+	$('#itemSearchForm input[name="startDate"]').val("");
+	$('#itemSearchForm input[name="endDate"]').val("");
+
+	$('#itemSearchForm input[name="itemOnlyYn"]').val("");
+	$('#itemSearchForm input[name="searchItemIds"]').val("");
+	$('#itemSearchForm input[name="searchItemId"]').val("");
+	$('#itemSearchForm input[name="searchLevel1Id"]').val("");
+	$('#itemSearchForm input[name="searchTypes"]').val("");
+	$('#itemSearchForm input[name="searchSujectClass1"]').val("");
+
+	// 기타 검색 조건 초기화
+	removeAllSearchConditionSet($("#itemSearchForm"));
+}
+
+// 상세 검색
+function fnSearchResultDetail() {
+	var inputCount = 0;
+	$("input.detail_input").each(function() {
+		var searchTerm = getImevar(this.id);
+		if ($.trim(searchTerm)) {
+			inputCount++;
+		}
+	});
+	if (inputCount <= 0) {
+		alert("하나 이상의 검색어를 입력해주세요.");
+		$("#totalWord_d_ifr").contents().find("#tinymce").focus();
+		return;
+	}
+
+	// 통합 검색 초기화
+	fnInitTotalSearchForm();
+
+	if ($("#synonym_d").is(":checked")) {
+		$('#totalSearchForm input[name="synonym"]').val("on");
+	} else {
+		$('#totalSearchForm input[name="synonym"]').val("off");
+	}
+	if ($("#chinessChar_d").is(":checked")) {
+		$('#totalSearchForm input[name="chinessChar"]').val("on");
+	} else {
+		$('#totalSearchForm input[name="chinessChar"]').val("off");
+	}
+
+	var searchQueryHtmlTag = "";	// 신출자이미지 변수
+
+	var reg1 = /[\S] [/][wn][0-9]{1,7} [\S]/ig;	// 정상
+	var reg2 = /[/][wn] /ig;					// 비정상
+
+	var totalWord_d = getImevar("totalWord_d");
+	totalWord_d = removeSpecialChar(totalWord_d);
+	if ($.trim(totalWord_d)) {	// 전체검색 입력란에 입력된 내용
+		var check1 = reg1.test(totalWord_d);
+		var check2 = reg2.test(totalWord_d);
+		if (!check1 && check2) {
+			alert("인접검색 방식이 잘못 되었습니다!");
+			return;
+		} else {
+			var keyword = totalWord_d;
+			keyword = removeSpecialChar(keyword);
+			if ($.trim(keyword)) {
+				searchQueryHtmlTag += getImevarHTML("totalWord_d", "").replace(/\'/gi, "\"") + "&nbsp;";
+				$('#totalSearchForm input[name="totalWord"]').val(keyword);
+			} else {
+				alert("특수문자를 제외한 검색단어가 없습니다. 하나이상의 검색어를 입력해주세요.");
+				//$("#totalWord_d").focus();
+				$("#totalWord_d_ifr").contents().find("#tinymce").focus();
+				return;
+			}
+		}
+	}
+
+	var titleWord_d = getImevar("titleWord_d");
+	titleWord_d = removeSpecialChar(titleWord_d);
+	if ($.trim(titleWord_d)) {
+		var check1 = reg1.test(titleWord_d);
+		var check2 = reg2.test(titleWord_d);
+		if (!check1 && check2) {
+			alert("인접검색 방식이 잘못 되었습니다!");
+			return;
+		} else {
+			var keyword = titleWord_d;
+			keyword = removeSpecialChar(keyword);
+			if ($.trim(keyword)) {
+				searchQueryHtmlTag += getImevarHTML("titleWord_d", "").replace(/\'/gi, "\"") + "&nbsp;";
+				$('#totalSearchForm input[name="titleWord"]').val(keyword);
+			} else {
+				alert("특수문자를 제외한 검색단어가 없습니다. 하나이상의 검색어를 입력해주세요.");
+				//$("#titleWord_d").focus();
+				$("#titleWord_d_ifr").contents().find("#tinymce").focus();
+				return;
+			}
+		}
+	}
+
+	var contentsWord_d = getImevar("contentsWord_d");
+	contentsWord_d = removeSpecialChar(contentsWord_d);
+	if ($.trim(contentsWord_d)) {
+		var check1 = reg1.test(contentsWord_d);
+		var check2 = reg2.test(contentsWord_d);
+		if (!check1 && check2) {
+			alert("인접검색 방식이 잘못 되었습니다!");
+			return;
+		} else {
+			var keyword = contentsWord_d;
+			keyword = removeSpecialChar(keyword);
+			if ($.trim(keyword)) {
+				var contentsConjunction_d = $("#contentsConjunction_d option:selected").val();
+				$('#totalSearchForm input[name="contentsConjunction"]').val(contentsConjunction_d);
+
+				searchQueryHtmlTag += getImevarHTML("contentsWord_d", "").replace(/\'/gi, "\"") + "&nbsp;";
+				$('#totalSearchForm input[name="contentsWord"]').val(keyword);
+			} else {
+				alert("특수문자를 제외한 검색단어가 없습니다. 하나이상의 검색어를 입력해주세요.");
+				//$("#contentsWord_d").focus();
+				$("#contentsWord_d_ifr").contents().find("#tinymce").focus();
+				return;
+			}
+		}
+	}
+
+	var creatorWord_d = getImevar("creatorWord_d");
+	creatorWord_d = removeSpecialChar(creatorWord_d);
+	if ($.trim(creatorWord_d)) {
+		var check1 = reg1.test(creatorWord_d);
+		var check2 = reg2.test(creatorWord_d);
+		if (check1 || (!check1 && check2)) {
+			alert("'저자/편자/발·수신자'항목에서는 인접 연산자를 통한 검색이 지원되지 않습니다.");
+			return;
+		} else {
+			var keyword = creatorWord_d;
+			keyword = removeSpecialChar(keyword);
+			if ($.trim(keyword)) {
+				var creatorConjunction_d = $("#creatorConjunction_d option:selected").val();
+				$('#totalSearchForm input[name="creatorConjunction"]').val(creatorConjunction_d);
+
+				searchQueryHtmlTag += getImevarHTML("creatorWord_d", "").replace(/\'/gi, "\"") + "&nbsp;";
+				$('#totalSearchForm input[name="creatorWord"]').val(keyword);
+			} else {
+				alert("특수문자를 제외한 검색단어가 없습니다. 하나이상의 검색어를 입력해주세요.");
+				//$("#creatorWord_d").focus();
+				$("#creatorWord_d_ifr").contents().find("#tinymce").focus();
+				return;
+			}
+		}
+	}
+
+	if (($("#startDate_year").val() || $("#startDate_month").val() || $("#startDate_day").val())
+			&& ($("#endDate_year").val() || $("#endDate_month").val() || $("#endDate_day").val()) ) {
+		var startYear = $("#startDate_year").val();
+		var startMon = $("#startDate_month").val();
+		var startDay = $("#startDate_day").val();
+		var startDate = searchFormatDate(startYear, startMon, startDay, "0000", "000");
+
+		var endYear = $("#endDate_year").val();
+		var endMon = $("#endDate_month").val();
+		var endDay = $("#endDate_day").val();
+		var endDate = searchFormatDate(endYear, endMon, endDay, "9999", "999");
+
+		if (startDate > endDate) {
+			alert("대상기간이 올바르지 않습니다. 다시 입력해주세요.");
+			return;
+		}
+
+		var dateKeyword = startDate + " ~ " + endDate;
+		searchQueryHtmlTag += dateKeyword + "&nbsp;";
+
+		$('#totalSearchForm input[name="startDate"]').val(startDate);
+		$('#totalSearchForm input[name="endDate"]').val(endDate);
+	} else if ($("#startDate_year").val() || $("#startDate_month").val() || $("#startDate_day").val()) {
+		var startYear = $("#startDate_year").val();
+		var startMon = $("#startDate_month").val();
+		var startDay = $("#startDate_day").val();
+		var startDate = searchFormatDate(startYear, startMon, startDay, "0000", "000");
+
+		searchQueryHtmlTag += startDate + "&nbsp;";
+		$('#totalSearchForm input[name="startDate"]').val(startDate);
+	} else if ($("#endDate_year").val() || $("#endDate_month").val() || $("#endDate_day").val()) {
+		var endYear = $("#endDate_year").val();
+		var endMon = $("#endDate_month").val();
+		var endDay = $("#endDate_day").val();
+		var endDate = searchFormatDate(endYear, endMon, endDay, "9999", "999");
+
+		searchQueryHtmlTag += endDate + "&nbsp;";
+		$('#totalSearchForm input[name="endDate"]').val(endDate);
+	}
+
+	$('#totalSearchForm input[name="wordImages"]').val(searchQueryHtmlTag);
+
+	// 검색  아이템아이디들
+	var searchItemIds = "";
+	var subjectItemIds_d = $("#subjectItemIds_d option:selected").val();	// 분류
+	var searchItemIds_d = $("#searchItemIds_d").val();						// 자료 선택
+	if (subjectItemIds_d && !searchItemIds_d) {
+		searchItemIds = subjectItemIds_d;
+	} else if (!subjectItemIds_d && searchItemIds_d) {
+		searchItemIds = searchItemIds_d;
+	} else if (subjectItemIds_d && searchItemIds_d) {
+		var subjectItemIds_dArr = subjectItemIds_d.split(";");
+		var searchItemIds_dArr = searchItemIds_d.split(";");
+		
+		// 분류와 자료 선택이 AND일 경우
+		$.each(subjectItemIds_dArr, function(index, value) {
+			$.each(searchItemIds_dArr, function(index2, value2) {
+				if (value == value2) {
+					if (searchItemIds) {
+						searchItemIds += ";";
+					}
+					searchItemIds += value;
+					return false;
+				}
+			});
+		});
+		if (searchItemIds === "") {
+			searchItemIds = "noItem";
+		}
+		/* // 분류와 자료 선택이 OR일 경우
+		searchItemIds = subjectItemIds_d;
+		$.each(searchItemIds_dArr, function(index, value) {
+			if ($.inArray(value, subjectItemIds_dArr) === -1) {
+				searchItemIds += ";" + value;
+			}
+		}); */
+	}
+	//console.log("searchItemIds=" + searchItemIds);
+	$('#totalSearchForm input[name="searchItemIds"]').val(searchItemIds);
+
+	$("#totalSearchForm").submit();
+}
+
+// 상세 검색 초기화
+function fnInitDetailSearchForm() {
+	document.detailSearchForm.reset();
+	
+	$("#synonym_d").prop("checked", false);
+	$("#chinessChar_d").prop("checked", true);
+	$("#totalWord_d").val("");
+	$("#titleWord_d").val("");
+	$("#contentsConjunction_d").val("AND").prop("selected", true);
+	$("#contentsWord_d").val("");
+	$("#creatorConjunction_d").val("AND").prop("selected", true);
+	$("#creatorWord_d").val("");
+	$("#startDate_year").val("");
+	$("#startDate_month").val("");
+	$("#startDate_day").val("");
+	$("#endDate_year").val("");
+	$("#endDate_month").val("");
+	$("#endDate_day").val("");
+
+	$("#subjectItemIds_d").val("").prop("selected", true);
+	$("#searchItemIds_d").val("");
+	$("#searchItemNames_d").val("");
+}
+
+// 아이템 검색으로 이동
+function fnGoSearchResultItem(itemId) {
+	if (itemId == "sun") {	// 삼일운동데이터베이스(sun)
+		window.open("https://hgis.history.go.kr/samil/home/manifesto/select_manifesto_list.do?search_word=" + $('#itemSearchForm input[name="wordImages"]').val(), "_blank");
+	} else {
+		$('#itemSearchForm input[name="searchItemId"]').val(itemId);
+
+		$('#itemSearchForm input[name="pageIndex"]').val("1");
+		$('#itemSearchForm input[name="pageUnit"]').val("20");
+		$('#itemSearchForm input[name="pageSize"]').val("1");
+		$('#itemSearchForm input[name="orderColumn"]').val("levelId");
+		$('#itemSearchForm input[name="orderDir"]').val("ASC");
+
+		$('#itemSearchForm input[name="searchTypes"]').val("");
+		$('#itemSearchForm input[name="searchSujectClass1"]').val("");
+
+		$("#itemSearchForm").submit();
+	}
+}
+
+// 아이템 검색 목록으로 이동
+function fnGoItemSearchList(itemId) {
+	$('#itemSearchForm input[name="searchItemId"]').val(itemId);
+	$("#itemSearchForm").submit();
+}
+
+// 아이템레벨 화면으로 이동
+function fnGoItemLevel(itemId, levelId, position) {
+	/* if ($('#itemSearchForm input[name="levelId"]').length) {
+		$('#itemSearchForm input[name="levelId"]').remove();
+	}
+	var hiddenLevelId = $('<input type="hidden" name="levelId" value="' + levelId + '" />');
+	$("#itemSearchForm").append(hiddenLevelId); */
+
+	if ($('#itemSearchForm input[name="position"]').length) {
+		$('#itemSearchForm input[name="position"]').remove();
+	}
+	var hiddenPosition = $('<input type="hidden" name="position" value="' + position + '" />');
+	$("#itemSearchForm").append(hiddenPosition);
+
+	var detailUrl = "";
+	if (itemId == "ia") {			// 일제감시대상인물카드(ia)
+		detailUrl = "/modern/ia/detail.do";
+	} else if (itemId == "im") {	// 한국근현대인물자료(im)
+		detailUrl = "/modern/im/detail.do";
+	} else if (itemId == "hs") {	// 한국근현대회사조합자료(hs)
+		detailUrl = "/modern/hs/detail.do";
+	} else if (itemId == "fl") {	// 사진유리필름자료(fl)
+		detailUrl = "/modern/fl/detail.do";
+	} else if (itemId == "jw") {	// 직원록자료(jw)
+		detailUrl = "/modern/jw/level.do";
+	} else if (itemId == "gb" || itemId == "gbdh" || itemId == "gbtg") {	// 조선총독부 관보(gb), 조선·대한제국 관보(gbdh), 통감부 공보(gbtg)
+		detailUrl = "/modern/gb/level.do";
+	} else if (itemId == "sea") {	// 사회단체DB(sea)
+		detailUrl = "/modern/sea/level.do";
+	} else {
+		detailUrl ="/modern/level.do";
+	}
+	//console.log("detailUrl=" + detailUrl);
+
+	$('#itemSearchForm input[name="orderColumn"]').val($("#orderColumn_top").val());
+
+	$("#itemSearchForm").attr("action", detailUrl).submit();
+}
+
+</script>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+	// 자료상세검색 토글
+	$('header .header-nav .search-type-detail2 a').on('click', function() {
+		$('header .header-nav .menu-list a').removeClass('open');
+		$('header .header-nav .search-type-detail1 a').removeClass('open');
+		$('header .header-nav .search-type-thesaurus a').removeClass('open');
+
+		if ($(this).hasClass('open')) {
+			$(this).removeClass('open');
+			$('header .submenu-search-type-detail2').removeClass('active');
+			$('.dimmed-tr').removeClass('active');
+		} else {
+			$(this).addClass('open');
+
+			var $childDiv = $("#itemDetailSearchArea").children("div.inner")
+			//console.log("$childDiv.length=" + $childDiv.length);
+			if ($childDiv.length == 0) {
+				$("#itemDetailSearchArea").empty();
+
+				// 자료 상세 검색 영역 가져오기
+				$.ajax({
+					url: "/search/getItemDetailSearchAreaAjax.do",
+					type: "get",
+					data: {
+						"itemId": $("#searchItemId_t").val()
+					},
+					dataType: "html",
+					success: function(data) {
+						$("#itemDetailSearchArea").html(data);
+
+						$('header .submenu-search-type-detail2').addClass('active').siblings('.submenu').removeClass('active');
+						$('.dimmed-tr').addClass('active');
+					},
+					error: function(xhr, status, error) {
+						alert("자료 상세 검색 영역 가져오기 에러!");
+					}
+				});
+			} else {
+				$('header .submenu-search-type-detail2').addClass('active').siblings('.submenu').removeClass('active');
+				$('.dimmed-tr').addClass('active');
+			}
+		}
+	});
+});
+
+// 자료 선택
+function fnSelectSearchItem(itemId, itemName) {
+	//console.log("fnSelectSearchItem itemId=" + itemId + ", itemName=" + itemName);
+	if (itemId) {
+		var selectedSearchItemIds = $("#searchItemIds_d").val();
+		//console.log("fnSelectSearchItem selectedSearchItemIds=" + selectedSearchItemIds);
+
+		var isAdd = true;
+		if (selectedSearchItemIds) {
+			var selectedSearchItemIdArr = selectedSearchItemIds.split(";");
+			$.each(selectedSearchItemIdArr, function(index, value) {
+				if (value == itemId) {
+					isAdd = false;
+					return false;
+				}
+			});
+		}
+		if (isAdd) {
+			var selectedSearchItemNames = $("#searchItemNames_d").val();
+			if (selectedSearchItemIds) {
+				selectedSearchItemIds += ";";
+				selectedSearchItemNames += ";";
+			}
+			selectedSearchItemIds += itemId;
+			selectedSearchItemNames += itemName;
+
+			$("#searchItemIds_d").val(selectedSearchItemIds);
+			$("#searchItemNames_d").val(selectedSearchItemNames);
+		}
+	}
+
+	$("#dataCloseBtn").trigger("click");
+}
+
+// 시소러스 검색
+function fnSearchThesaurusResult(textId) {
+	if (textId) {
+		var searchword = $.trim($("#" + textId).val());
+		if (searchword) {
+			$('#thesaurusForm input[name="searchword"]').val(searchword);
+			$("#thesaurusForm").submit();
+		} else {
+			alert("검색어를 입력해주세요.");
+			$("#" + textId).focus();
+			return false;
+		}	
+	} else {
+		$("#thesaurusForm").submit();
+	}
+}
+
+function getContextPath() {
+	return '';
+}
+
+// 자동완성
+function autoComplete(word) {
+	
+}
+
+</script>
+
+
+	<!-- //header -->
+	
+	<div id="container">
+		<div id="content">
+			<!-- content_top -->
+			<div class="content-top">
+				<div class="box-wrap">
+					<ul class="nav">
+						<li><a href="/modern/main.do"><img src="/resources/modern/images/ico_bc_home.svg" alt="홈" title="홈" /></a></li>
+						
+							
+								<li>
+									
+									
+									<a href="/modern/level.do?itemId=ma">근현대잡지자료</a>
+								</li>
+								
+									<li>
+										
+											
+											
+												<a href="/modern/level.do?levelId=ma_013&isLeaf=0">개벽</a>
+											
+										
+									</li>
+								
+									<li>
+										
+											
+											
+												<a href="/modern/level.do?levelId=ma_013_0271&isLeaf=0">개벽 제28호(1부)</a>
+											
+										
+									</li>
+								
+									<li>
+										
+											
+												兩湖雜觀
+											
+											
+										
+									</li>
+								
+							
+							
+						
+					</ul>
+					<div class="box-right">
+						<div class="btn-hoi">
+							
+								<div class="btn">
+									<span class="tit">HOI</span>
+									<span id="hoiLevelId">ma_013_0271_0100</span>
+									<div class="popup-nd popup-hoi">
+										<ul>
+											<li><a href="javascript:;" class="copyurl" title="URL 복사하기" onclick="fnCopyUrl(); return false;">URL복사하기</a></li>
+											<li><a href="javascript:;" class="copyid" title="ID 복사하기" onclick="fnCopyId(); return false;">ID복사하기</a></li>
+											<li><a href="javascript:;" class="btn-lp-data" title="자료인용방법" onclick="return false;">자료인용방법</a></li>
+										</ul>
+									</div>
+								</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- //content_top -->
+
+			<div class="page-content-wrap">
+				<div class="nd-box">
+					
+						
+
+
+
+
+
+<div class="nd-snb">
+	<div class="position-stiky">
+		<div class="box-scroll-wrap">
+			<div class="nd-snb-title">
+				<div class="title"><b>개벽</b></div>
+				<div class="btn-wrap">
+					<a href="#none" class="snb-btn-close">축소</a>
+					<a href="#none" class="snb-btn-open-sm">좁게</a>
+					<a href="#none" class="snb-btn-open-wide">확대</a>
+				</div>
+				<div class="btn-wrap-mob">
+					<a href="#none" class="snb-btn-open-wide">열<br />기</a>
+					<a href="#none" class="snb-btn-hidden">닫<br />기</a>
+				</div>
+			</div>
+			<div class="nd-snb-content">
+				<div id="leftMenuDiv" class="inner">
+					<ul class="snb-list">
+						
+							<li class="child level1">
+								<div id="div-ma_001" class="cate" data-id="ma_001" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_001&isLeaf=0" onclick="return false;">
+										
+											
+											
+												대한자강회월보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_001">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_002" class="cate" data-id="ma_002" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_002&isLeaf=0" onclick="return false;">
+										
+											
+											
+												대한협회회보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_002">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_003" class="cate" data-id="ma_003" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_003&isLeaf=0" onclick="return false;">
+										
+											
+											
+												서우
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_003">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_004" class="cate" data-id="ma_004" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_004&isLeaf=0" onclick="return false;">
+										
+											
+											
+												서북학회월보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_004">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_005" class="cate" data-id="ma_005" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_005&isLeaf=0" onclick="return false;">
+										
+											
+											
+												기호흥학회월보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_005">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_006" class="cate" data-id="ma_006" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_006&isLeaf=0" onclick="return false;">
+										
+											
+											
+												대조선독립협회회보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_006">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_007" class="cate" data-id="ma_007" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_007&isLeaf=0" onclick="return false;">
+										
+											
+											
+												태극학보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_007">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_008" class="cate" data-id="ma_008" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_008&isLeaf=0" onclick="return false;">
+										
+											
+											
+												호남학보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_008">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_009" class="cate" data-id="ma_009" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_009&isLeaf=0" onclick="return false;">
+										
+											
+											
+												대한학회월보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_009">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_010" class="cate" data-id="ma_010" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_010&isLeaf=0" onclick="return false;">
+										
+											
+											
+												대한유학생회학보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_010">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_011" class="cate" data-id="ma_011" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_011&isLeaf=0" onclick="return false;">
+										
+											
+											
+												대한흥학보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_011">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_012" class="cate" data-id="ma_012" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_012&isLeaf=0" onclick="return false;">
+										
+											
+											
+												대동학회월보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_012">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_013" class="cate" data-id="ma_013" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_013&isLeaf=0" onclick="return false;">
+										
+											
+											
+												개벽
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_013">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_014" class="cate" data-id="ma_014" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_014&isLeaf=0" onclick="return false;">
+										
+											
+											
+												동광
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_014">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_015" class="cate" data-id="ma_015" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_015&isLeaf=0" onclick="return false;">
+										
+											
+											
+												별건곤
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_015">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_016" class="cate" data-id="ma_016" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_016&isLeaf=0" onclick="return false;">
+										
+											
+											
+												삼천리
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_016">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_017" class="cate" data-id="ma_017" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_017&isLeaf=0" onclick="return false;">
+										
+											
+											
+												대동아
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_017">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_018" class="cate" data-id="ma_018" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_018&isLeaf=0" onclick="return false;">
+										
+											
+											
+												삼천리문학
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_018">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_019" class="cate" data-id="ma_019" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_019&isLeaf=0" onclick="return false;">
+										
+											
+											
+												만국부인
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_019">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_020" class="cate" data-id="ma_020" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_020&isLeaf=0" onclick="return false;">
+										
+											
+											
+												경무휘보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_020">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_021" class="cate" data-id="ma_021" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_021&isLeaf=0" onclick="return false;">
+										
+											
+											
+												문교의 조선
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_021">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_022" class="cate" data-id="ma_022" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_022&isLeaf=0" onclick="return false;">
+										
+											
+											
+												사상월보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_022">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_023" class="cate" data-id="ma_023" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_023&isLeaf=0" onclick="return false;">
+										
+											
+											
+												사상휘보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_023">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_024" class="cate" data-id="ma_024" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_024&isLeaf=0" onclick="return false;">
+										
+											
+											
+												조선
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_024">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_025" class="cate" data-id="ma_025" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_025&isLeaf=0" onclick="return false;">
+										
+											
+											
+												조선급만주
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_025">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_026" class="cate" data-id="ma_026" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_026&isLeaf=0" onclick="return false;">
+										
+											
+											
+												조선의 교육연구
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_026">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_027" class="cate" data-id="ma_027" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_027&isLeaf=0" onclick="return false;">
+										
+											
+											
+												조선총독부월보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_027">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_028" class="cate" data-id="ma_028" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_028&isLeaf=0" onclick="return false;">
+										
+											
+											
+												조선총독부조사월보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_028">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_029" class="cate" data-id="ma_029" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_029&isLeaf=0" onclick="return false;">
+										
+											
+											
+												조선행정
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_029">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_030" class="cate" data-id="ma_030" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_030&isLeaf=0" onclick="return false;">
+										
+											
+											
+												조선휘보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_030">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_031" class="cate" data-id="ma_031" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_031&isLeaf=0" onclick="return false;">
+										
+											
+											
+												개벽
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_031">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_032" class="cate" data-id="ma_032" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_032&isLeaf=0" onclick="return false;">
+										
+											
+											
+												대조
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_032">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_033" class="cate" data-id="ma_033" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_033&isLeaf=0" onclick="return false;">
+										
+											
+											
+												문예
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_033">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_034" class="cate" data-id="ma_034" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_034&isLeaf=0" onclick="return false;">
+										
+											
+											
+												민성
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_034">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_035" class="cate" data-id="ma_035" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_035&isLeaf=0" onclick="return false;">
+										
+											
+											
+												민심
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_035">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_036" class="cate" data-id="ma_036" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_036&isLeaf=0" onclick="return false;">
+										
+											
+											
+												민족문화
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_036">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_037" class="cate" data-id="ma_037" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_037&isLeaf=0" onclick="return false;">
+										
+											
+											
+												민주조선
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_037">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_038" class="cate" data-id="ma_038" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_038&isLeaf=0" onclick="return false;">
+										
+											
+											
+												민중조선
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_038">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_039" class="cate" data-id="ma_039" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_039&isLeaf=0" onclick="return false;">
+										
+											
+											
+												백민
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_039">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_040" class="cate" data-id="ma_040" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_040&isLeaf=0" onclick="return false;">
+										
+											
+											
+												신문평론
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_040">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_041" class="cate" data-id="ma_041" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_041&isLeaf=0" onclick="return false;">
+										
+											
+											
+												신사조
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_041">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_042" class="cate" data-id="ma_042" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_042&isLeaf=0" onclick="return false;">
+										
+											
+											
+												신세대
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_042">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_043" class="cate" data-id="ma_043" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_043&isLeaf=0" onclick="return false;">
+										
+											
+											
+												신천지
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_043">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_044" class="cate" data-id="ma_044" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_044&isLeaf=0" onclick="return false;">
+										
+											
+											
+												조선교육
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_044">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_045" class="cate" data-id="ma_045" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_045&isLeaf=0" onclick="return false;">
+										
+											
+											
+												학풍
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_045">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_046" class="cate" data-id="ma_046" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_046&isLeaf=0" onclick="return false;">
+										
+											
+											
+												향토
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_046">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_047" class="cate" data-id="ma_047" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_047&isLeaf=0" onclick="return false;">
+										
+											
+											
+												협동
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_047">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_048" class="cate" data-id="ma_048" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_048&isLeaf=0" onclick="return false;">
+										
+											
+											
+												교남교육회잡지
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_048">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_061" class="cate" data-id="ma_061" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_061&isLeaf=0" onclick="return false;">
+										
+											
+											
+												공제
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_061">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_062" class="cate" data-id="ma_062" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_062&isLeaf=0" onclick="return false;">
+										
+											
+											
+												근우
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_062">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_063" class="cate" data-id="ma_063" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_063&isLeaf=0" onclick="return false;">
+										
+											
+											
+												농민
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_063">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_064" class="cate" data-id="ma_064" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_064&isLeaf=0" onclick="return false;">
+										
+											
+											
+												대중
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_064">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_065" class="cate" data-id="ma_065" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_065&isLeaf=0" onclick="return false;">
+										
+											
+											
+												대중공론
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_065">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_066" class="cate" data-id="ma_066" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_066&isLeaf=0" onclick="return false;">
+										
+											
+											
+												동명
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_066">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_067" class="cate" data-id="ma_067" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_067&isLeaf=0" onclick="return false;">
+										
+											
+											
+												동방평론
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_067">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_068" class="cate" data-id="ma_068" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_068&isLeaf=0" onclick="return false;">
+										
+											
+											
+												반도시론
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_068">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_069" class="cate" data-id="ma_069" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_069&isLeaf=0" onclick="return false;">
+										
+											
+											
+												사상운동
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_069">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_070" class="cate" data-id="ma_070" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_070&isLeaf=0" onclick="return false;">
+										
+											
+											
+												사해공론
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_070">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_071" class="cate" data-id="ma_071" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_071&isLeaf=0" onclick="return false;">
+										
+											
+											
+												산업계
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_071">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_072" class="cate" data-id="ma_072" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_072&isLeaf=0" onclick="return false;">
+										
+											
+											
+												서광
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_072">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_073" class="cate" data-id="ma_073" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_073&isLeaf=0" onclick="return false;">
+										
+											
+											
+												서울
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_073">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_074" class="cate" data-id="ma_074" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_074&isLeaf=0" onclick="return false;">
+										
+											
+											
+												시사평론
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_074">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_075" class="cate" data-id="ma_075" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_075&isLeaf=0" onclick="return false;">
+										
+											
+											
+												신계단
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_075">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_076" class="cate" data-id="ma_076" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_076&isLeaf=0" onclick="return false;">
+										
+											
+											
+												신문계
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_076">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_077" class="cate" data-id="ma_077" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_077&isLeaf=0" onclick="return false;">
+										
+											
+											
+												신민
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_077">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_078" class="cate" data-id="ma_078" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_078&isLeaf=0" onclick="return false;">
+										
+											
+											
+												신조선
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_078">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_079" class="cate" data-id="ma_079" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_079&isLeaf=0" onclick="return false;">
+										
+											
+											
+												신흥
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_079">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_080" class="cate" data-id="ma_080" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_080&isLeaf=0" onclick="return false;">
+										
+											
+											
+												신흥과학
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_080">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_081" class="cate" data-id="ma_081" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_081&isLeaf=0" onclick="return false;">
+										
+											
+											
+												아성
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_081">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_082" class="cate" data-id="ma_082" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_082&isLeaf=0" onclick="return false;">
+										
+											
+											
+												여자계
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_082">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_083" class="cate" data-id="ma_083" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_083&isLeaf=0" onclick="return false;">
+										
+											
+											
+												여자시론
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_083">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_084" class="cate" data-id="ma_084" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_084&isLeaf=0" onclick="return false;">
+										
+											
+											
+												우라키
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_084">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_085" class="cate" data-id="ma_085" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_085&isLeaf=0" onclick="return false;">
+										
+											
+											
+												이론투쟁
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_085">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_086" class="cate" data-id="ma_086" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_086&isLeaf=0" onclick="return false;">
+										
+											
+											
+												제일선
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_086">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_087" class="cate" data-id="ma_087" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_087&isLeaf=0" onclick="return false;">
+										
+											
+											
+												조선농민
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_087">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_088" class="cate" data-id="ma_088" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_088&isLeaf=0" onclick="return false;">
+										
+											
+											
+												쩌날리즘
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_088">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_089" class="cate" data-id="ma_089" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_089&isLeaf=0" onclick="return false;">
+										
+											
+											
+												철필
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_089">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_090" class="cate" data-id="ma_090" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_090&isLeaf=0" onclick="return false;">
+										
+											
+											
+												청년조선
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_090">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_091" class="cate" data-id="ma_091" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_091&isLeaf=0" onclick="return false;">
+										
+											
+											
+												학지광
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_091">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_092" class="cate" data-id="ma_092" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_092&isLeaf=0" onclick="return false;">
+										
+											
+											
+												현계단
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_092">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_093" class="cate" data-id="ma_093" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_093&isLeaf=0" onclick="return false;">
+										
+											
+											
+												현대평론
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_093">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_094" class="cate" data-id="ma_094" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_094&isLeaf=0" onclick="return false;">
+										
+											
+											
+												혜성
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_094">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_095" class="cate" data-id="ma_095" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_095&isLeaf=0" onclick="return false;">
+										
+											
+											
+												호남평론
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_095">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_096" class="cate" data-id="ma_096" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_096&isLeaf=0" onclick="return false;">
+										
+											
+											
+												과학조선
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_096">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_097" class="cate" data-id="ma_097" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_097&isLeaf=0" onclick="return false;">
+										
+											
+											
+												광업조선
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_097">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_098" class="cate" data-id="ma_098" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_098&isLeaf=0" onclick="return false;">
+										
+											
+											
+												농민생활
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_098">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_099" class="cate" data-id="ma_099" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_099&isLeaf=0" onclick="return false;">
+										
+											
+											
+												농업조선
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_099">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_100" class="cate" data-id="ma_100" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_100&isLeaf=0" onclick="return false;">
+										
+											
+											
+												비판
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_100">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_101" class="cate" data-id="ma_101" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_101&isLeaf=0" onclick="return false;">
+										
+											
+											
+												신소년
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_101">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_102" class="cate" data-id="ma_102" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_102&isLeaf=0" onclick="return false;">
+										
+											
+											
+												신여성
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_102">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_103" class="cate" data-id="ma_103" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_103&isLeaf=0" onclick="return false;">
+										
+											
+											
+												청년
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_103">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_104" class="cate" data-id="ma_104" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_104&isLeaf=0" onclick="return false;">
+										
+											
+											
+												교육월보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_104">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_105" class="cate" data-id="ma_105" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_105&isLeaf=0" onclick="return false;">
+										
+											
+											
+												농촌청년
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_105">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_106" class="cate" data-id="ma_106" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_106&isLeaf=0" onclick="return false;">
+										
+											
+											
+												대동보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_106">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_107" class="cate" data-id="ma_107" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_107&isLeaf=0" onclick="return false;">
+										
+											
+											
+												창조
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_107">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_108" class="cate" data-id="ma_108" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_108&isLeaf=0" onclick="return false;">
+										
+											
+											
+												동서의학보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_108">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_109" class="cate" data-id="ma_109" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_109&isLeaf=0" onclick="return false;">
+										
+											
+											
+												소년
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_109">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_110" class="cate" data-id="ma_110" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_110&isLeaf=0" onclick="return false;">
+										
+											
+											
+												정음
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_110">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_111" class="cate" data-id="ma_111" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_111&isLeaf=0" onclick="return false;">
+										
+											
+											
+												아이들보이
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_111">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_112" class="cate" data-id="ma_112" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_112&isLeaf=0" onclick="return false;">
+										
+											
+											
+												녀자지남월보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_112">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_113" class="cate" data-id="ma_113" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_113&isLeaf=0" onclick="return false;">
+										
+											
+											
+												인문평론
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_113">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_114" class="cate" data-id="ma_114" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_114&isLeaf=0" onclick="return false;">
+										
+											
+											
+												한글
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_114">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_115" class="cate" data-id="ma_115" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_115&isLeaf=0" onclick="return false;">
+										
+											
+											
+												건국공론
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_115">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_116" class="cate" data-id="ma_116" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_116&isLeaf=0" onclick="return false;">
+										
+											
+											
+												조선문단
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_116">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_117" class="cate" data-id="ma_117" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_117&isLeaf=0" onclick="return false;">
+										
+											
+											
+												법정학계
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_117">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_118" class="cate" data-id="ma_118" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_118&isLeaf=0" onclick="return false;">
+										
+											
+											
+												낙동친목회학보
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_118">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_119" class="cate" data-id="ma_119" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_119&isLeaf=0" onclick="return false;">
+										
+											
+											
+												야뢰
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_119">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_120" class="cate" data-id="ma_120" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_120&isLeaf=0" onclick="return false;">
+										
+											
+											
+												춘추
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_120">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_121" class="cate" data-id="ma_121" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_121&isLeaf=0" onclick="return false;">
+										
+											
+											
+												신가정
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_121">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_122" class="cate" data-id="ma_122" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_122&isLeaf=0" onclick="return false;">
+										
+											
+											
+												요양촌
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_122">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_123" class="cate" data-id="ma_123" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_123&isLeaf=0" onclick="return false;">
+										
+											
+											
+												박문
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_123">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_124" class="cate" data-id="ma_124" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_124&isLeaf=0" onclick="return false;">
+										
+											
+											
+												동양의약
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_124">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_125" class="cate" data-id="ma_125" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_125&isLeaf=0" onclick="return false;">
+										
+											
+											
+												우리의 가뎡
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_125">
+									
+									</ul>
+								
+							</li>
+						
+							<li class="child level1">
+								<div id="div-ma_126" class="cate" data-id="ma_126" data-leaf="0" data-level="1" data-isText="0">
+									<span class="ico"></span>
+									<a href="/modern/level.do?levelId=ma_126&isLeaf=0" onclick="return false;">
+										
+											
+											
+												어린이
+											
+										
+									</a>
+									
+								</div>
+								
+									<ul id="ul-ma_126">
+									
+									</ul>
+								
+							</li>
+						
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+					
+					<div class="nd-content">
+						<div class="nd-content-wrap">
+							<!-- container -->
+							
+
+
+
+
+<div class="nd-section">
+	<section class="section-top">
+		<div class="title">
+			兩湖雜觀
+		</div>
+		<div class="util-menu">
+			
+				
+				
+				<a href="javascript:;" onclick="fnImageViewerPopup('ma_013_0271_0100', ''); return false;">
+					<figure>
+						<img src="/resources/modern/images/ico_viewImage.svg" class="ico1" alt="원문이미지" />
+						<figcaption>원문이미지</figcaption>
+					</figure>
+				</a>
+			
+			
+			
+			
+			
+		</div>
+	</section>
+	
+	<section id="section-read" class="section-read">
+		<div class="txt-wrap">
+			<section class="section-meta"><div class="item"><div class="tit">잡지명</div><div class="cont">개벽 제28호(1부)
+				 
+				</div></div><div class="item"><div class="tit">발행일</div><div class="cont">1922년 10월 01일
+				 
+				</div></div><div class="item"><div class="tit">기사제목</div><div class="cont">兩湖雜觀  
+					</div></div><div class="item"><div class="tit">필자</div><div class="cont">
+						
+							春坡
+						
+					  
+					</div></div><div class="item"><div class="tit">기사형태</div><div class="cont">문예기타  
+					</div></div></section><div id="cont_view">
+					<div style="text-align:justify;word-break:break-all;">
+						<b>兩湖雜觀/迷信의 王窟新都안에서</b><br/>
+						春坡
+					</div>
+					<div style="text-align:justify;word-break:break-all;">
+						
+							<div class="pic-caption nobg"><div class="wrap"><div class="pic"><a name="gb2808701" href="/download.do?fileName=gb2808701.gif&amp;levelId=ma_013_0271_0100" title="" target="_blank"><img title="" align="center" src="/download.do?fileName=gb2808701.gif&amp;levelId=ma_013_0271_0100&amp;type=thumbnail&#10;&#9;&#9;" alt="gb2808701.gif" border="0" width="400"/></a></div><div class="caption"><p/></div></div></div>
+						
+					</div>
+					<div style="text-align:justify;word-break:break-all;">K兄. 나는 그 間 光州, 木浦 羣山等 湖南三都를 두루보고 다시 湖西에 들러 論山의 어 農村과 恩津의 大石佛과 鷄龍山의 東鶴, 甲寺, 新元寺等을 보고 至今未來의 都邑地 即 迷信의 王窟-어 新都안이란곳을 왓나이다 그 間 南과 北 東과 西 山과 들 바다와 江 都市와 村 사람과 사람에 본 바 들은 바 感한 바가 實로적지안핫나이다. 形便에 依하야 一一이 말슴키는 어려우나 이제 그 대강을 들어 兄 紹介하려 하나이다.</div>
+					<div style="text-align:justify;word-break:break-all;">K兄. 兄이 일즉 말슴하기를 『湖南線을 타고 안즈면 멀리멀리 江南別國으로 가는 것다』고 하셧지요? 果然이더이다 車가 줄곳 南으로만 甁에 물붓듯이 쏘다지는 것은 果然江南行의 感히업지안하엿나이다.</div>
+					<div style="text-align:justify;word-break:break-all;">K兄. 江景 裡里 金堤 井邑으로 光州 木浦지의 今年年事는 果然萬古大豊이더이다.</div>
+					<div style="text-align:justify;word-break:break-all;">當地人士의 말을 듯건대 近年처음보는 大豊인데 今年은 水害도 업고 蟲災도 업다합니다 例年에 比하야 無慮 三割以上은 增收하겟다 합니다 그러나 將來가 未安하다하더이다</div>
+					<div style="text-align:justify;word-break:break-all;">나는 車中에서 잠자기보다도 冊읽기보다도 沿路의 山川보다도 萬田豊穀을 觀賞하기에 웅덩이를 어나 들먹거렷는지 지금 村家의 어 마루치나마 尙今것웅딍이바람이나나이다.</div>
+					<div style="text-align:justify;word-break:break-all;">
+                        <br/>
+                    </div>
+					<div style="text-align:justify;word-break:break-all;">K兄. 光州는 山川으로보든지 土沃함으로 보든지 사람들이 人事性밝고  淳厚함으로보든지 長方形으로 正正하게된 市街로 보든지 敎育機關이 相當히 設備됨으로 보든지 靑年들의 文化運動으로 보든지 모든 것이 그럴 듯이 보이나 다만 한가지 怪惡한 것은 그-齷齪스럽고 至毒한『모히』神이 靑年男女의 皮膚와 心＜87＞藏에 그대로 숨어잇서 피를  아먹으며 고기를 싹싹 저며내는 그것이더이다</div>
+					<div style="text-align:justify;word-break:break-all;">이-『모히』餓鬼가 光州에 侵犯하기는 벌서 五六年前이엇는데 한참은 아조 旺盛이되어 光州가 거의 亡할 悲境에 陷하얏는 것을 幸히 有志靑年, 特히 當地靑年會의 團結的豫防 必死的擊退下에서 거의 그 勢의 七分以上을 거눌럿는데 오히려 一部一部에 그-殘賊이 숨어잇서 尙今것 百名以上의 中毒者를 가지고 잇다 합니다 그러나 靑年들의 鐵拳이 四方에서 不絶히 불룩어티매 不幾數月에 그 迹이 頓滅하리라 합니다</div>
+					<div style="text-align:justify;word-break:break-all;">그런데 當地人士도 忿槪하야 이를 갈다십히 하지만 듯기에 過客조차 義憤이 생기는 것은 當地의 官路者 그들입니다 『모히』의 侵犯이 이러하고 靑年會의 豫防이 이러하지만 官路者 그들은 尋常觀하고 만다는 그것이외다 中毒者에게 重罰이 업습은 姑捨하고 密賣者에게 어름어름하는 手段을 取하는 그것이 朝鮮人滅亡을 暗觀하는 態가 넉넉히 보인다하야 當地靑年들의 當局非難의 聲은 口口相傳에 光州市內가 들석하더이다 罪는 中毒者-自身에 잇지만 어든 日本人의 心理야말로 可憎可酷합니다 密賣者는 全혀 日本人이며 中毒者는 全혀 朝鮮人이라합니다 이것이 光州人士-興替의 一大分歧問題이며 널리 朝鮮兄弟-自覺 는 對策의 懸案이라하야 一段을 紹介하얏나이다</div>
+					<div style="text-align:justify;word-break:break-all;">
+                        <br/>
+                    </div>
+					<div style="text-align:justify;word-break:break-all;">K兄. 이것은 松汀里에서 본 醜事입니다 바로 松汀驛前廣場東便路邊이외다 어 飮食장사 女便네 五六名이 路㥬에 列坐하야 飮食을 파는 모양인데 어나 醜하고 더러운지 생각만하면 지금것 口逆이 날듯합니다</div>
+					<div style="text-align:justify;word-break:break-all;">어느 옛적에 洗面을 하얏는지 얼굴은 얼숭덜숭한데다가 머리를 함부로 틀어올리고 저진 벼(布)赤衫 행주치마를 두루고 어진 밥床을 압헤노코 床우에는 열무김치 고초탕친 것 간장 소곰 各한 그릇식을 노코 床미테는 크다란 별덕광주리에 倭국수인지 胡군수인지 한광주리담어노코 기다란 烟竹을 가루물고 이러니 저러니 雜談을 하면서 往來客의 動靜을 삷혀가며『국수요』『이요』하는 은 참아못보겟더이다 그리면서 막걸리잔이나먹어그런지 本來버릇이그런지 목을 늘엿다 줄엿다하며 무릅장단을 치며『아이고내 八字야』『千年을 살거나 萬年이나사드란 말이냐』等 雜歌를 忌憚업시 불르는 이야 참아 外國人부러워 못보겟더이다 몬지와 검불은 로날려＜88＞ 飮食床을 뒤덥고 파리와 하루살이들은 사람을 잡아먹을 듯이 뒤덤비는데 그래도 먹겟다고 웅숭그리고 빙둘러안즌 勞働者 는 行客들-아-氣막혀 못 보겟더이다 天幕이라도치고 依支라도 하얏스면 이 그러케 사납지는 안흘터이고 雜歌라도 아니하고 外貌라도 좀 다스렷스면 비위가 그러케는 傷하지는 안켓지만 風俗이 그런지 性質이 그런지 終是野卑함을 그대로 廣告함에 어하겟습니 中國人은 물럼이 서서 보고 日本人은  웃으며 손가락질하더이다 그래도 그들은 如前히 모릅니다 原來 常人이라 그런지 貧民이라 그런지?</div>
+					<div style="text-align:justify;word-break:break-all;">K兄. 이것이 어 이들입니 三國到處에서 볼 수 잇스며 西北에서도 볼 수 잇습니다 平壤을 가면 路傍賣食男女가 더 만흔듯하지요?</div>
+					<div style="text-align:justify;word-break:break-all;">K兄. 이러한 惡風을 어케 하면 掃蕩할 수 잇슬가요 우리의 知識程度 우리의 生活程度라 하겟지만 이런 것이야 改良 는 善導의 可能性이 잇지 아니합니 그곳그곳의 靑年有志의 活動이면 容易할 듯 합니다 傍觀하지는 決코 못합니다 그 地方 그 民族의 體面보아서도 決코 不知에 付할수는 업다하나이다 그들의 自覺을 기다리거나 當局者들의 好意도 바랄수 업습니다 當局者들은 걸핏하면 衛生이니 淸潔이니 하면서도 이러한데는 족음도 用意를 아니합니다 『요놈들 너의 蠻風을 廣告할대로 해봐라 우리에게는 損害-半分업다』하고 속으로 조하만하는 것이 事實이외다</div>
+					<div style="text-align:justify;word-break:break-all;">K兄. 우리는 무어니무어니해도 地方細民의 이러한 細事를 보는 대로 當하는 대로 말하고 우고 고치고함이 가장 意味깁흔듯하야 이 事實을 들엿나이다</div>
+					<div style="text-align:justify;word-break:break-all;">K兄. 木浦 木浦臺의 月夜는 景致로보다 實로 放歌大躍할듯하나 傷心이 猶多하메 放聲大哭할번 하얏나이다 儒達山岩石이 大責을 下하는 듯하며 孤霞島松林이 (李忠武의 碑文이 有함) 愁色을 인 듯 하더이다 整然하고 潤活한 日本人市街를 보고 저-北橋洞一隅에 너저분한 우리 同胞의 市井을 볼 그만 火가 나서 주먹만 두어번 비틀고 말왓나이다</div>
+					<div style="text-align:justify;word-break:break-all;">群山와서도 亦是 木浦와 一樣이엇습니다 但一夜로써 群山公園에서 單獨히 感하고 傷할이엇나이다 아무대도 開港場이란 朝鮮人에 對한 記錄이 別로 적어짐은 말할수업는 恨事입니다</div>
+					<div style="text-align:justify;word-break:break-all;">
+                        <br/>
+                    </div>
+					<div style="text-align:justify;word-break:break-all;">K兄. 이것은 江景平野一隅인 論山郡恩津面南山里에서 본 農事契(一名豊物)即＜89＞</div>
+					<div style="text-align:justify;word-break:break-all;">
+						<span style="font-weight: bold;">두레먹이</span>라는 大快事 極興致의 놀음이외다 平安道나 咸鏡道가튼 地方에는 農村에 이러한 風俗이 업습니다만 京畿以南三南各地方에는 이러한 風俗 即 『두레먹이』라는 것이 만히 流行됩니다</div>
+					<div style="text-align:justify;word-break:break-all;">봄 모내일라든지 여름 기음맬라든지 京畿或三南地方에를 가면 村中이나 或農場에서 旗ㅅ발이휘날리며 막이소리 小鼓소리가 搖亂히 남을 듯고 볼수잇습니다 처음보는 이는 저것이 무슨 놀음인가 神仙놀음이나 아닌가하고 매우 疑心도 하며 神奇하게도 생각키웁니다 그리하야 行步를 中止하고 이윽히 구경하는 이도 잇고 갓가이 하가서 억개춤지 추는 이가 잇습니다 그러나 이놀음이 이 어한 놀음인지는 容易히 모릅니다 나도 이것을 二三次나 구경하고 그저-農事契놀음이거니만알고 그-仔細한 것은 몰랏든 터입니다 마츰 이곳을 와서『두레먹이』의 內幕을 알고보니 果然 農村의 美風이며 널리 자랑할 만한 것입니다</div>
+					<div style="text-align:justify;word-break:break-all;">바로 내가 南山里에 간 그날이 이 南山里 『두레먹이』날입니다 親舊 K君은 이 洞里農契의 頭目이라 합니다 그래서 頭目의 집마당에 農民全部가 모여 神農遺業이라 大書한 큰 旗를 자노코 喇叭을 불며 小鼓와 북을 치며 막이와 증을 울리며 막느그러지게 노는데 참-可觀이러이다 패랑이에 花環을 달아쓰고 응덩춤을 추는 이도 잇고 나비服色 는 處女幻裝을 한 花童들은 억개춤을 一手잘추며  고쓴 上子色의 技童들은 무동춤도 추며 어 이는 장춤 어 이는 새우춤 눈짓 입짓 손짓이 참 長短에 마저 어지는 것은 劇場 以上의 大奇觀이더이다 한참 놀다가는 一大白式이나  들여마시고  놀군하는데 낫으로 밤지 洞內가 나가듯이 야단스럽게 놀더이다 이『두레먹이』가 어느 어케 始作되엇는지 그-來歷은 모르나 一種軍隊式農契인데 봄에 모내기 前臨時하야 農民全部가 洞會를 열고 그해에 對한 頭目一人과 公員一人을 選擧한다 합니다 이해는 農事上 는 洞事上 이 頭目의 指揮를 밧게된다 하는데 이 두레라는 것은 農民全部가 들어부터 어 집일이고 順次로 하루式하고 그-賃金은 農會의 公金으로하야 洞中公共事에 쓰며  樂器買入修繕等 모든 公用에 費하며 는 이 두레먹이날 가튼  公費들 한다 합니다</div>
+					<div style="text-align:justify;word-break:break-all;">
+						<span style="font-weight: bold;">두레난다</span>는 날은 어 집일을 하게된다는 날인데 頭目이 發論을 하야 오늘은 아모의 일을 할터이니 다-나라고 農民一般에게 令을 나린다합니다(아니나지는 ＜90＞못함) 그리고 일집에서는 私事로이 할 마음이 잇스나 아니바들 수 업게 된다 합니다 (아무 격거도 한번은 치를 터이니)두레ㅅ軍들이 農場으로 向할 時는 令旗 龍旗 (神農遺業)을 압세우고 喇叭一雙 小鼓一雙 막이 一雙 중 一個 長鼓一介 大鼓一個가 連해 흐며 상쇠잡이 (先頭막이) 指揮下에 軍隊式으로 거려 나아간다 합니다 農場에 가서는 旗를 자노코 一齊히 김매기를 始作하는데 북과 막이치는 사람 二三人이 로나서 김군의 뒤를 하단이며 速히매라 느리게해라 뒤어진 者에게는 모라치고 압선 者에게 느리게 쳐준다 합니다 그리하면 모다 興이나서 어나 잘매는지 한마지기 두마지기가튼 것은 눈할새 다-매여버린다합니다 그러케 한참매고 나서는 一大白式이나하고 담배를 한 대式 은 뒤에 들어부터 한참 興致잇게 다가 매고 매고 한다는데 盡日가도 疲困한 줄 모르고 元氣旺盛하야 農夫歌만 불은다 합니다</div>
+					<div style="text-align:justify;word-break:break-all;">K兄. 참-조흔 風俗이지요? 그리고</div>
+					<div style="text-align:justify;word-break:break-all;">『<span style="font-weight: bold;">두레먹이날</span>』은 一年春秋二次인데 이날은 頭目이 그해의 벌은 金錢에서 公用에 쓰고 남을 것에 하 쌀과 고기를 몃 石이고 몃 貫을 사드려서 每戶에 分配를 시킨다합니다 一年間만히 애쓰고  돈들도 잘벌고 豊年도 젓스니 하루 동안 잘 먹고 잘 놀자는 意味이외다 웨 頭目이 사서 分配를 시키느냐 하면 돈을 주어 各各自意대로 해먹고 놀자하면 或잘먹고 或아니먹는 不平均이 잇슬가 念慮하야 一致平均主義로 그리한다 합니다 그리고 이『두레먹이』ㅅ날은 <span style="font-weight: bold;">집집이 沐浴을 하고 새옷을 입고 안팟글 掃除하며 우물을 가시며 道路를 쓸며하야</span> 大淸潔을 한뒤에 洞中第一安穩無故한 집을 가리어 土地神 大祭를 行하고 그리고나서 各自家대로 잘먹고 잘고 잘논다 합니다 春秋二大淸潔이란 此以上에 더-할 者-업다합니다 그리한뒤에 男子들은 頭目의 집이나 或-大家에 모여 盡日 밤새도록 二日或三日을 佚宕하게 노는데 이날의 술이란 農事多少에 하 義務로 家家에서 提供하는데 三十斗家는 三十器 二十斗家는 二十器 五斗家는 五器 집집이 모다내인다합니다 이리하야 一年二次式 擧洞共樂을 한다합니다 이리하야 一年二次式 擧洞共樂을 한다 합니다 果然 美風이더이다</div>
+					<div style="text-align:justify;word-break:break-all;">K兄. 나는 이것을 朝鮮方方谷谷에 다-宣傳하고 십습니다 여러 가지로보아 美風인듯합니다 親睦으로 慰安으로 團體力으로 다-利할듯하더이다 그런데 이것으로 말미암아 洞里洞里의 勢力競爭이 如＜91＞干아니라합니다 農旗와 農旗가 맛나면 서로 길을 아니 避하고 서로 禮하라고 是非를 하다가 大戰爭도 起하며 甚하면 殺人지 난다 합니다 以前은 매우 甚하얏는데 至今은 좀 順해젓다합니다</div>
+					<div style="text-align:justify;word-break:break-all;">
+                        <br/>
+                    </div>
+					<div style="text-align:justify;word-break:break-all;">K兄. 나는 이 農村에서 이러한 快事美風을 보고 그-이튼날 恩津彌勒佛을 보고 論山장구경을 하고 豆溪停車場에서 나러 鷄龍山禹跡골이라는 山中 어 草屋에서 밤을 지나고 그이튼날 鳩嶺을 넘어 東鶴寺, 甲寺, 新元寺를 보고  그이튼날 即 오늘 아츰에 이 新都안이를 왓나이다</div>
+					<div style="text-align:justify;word-break:break-all;">
+                        <br/>
+                    </div>
+					<div style="text-align:justify;word-break:break-all;">K兄. 恩津의 灌燭寺 大石佛은 東洋的, 아니 世界的大名物로, 其名이 村婦野童에게지 미첫스니 여긔에는 略하겟스며 論山장은 무엇보다 <span style="font-weight: bold;">飮食장</span>이라함이 可하겟더이다 (路傍食店) 그런데 禹跡골이라는 대서는 하마터면 죽을 번하얏소이다 마츰 論山서부터 尨村兄을 맛나 同行이되엇스나 初行山中이라 路次도 모르는데 날지 저물엇습니다 어둡고 險路임을 不拘하고 東鶴을 넘으려할  마츰 山家의 好農老를 맛나 好意의 挽留로 一夜를 山家안방에서 지나엿는데 이튼날 구턱재(鳩嶺)를 넘어보니 엇저녁 그 老人이 아니드면 벌서 콩가루가 되어 저-개천에 어저 잇슬 것이엇습니다 果然 險하더이다</div>
+					<div style="text-align:justify;word-break:break-all;">東鶴 甲寺이약이도 略하고(九月號編輯當時에 某氏의 鷄龍山遊記가 編入됨을 아는 故로)이제 이</div>
+					<div style="text-align:justify;word-break:break-all;">迷信의 王窟-新都안이 이약이를 좀하고 치겟나이다</div>
+					<div style="text-align:justify;word-break:break-all;">
+                        <br/>
+                    </div>
+					<div style="text-align:justify;word-break:break-all;">K兄. 鷄龍山-하면 都邑을 聯想하며 鄭哥를 聯想하며 趙哥를 聯想하며  侍天敎를 聯想케 됨이 우리의 普通일 듯 합니다 내가 줌억위부터 鷄龍山에 都邑된다는 이약이를 귀가 압흐도록 들엇거니와 近來에 와서 그말은 더욱 熾盛이 되어 <span style="font-weight: bold;">不在三年</span>이니 <span style="font-weight: bold;">甲子應當</span>이니하야 傳之聞之에 其說이 頻頻한 데다가 더군다나 侍天敎人이 幾萬名이 移寓를 하얏느니 金龜菴이 新宮을 宏壯히 지엇느니 車天子가 基地를 奠하얏느니 別別怪聞怪說이 만히 流行되매 그것이 事實일가 風說일가 어하얏든 迷信家의 妄說인줄을 알면서도 한번 親往親見할밧게업다하고 밧분길이지만 二日을 費하야 所謂都邑터라는 <span style="font-weight: bold;">新都안이</span>를 들럿나이다＜92＞</div>
+					<div style="text-align:justify;word-break:break-all;">K兄. 놀라지마시오 都邑與否는 姑捨하고 듯든말은 事實입니다 侍天敎人이 四五千名모엿고 新築한 戶數로만해도 千餘戶가넘습니다 宮인지 殿인지 金龜菴宿泊室이라는 宏壯한 新築物도 잇고 侍天敎傳敎室  學校지 잇고 三部落으로된 新市街가 잇서 어지간한 邑內보다 낫습니다 西門巨里 東門巨里가 잇고 鍾路가 잇고 宮터가 잇고 帝子峰이 잇고  李太祖의 遺物인지 柱石이 잇고하야 廢都라면 廢都, 新都라면 新都의 感이 업지 못하외다</div>
+					<div style="text-align:justify;word-break:break-all;">地勢로 보면 저-全羅道長水의 大屯山 (一名 한점山) 一脉이 北으로 論山을 쑥건너와 所謂 西門재라는 鷄龍山西脉이 되고 다시 웃둑소사 鷄龍山 主峰이 되고 主峰에서 東으로 弓形가티 휘둘러 豆溪로 直走한 一脉이 잇고  南으로 충충 여 所謂 新宮의 主峰帝子峰이 되엇습니다 迷信家나 風水眼으로 보면 그럴 듯이 되엇다 하겟나이다 左靑龍 右白虎니 雙龍弄珠形이니 金鷄抱卵形이니 山太極水太極이니 (水는 錦江水가 亦長水에서 發源함에서 鷄龍爲名도 此意에서 出하얏다 云) 하야  들게 되엇습니다  한便으로 보면 사람이 兩手를 벌려 무엇을 안으려하는 感도 잇기는 잇습니다 如何間 山勢는 꼭 新都의 說을 做出하게만 되엇습니다 그래그런지 어니에게 鷄龍山求景을 왓다하니 그는 將來의 政丞 判書를 어루만지며 希望에 넘치는 말로『地理낫치나하셧스면 어는지 容易히 모르지요 山勢볼줄모르면 헛구경이지요 참 잘생겻습니다』하고 富家의 先墓에 려간 風水놈의 말하듯 합니다 그래 그의 心理를 좀더 興舊시키노라고『나도 地理에 그러케 疎忽치는 안흔데 참잘생겻습니다』하고 對句를 노코『언제 都邑이돼야지』라고 語尾를 다니 그는 『차차되지오 萬古大運이 어 그러케 쉽다구요』하며 멋업시조하함을 보앗나이다</div>
+					<div style="text-align:justify;word-break:break-all;">그러나 俗眼 아니 兒童에게 무러도 都邑은 커녕 村排布도 못하겟나이다 本來 局內가 삼태기(簣)안만한데다가 宮터 鍾路자리라는 곳이 족음 놉즉하고는 鷄龍山 東西山谷에서 흐르는 左右개천은 돌파모레로 乾川을 이루어 農事도 못 지어먹게 되엇습니다  山谷인지라 交通不便上 장사도 못 할 아조 <span style="font-weight: bold;">不農不商의 地</span>입니다 어이에게 이말을 하니 그는 조치못한 氣色으로『都邑되면 잘맨들지오 어대 本來 조흔 곳이 잇답듸 移山移水하는 이 時代에-』하고 픽돌아섭니다 그러키도할듯합니다 이런것을 보면 이곳에 모＜93＞인 그들에게는 擧皆迷信의 網이 全身을 잡아싼듯하나이다</div>
+					<div style="text-align:justify;word-break:break-all;">어 草家에 들러 집석이 삼는 侍天敎人에게 人事를 請하고『왜-이 不農不商의 薄地에 모여와서 苟且함을 當하느냐』무르니 그는 『이것이 偵探이나 아닌가』하고 매우 疑心스러운 눈으로 한참이나 흘겨보더니『그저-아모 意味업시 남들이 다-오니 왓습니다』하고는 하며 신날만 죄입니다 어대서 왓느냐 무르니 黃海道라하며 이곳에 어느곳 사람이 第一만히 왓느냐하니 <span style="font-weight: bold;">大槪는 黃海道며</span> 그다음은 平安道라합니다 農事하느냐하니 못한다하며 무엇가지고 生活하느냐하니 <span style="font-weight: bold;">집석이이나삼고</span> 처음 왓스니 모든 것이 이모양이라 할입니다 나는 다시『그래도은 原因이 잇겟지오 어한 動機로 오셧서요』하니- <span style="font-weight: bold;">연줄</span>이 무엇인지『연줄연줄하야 왓슬이라』고만합니다 果然 딱한 그들이러이다 門밧게는 沈단근감(柿) 몃 個式 버려노코 房에서는 집석이을 삼으며 往來人의 얼굴만 쳐다보며 糊口의 末由함으로 隱然히 哀願하는 듯하더이다</div>
+					<div style="text-align:justify;word-break:break-all;">K兄. 나는 計家하다 심히 巨里를 巡廻하야 傳敎室 學校 本願寺 는 흔들린다는 趾石돍을 보고 彼-宿泊室을 求景하얏습니다 一二丈式되는 大石柱에 材木도 아람이 넘는 것으로 싀골하고는  宏壯히 짓습듸다 至今도 <span style="font-weight: bold;">敎人들이모여 賦役을 하는데</span> 언제나 落成이 될지 모른다하며 預算도 貳萬圓이들 아즉 모른다하며 石材는 鷄龍山에서 採出하고 木材는 水原에서 運搬하얏다하며 侍天敎總部에서 金錢이 오긴하나 大槪는 敎人들의 義務出役이라 합니다</div>
+					<div style="text-align:justify;word-break:break-all;">K兄. 內幕이 分明히 잇겟지마는 中傷的이 될가봐 못쓰겟소이다 는 新來의 同胞가 오즉 希望하나으로 生命을 連해가는 데 참아 그의 秘密은 公開치 못하겟소이다(모르기도 하려니와) 본대로 들은대로 事實들엇소이다 그런데</div>
+					<div style="text-align:justify;word-break:break-all;">K兄. 鷄龍山都邑說이 왜 낫는지 아십니 아는 말이지만 말하든 이니 잠간 이약이하겟습니다</div>
+					<div style="text-align:justify;word-break:break-all;">李太祖-第士鄭道傳으로 더불어 大事를 經營할  雄計와 奇略이 多方面이엇슴은 우리가 推知하겟시죠 그들은 일즉이 新都를 漢陽에 卜하고 그 地가 舊都의 松都와 近하며  人心이 自己에 歸服치 아니함을 憂하야 그윽히 漢陽의 東十里許에 「往十里」의 三字를 刻한 砥石을 埋하고 衆人歸服의 前計로 先히 鷄龍山東便에 來하야 宮城을 築하노라 三日大役을 하얏습니다 當＜94＞然-假老婆인지 山한머니인지 장사 老婆가 三日間連해와서 李太祖에게을 팔앗습니다 三日만에는 老婆-李祖에게말하야 曰『이은 鄭氏이거늘 그대 徒勞하도다 그대은 漢陽이어니 須速漢陽去를 』하고는 仍急不見이엇습니다 이것이 太祖의 奇計中 하나이엇스나 衆人은 감가티속엇습니다 太祖는 이로부터 聲言하야 曰『鷄龍山神한 머니가 予를 漢陽으로 指示하얏도다 그는 神이라 어異言이 有하리오 我運은 從此大通하리라하야 크게 宣傳하는 一面으로 鷄龍山神堂을 세워 神祭하며 鄭道傳과하야 鄭堪錄等異書를 作하야 當時不平人으로 멀리 幾百年後로 斷念케 하는 等-實로 그 計-百出이엇든것이 事實이외다 此가어 李太祖故意作事가아니리오마는 人民은 속아왓습니다 傳하고 傳하기를 五百年後 鄭氏都邑乎鷄龍山이라하며 그리고 山上에 異言을 劃하며 童謠를 傳하며 奇書를 作하야 衆心을 歸服시켯슴이 事實이외다</div>
+					<div style="text-align:justify;word-break:break-all;">K兄. 趙氏都邑說이 하나잇소이다 옛적어趙氏의 義子가 그-義父의 恩惠를 갑기로하고 地理工夫를 잘하야 그의 墓를 擇하고나서 稱하야 曰 <span style="font-weight: bold;">着根於松都 發葉於漢陽 開化於鷄龍 結實於伽倻</span>라한것이 亦鷄龍都邑說의 하나외다 그런데</div>
+					<div style="text-align:justify;word-break:break-all;">近來侍天敎人이 此地로 多聚함은 한 一說이잇다하는데 同敎敎主金<span style="font-weight: bold;">龜</span>菴의 <span style="font-weight: bold;">龜</span>字가 同敎大神師-降詩中 龜岳春回一世花의 句와 相副相應한다하야 龜菴國師의 意로 同敎人이 鷄龍山으로 多聚한다고 어이가 傳합니다 駭怪한 酬酌이 넘우만흐니 一一이 記憶할수도업고  紹介할 價値도 업습니다 그저 한번 웃고 말이라하나이다</div>
+					<div style="text-align:justify;word-break:break-all;">K兄. 數日後面談하겟소이다 그만</div>
+					<div style="text-align:justify;word-break:break-all;">………(九月八日夕)………＜95＞</div>
+					<div style="text-align:justify;word-break:break-all;">＜87-95＞</div>
+				<br/></div>
+			
+			
+			
+		</div>
+	</section>
+
+	<input type="hidden" id="selected1Id" value="ma_013" />
+	<input type="hidden" id="selected2Id" value="ma_013_0271" />
+	<input type="hidden" id="selected3Id" value="ma_013_0271_0100" />
+	<input type="hidden" id="selected4Id" value="" />
+	<input type="hidden" id="selected5Id" value="" />
+	<input type="hidden" id="selected6Id" value="" />
+	<input type="hidden" id="selected7Id" value="" />
+	<input type="hidden" id="selectedId" value="ma_013_0271_0100" />
+	<input type="hidden" id="level" value="3" />
+</div>
+
+							<!-- //container -->
+
+							<!-- footer -->
+							
+
+
+
+
+   <footer id="footer">
+       <div class="footer-inner">
+           <div class="footer-box">
+               <div class="box-left">
+                   <div class="info">
+                       <div class="link-wrap">
+                           <a href="https://www.history.go.kr/contents/contentsPage.do?groupId=000000000571&menuId=000000000572&pageId=000000000211" class="color" target="_blank">개인정보취급방침</a>
+                           <a href="/modern/errorReportList.do">오류신고 확인</a>
+                       </div>
+                       <div class="info-wrap">
+                           <address>13809 경기도 과천시 교육원로 86<span class="copyright">Copyright &copy; National Institute of Korean History All Rights Reserved.</span></address>
+                       </div>
+                   </div>
+               </div>
+               <div class="box-right">
+                   
+
+
+
+
+<div class="select-box">
+	<label for="relatedSite"></label>
+	<select id="relatedSite" onchange="if (value) {window.open(value, '_blank'); return false;}" title="관련사이트">
+		<option value="" selected>관련 사이트</option>
+		<!-- <option value="http://thesaurus.history.go.kr/">한국역사용어시소러스</option> -->
+		<option value="/thesaurus/">한국역사용어시소러스</option>
+		
+		<option value="/unicode/">유니코드한자검색시스템</option>
+		<option value="http://contents.history.go.kr/">우리역사넷</option>
+		<option value="http://archive.history.go.kr/">전자사료관</option>
+		<option value="https://kdp.aks.ac.kr/">한국학자료통합플랫폼</option>
+		<option value="https://kyudb.snu.ac.kr/">규장각원문검색서비스</option>
+		<option value="http://contents.nahf.or.kr/">동북아역사넷</option>
+		<option value="https://www.ugyo.net/">유교넷</option>
+		<option value="https://db.itkc.or.kr/">한국고전종합DB</option>
+	</select>
+</div>
+               </div>
+           </div>
+       </div>
+   </footer>
+
+							<!-- //footer -->
+						</div>
+						<!-- quick-wrap(side remote Control) -->
+						
+
+
+
+
+<div class="quick-wrap">
+	<div class="quick-wrap-inner">
+		<div class="inner">
+			<div class="item-wrap">
+				<!--모바일에서만 사라지는 아이콘에는 noDpMob / 태블릿과 모바일에서 사라지는 아이콘에는 noDpTab / 사용하지 않는 아이콘에는 noDP 클래스를 넣어주세요-->
+				
+				
+				
+					
+					
+						
+					
+					
+					
+				
+				
+				<div class="item item-trans noDp">
+					<a href="javascript:;" onclick="changeLang();">
+						<figure>
+							<span>
+								<img src="/resources/modern/images/quick_ico_btn_trans.svg" alt="번역문" title="번역문" />
+							</span>
+							<figcaption>
+								번역문
+							</figcaption>
+						</figure>
+					</a>
+				</div>
+				
+				<div class="item item-bigger noDpMob ">
+					<a href="javascript:;" onclick="ts('cont_view', +1); return false;">
+						<figure><span><img src="/resources/modern/images/quick_ico_btn_bigger.svg" alt="크게" title="크게" /></span><figcaption>크게</figcaption></figure>
+					</a>
+				</div>
+				<div class="item item-smaller noDpMob ">
+					<a href="javascript:;" onclick="ts('cont_view', -1); return false;">
+						<figure><span><img src="/resources/modern/images/quick_ico_btn_smaller.svg" alt="작게" title="작게" /></span><figcaption>작게</figcaption></figure>
+					</a>
+				</div>
+				
+				<div class="item item-print noDpMob">
+					<a href="javascript:;">
+						<figure><span><img src="/resources/modern/images/quick_ico_btn_print.svg" alt="출력" title="출력" /></span><figcaption>출력</figcaption></figure>
+					</a>
+				</div>
+				
+				<div class="item item-error noDpMob">
+					<a href="javascript:;">
+						<figure><span><img src="/resources/modern/images/quick_ico_btn_error.svg" alt="오류신고" title="오류신고" /></span><figcaption>오류신고</figcaption></figure>
+					</a>
+				</div>
+				
+				<!-- hoiYn hoiNumber가 있는  상세페이지 -->
+				
+					
+						
+						
+						
+							<div class="item item-list">
+								
+									
+									
+										
+											
+											
+											
+												<a href="javascript:;" onclick="modernPrevMenu('/modern/level.do', {levelId: 'ma_013_0271'});">
+													<figure><span><img src="/resources/modern/images/quick_ico_btn_up.svg" alt="상위" title="상위" /></span><figcaption>상위</figcaption></figure>
+												</a>
+											
+										
+									
+								
+							</div>
+						
+					
+					
+					<div class="item item-prev">
+						<a href="javascript:;" onclick="goData('prev', 'ma_013_0271_0090');">
+							<figure><span><img src="/resources/modern/images/quick_ico_btn_prev.svg" alt="이전" title="이전" /></span><figcaption>이전</figcaption></figure>
+						</a>
+					</div>
+					<div class="item item-next">
+						<a href="#javascript:;" onclick="goData('next', 'ma_013_0271_0110');">
+							<figure><span><img src="/resources/modern/images/quick_ico_btn_next.svg" alt="다음" title="다음" /></span><figcaption>다음</figcaption></figure>
+						</a>
+					</div>
+					
+					
+				
+				
+				
+				
+				<div class="item item-top btn-top">
+					<a href="javascript:;">
+						<figure><span><img src="/resources/modern/images/quick_ico_btn_totop.svg" alt="맨위로" title="맨위로" /></span></figure>
+					</a>
+				</div>
+			</div>
+			
+			<div class="item item-top btn-top">
+				<a href="javascript:;">
+					<figure><span><img src="/resources/modern/images/quick_ico_btn_totop.svg" alt="맨위로" title="맨위로" /></span></figure>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+// 이전, 다음
+function goData(type, levelId) {
+	if (isEmpty(levelId)) {
+		if (type == 'prev') {
+			alert('이전 데이터가 없습니다.');
+		} else {
+			alert('다음 데이터가 없습니다.');
+		}
+	} else {
+		var itemType = 'XML';
+		var itemId = 'ma';
+		if (itemId == 'notice') {
+			location.href = "/" + $("#period").val() + "/notice/noticeView.do?noticeId=" + levelId + "&" + $("#noticeForm").serialize();
+		} else if (itemType == 'RDB') {
+			location.href = '/modern/' + itemId + "/detail.do?levelId=" + levelId;
+		} else if ( itemType == 'XML') {
+			location.href = '/modern/level.do?levelId='+levelId;
+		}
+	}
+}
+
+// 직원록의 경우 types를 원문/국역 의미로 사용하지않아서  lang 이란 변수 로 원문 /국역 구분
+function changeLang() {
+	let itemType = 'XML';
+	let itemId = 'ma';
+	let host = location.origin + "/modern/";
+	let lang = new URLSearchParams(location.search).get("lang");
+	let types=  new URLSearchParams(location.search).get("types");
+	let levelId= new URLSearchParams(location.search).get("levelId");
+	let params = new URLSearchParams(location.search);
+	
+	levelId = 'ma_013_0271_0100';
+	
+	let changedRLevelId = ''
+	
+	// levelId r 처리
+	let isR = '';
+	if (!isEmpty(levelId)) {
+		changedRLevelId = changeR(levelId);
+		params.set("levelId", changedRLevelId.levelId);
+	}
+	if (itemType == 'RDB') {
+		if (itemId == 'jw') {
+			params.set("lang", (lang == 'ko' ? 'ch' :'ko'));
+			/* if ('' != '') {
+				params.set("levelId", '');
+			} else {
+				params.set("itemId", itemId);
+			} */
+		}
+	} else {
+		params.set("types", (types == 'r' || changedRLevelId.isR) ? 'o' : 'r');
+	}
+	
+	host += ( (itemType == 'RDB') ? (itemId + "/") : '' ) + 'level.do';
+	
+	location.href = host + "?" + params;
+}
+
+// gk_010r -> gk_010 // gk_010 -> gk_010r {levelId : 바뀐결과 , isR : r포함여부 }
+function changeR(levelId) {
+	let isR = "";
+	let levelIdArr = levelId.split('_') ;
+	let with_r_part = levelIdArr[1];
+	isR = with_r_part.indexOf("r") > -1;
+	let replacedPart = (isR) ? with_r_part.replace('r', '') : with_r_part + 'r';
+	levelIdArr[1] = replacedPart;
+	let result = levelIdArr.join('_');
+	
+	return {"levelId" : result, "isR" : isR};
+}
+
+// 상위
+function modernPrevMenu(url, obj) {
+	let map = parseQueryStringToMap(decodeURI(location.search));
+	
+	// 사진유리필름자료일 경우 fl_001_001_001_0010 마지막_이후로 제거한 levelId를 같이 전달한다.
+	if ('ma' === 'fl') {
+		let levelId = map.get("levelId");
+		map.set("levelId", levelId.substring(0, levelId.lastIndexOf("_")));
+	} else {
+		map.delete("levelId");
+	}
+	
+	// 근현대회사조합자료(hs)
+	if ('ma' === 'hs') {
+		if (map.size === 0) {
+			map.set("part1", "__");
+			map.set("subjectClass", "");
+			map.set("level1", "");
+			map.set("level2", "");
+		}
+	}
+	
+	if (!isEmpty(obj)) {
+		for (const property in obj) {
+			map.set(property, obj[property]);
+		}
+	}
+	
+	redirectPage(map, url);
+}
+
+</script>
+
+						<!-- //quick-wrap -->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- //wrap -->
+
+<!-- layer_popup -->
+
+
+
+
+
+<!-- 레이어팝업 -->
+<!-- 자료인용방법 -->
+<div class="layer-popup lp-data">
+    <div class="scroll-wrap">
+        <div class="lp-inner">
+            <div class="lp-title">
+                <div class="txt">디지털역사자료 인용방법</div>
+                <a href="#none" class="btn"><img src="/resources/modern/images/cmn_ico_close_bk.svg" alt="닫기" title="닫기" /></a>
+            </div>
+            <div class="lp-content">
+                <div class="item-wrap">
+                    <div class="item">
+                        <div class="item-title">
+                            <div class="txt1">1안</div>
+                            <div class="txt2 fc4">저자, 기사명, 자료명. URL (검색날짜)</div>
+                        </div>
+                        <div class="item-cont">
+                            주)1 황현, “高宗三十二年乙未”, ≪매천야록≫(한국사료총서 제1권,<br /> 1971).http://db.history.go.kr/id/sa_001_0030_0020 (accessed 2007. 09. 03)<br /><br />
+                            주)2 “日陸戰隊撤退는 南北戰으로 中止? 今回 半數만 交代”, ≪동아일보≫ 1928년 3월 19일.<br /> http://db.history.go.kr/id/np_da_1928_03_19_0030 (accessed 2007. 09. 03)
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-title">
+                            <div class="txt1">2안</div>
+                            <div class="txt2 fc4">저자, 기사명, 자료명.(사이트명, URL, ID, 검색날짜)</div>
+                        </div>
+                        <div class="item-cont">
+                            주)1 황현, “高宗三十二年乙未”, ≪매천야록≫(한국사료총서 제1권, 1971).(국사편찬위원회 한국사데이터베이스 http://www.history.go.kr, sa_001_0030_0020, 2007. 09. 03)<br /><br />
+                            주)2 “日陸戰隊撤退는 南北戰으로 中止? 今回 半數만 交代”, ≪동아일보≫ 1928년 3월 19일. (국사편찬위원회 한국사데이터베이스 http://www.history.go.kr, np_da_1928_03_19_0030, accessed 2007. 09. 03)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- //자료인용방법 -->
+
+<!-- 오류신고 -->
+
+
+
+
+
+
+
+
+<div class="layer-popup lp-error">
+	<div class="scroll-wrap">
+		<div class="lp-inner">
+			<div class="lp-title">
+				<div class="txt">오류신고</div>
+				<a href="javascript:;" class="btn"><img src="/resources/korea/images/cmn_ico_close_bk.svg" alt="닫기" title="닫기" /></a>
+			</div>
+			<div class="lp-content">
+				<div class="guide">
+					<!-- <div class="txt">본 사이트 자료 중 잘못된 정보를 발견하였거나 사용 중 불편한 사항이 있을 경우 알려주십시오. 이용자의 참여가 사이트 가치 향상에 큰 도움이 됩니다.</div> -->
+					<div class="txt ico"><span class="fc4">사이트 하단의 ‘오류신고 확인’ 메뉴</span>를 이용하시면 신고 내용의 적용여부를 확인하실 수 있습니다.</div>
+					<div class="txt">(오류유형: 오자·탈자, 링크 오류, 이미지 오류, 기타)</div>
+					<div class="txt">전화번호, 이메일 등 개인정보는 삭제하오니 유념하시기 바랍니다.</div>
+				</div>
+				<form id="errorReportForm" name="errorReportForm" method="post">
+					<input type="hidden" name="itemName" value="근현대잡지자료" />
+					
+						
+						
+						
+							<input type="hidden" name="levelId" value="ma_013_0271_0100" />
+						
+					
+					
+					<div class="data-wrap">
+						<div class="item">
+							<div class="tit">자료명</div>
+							<div class="txt"><span class="fc4">근현대잡지자료</span></div>
+						</div>
+						<div class="item">
+							
+							
+								
+								
+									
+										
+											
+										
+										
+									
+								
+							
+							
+							<div class="tit">자료위치</div>
+							<div class="txt">자료상세화면</div>
+							<input type="hidden" name="location" value="자료상세화면" />
+						</div>
+					</div>
+					<div class="form-wrap">
+						<div class="item">
+							<div class="tit"><label for="errorTitle">제목</label></div>
+							<div class="cont"><input type="text" id="errorTitle" name="title" class="input_error" /></div>
+						</div>
+						<div class="item">
+							<div class="tit"><label for="errorType">오류 유형</label></div>
+							<div class="cont">
+								<select id="errorType" name="errorType" class="input_error">
+									<option value="">선택하세요</option>
+									<option value="오자·탈자">오자·탈자</option>
+									<option value="링크 오류">링크 오류</option>
+									<option value="이미지 오류">이미지 오류</option>
+									<!-- <option value="내용 오류">내용 오류</option> -->
+									<option value="기타">기타</option>
+								</select>
+							</div>
+						</div>
+						<div class="item">
+							<div class="tit"><label for="errorContent">요청 내용</label></div>
+							<div class="cont"><textarea id="errorContent" name="content" class="input_error" placeholder="상세한 정보 입력 부탁드립니다."></textarea></div>
+						</div>
+						<div class="item">
+							<div class="tit"><label for="reporter">이름</label></div>
+							<div class="cont"><input type="text" id="reporter" name="reporter" class="input_error" /></div>
+						</div>
+						<div class="item">
+							<div class="tit"><label for="captchaStr">자동입력 방지문자</label></div>
+							<div class="cont btn-wrap">
+								<img id="captchaImg" src="/resources/images/num_sec.png" title="캡차 이미지" alt="캡차 이미지" />
+								<button type="button" id="refresh_btn" class="reset">새로고침</button>
+								<input type="text" id="captchaStr" name="captchaStr" maxlength="6" />
+							</div>
+						</div>
+					</div>
+					<div class="btn-wrap">
+						<button type="button" class="submit" onclick="fnRegisterErrorReport(); return false;">등록하기</button>
+						<button type="button" class="reset" onclick="fnResetErrorPopup(); return false;">다시 쓰기</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+	// 오류신고 버튼 클릭 이벤트
+	if ($(".quick-wrap .item-wrap .item-error").length) {
+		$(".quick-wrap .item-wrap .item-error").off("click").on("click", function() {
+			// 자동입력 방지문자 이미지 갱신
+			fnRefreshCaptchaImg();
+			
+			// 오류신고 다시 쓰기
+			fnResetErrorPopup();
+			
+			$(".dimmed").addClass("active");
+			$(".layer-popup.lp-error").addClass("active");
+		});
+	}
+	
+	// 조선시대 법령자료 오류신고 버튼 클릭 이벤트
+	if ($("a.help.dpWeb").length) {
+		$("a.help.dpWeb").off("click").on("click", function() {
+			// 자동입력 방지문자 이미지 갱신
+			fnRefreshCaptchaImg();
+			
+			// 오류신고 다시 쓰기
+			fnResetErrorPopup();
+			
+			$(".dimmed").addClass("active");
+			$(".layer-popup.lp-error").addClass("active");
+		});
+	}
+	
+	// 헌정사 자료 DB(cons) 오류신고 버튼 클릭 이벤트
+	if ($(".bt_fnc .btn_help").length) {
+		$(".bt_fnc .btn_help").off("click").on("click", function() {
+			// 자동입력 방지문자 이미지 갱신
+			fnRefreshCaptchaImg();
+			
+			// 오류신고 다시 쓰기
+			fnResetErrorPopup();
+			
+			$(".dimmed").addClass("active");
+			$(".layer-popup.lp-error").addClass("active");
+		});
+	}
+	
+	// 자동입력 방지문자 새로고침 클릭 이벤트
+	$("#refresh_btn").on("click", function() {
+		// 자동입력 방지문자 이미지 갱신
+		fnRefreshCaptchaImg();
+	});
+});
+
+// 자동입력 방지문자 이미지 갱신
+function fnRefreshCaptchaImg() {
+	$("#captchaImg").attr("src", "/captchaImg.do");
+}
+
+// 오류신고 다시 쓰기
+function fnResetErrorPopup() {
+	$("#errorTitle").val("");
+	$("#errorType").val("");
+	$("#errorContent").val("");
+	$("#reporter").val("");
+	$("#captchaStr").val("");
+}
+
+// 오류신고 등록
+function fnRegisterErrorReport() {
+	const titleVal = $("#errorTitle").val();
+	const errorTypeVal = $("#errorType").val();
+	const contentVal = $("#errorContent").val();
+	const reporterVal = $("#reporter").val();
+
+	let inputCount = 0;
+	$(".input_error").each(function() {
+		if ($.trim($(this).val())) {
+			inputCount++;
+		}
+	});
+	if (inputCount < 4) {
+		alert('모든 입력란 기입을 부탁드립니다');
+		return;
+	}
+	
+	if (!$.trim(titleVal)) {
+		alert('제목을 입력해주세요.');
+		$("#errorTitle").focus();
+		return;
+	}
+	if (!$.trim(errorTypeVal)) {
+		alert('오류유형을 선택해주세요.');
+		$("#errorType").focus();
+		return;
+	}
+	if (!$.trim(contentVal)) {
+		alert('내용을 입력해주세요.');
+		$("#errorContent").focus();
+		return;
+	}
+	if (!$.trim(reporterVal)) {
+		alert('이름을 입력해주세요.');
+		$("#reporter").focus();
+		return;
+	}
+	
+	// 자동입력 방지문자
+	const captchaStr = $("#captchaStr").val();
+	if (!$.trim(captchaStr)) {
+		alert('자동입력 방지문자를 입력해주세요.');
+		$("#captchaStr").focus();
+		return;
+	} else {
+		$("#captchaStr").val($.trim(captchaStr));
+	}
+	
+	if (confirm('오류신고를 하시겠습니까?')) {
+		$.ajax({
+			url: "/errorReport/insertErrorReportAjax.do",
+			type: "post",
+			data: $("[name=errorReportForm]").serialize(),
+			dataType: "json",
+			success: function(data) {
+				var result = data.result;
+				var message = data.message;
+
+				// 결과 message
+				alert(message);
+
+				if (result == "success") {
+					$('.dimmed').removeClass('active');
+					$('.layer-popup.lp-error').removeClass('active');
+				} else {
+					// 등록 실패 시 자동입력 방지문자 이미지 갱신
+					fnRefreshCaptchaImg();
+					$("#captchaStr").val("");
+				}
+			},
+			error: function(xhr, status, error) {
+				alert("오류신고  등록 error!");
+			}
+		});
+	}
+}
+
+</script>
+
+<!-- //오류신고 -->
+
+<!-- 자료선택 -->
+<div class="layer-popup-sm lp-data-select">
+	<div class="lp-inner">
+		<div class="lp-title">
+			<div class="txt">자료 선택</div>
+			<a href="javascript:;" class="btn" onclick="return false;">
+				<img src="/resources/modern/images/cmn_ico_close_bk.svg" id="dataCloseBtn" alt="닫기" title="닫기" />
+			</a>
+		</div>
+		<div class="scroll-wrap">
+			<div class="lp-content">
+				<ul id="detail_search_item_ul">
+					
+						
+							
+								<li id="detail_search_item_li_mk">
+									<a href="#none" onclick="fnSelectSearchItem('mk', '각사등록 근대편'); return false;">
+										각사등록 근대편
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_gj">
+									<a href="#none" onclick="fnSelectSearchItem('gj', '고종시대사'); return false;">
+										고종시대사
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_npgr">
+									<a href="#none" onclick="fnSelectSearchItem('npgr', '공립신보'); return false;">
+										공립신보
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_had">
+									<a href="#none" onclick="fnSelectSearchItem('had', '국내 항일운동 자료 : 경성지방법원 검사국 문서'); return false;">
+										국내 항일운동 자료 : 경성지방법원 검사국 문서
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_haf">
+									<a href="#none" onclick="fnSelectSearchItem('haf', '국외 항일운동 자료 : 일본 외무성기록'); return false;">
+										국외 항일운동 자료 : 일본 외무성기록
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_smla">
+									<a href="#none" onclick="fnSelectSearchItem('smla', '근대한일외교자료'); return false;">
+										근대한일외교자료
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_im">
+									<a href="#none" onclick="fnSelectSearchItem('im', '근현대인물자료'); return false;">
+										근현대인물자료
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_ma">
+									<a href="#none" onclick="fnSelectSearchItem('ma', '근현대잡지자료'); return false;">
+										근현대잡지자료
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_hs">
+									<a href="#none" onclick="fnSelectSearchItem('hs', '근현대회사조합자료'); return false;">
+										근현대회사조합자료
+									</a>
+								</li>
+							
+						
+					
+						
+							
+								<li id="detail_search_item_li_ij">
+									<a href="#none" onclick="fnSelectSearchItem('ij', '대한민국임시정부자료집'); return false;">
+										대한민국임시정부자료집
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_npda">
+									<a href="#none" onclick="fnSelectSearchItem('npda', '동아일보'); return false;">
+										동아일보
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_prb">
+									<a href="#none" onclick="fnSelectSearchItem('prb', '동학농민혁명사논저목록'); return false;">
+										동학농민혁명사논저목록
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_pry">
+									<a href="#none" onclick="fnSelectSearchItem('pry', '동학농민혁명사일지'); return false;">
+										동학농민혁명사일지
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_prc">
+									<a href="#none" onclick="fnSelectSearchItem('prc', '동학농민혁명연표'); return false;">
+										동학농민혁명연표
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_prd">
+									<a href="#none" onclick="fnSelectSearchItem('prd', '동학농민혁명자료총서'); return false;">
+										동학농민혁명자료총서
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_prw">
+									<a href="#none" onclick="fnSelectSearchItem('prw', '동학농민혁명증언록'); return false;">
+										동학농민혁명증언록
+									</a>
+								</li>
+							
+						
+					
+						
+							
+								<li id="detail_search_item_li_npbs">
+									<a href="#none" onclick="fnSelectSearchItem('npbs', '부산일보'); return false;">
+										부산일보
+									</a>
+								</li>
+							
+						
+					
+						
+							
+								<li id="detail_search_item_li_sk">
+									<a href="#none" onclick="fnSelectSearchItem('sk', '사료 고종시대사'); return false;">
+										사료 고종시대사
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_fl">
+									<a href="#none" onclick="fnSelectSearchItem('fl', '사진유리필름자료'); return false;">
+										사진유리필름자료
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_sea">
+									<a href="#none" onclick="fnSelectSearchItem('sea', '사회단체DB'); return false;">
+										사회단체DB
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_sun">
+									<a href="#none" onclick="fnSelectSearchItem('sun', '삼일운동데이터베이스'); return false;">
+										삼일운동데이터베이스
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_pro">
+									<a href="#none" onclick="fnSelectSearchItem('pro', '소요사건에 관한 도장관 보고철'); return false;">
+										소요사건에 관한 도장관 보고철
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_npsd">
+									<a href="#none" onclick="fnSelectSearchItem('npsd', '시대일보'); return false;">
+										시대일보
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_npsc">
+									<a href="#none" onclick="fnSelectSearchItem('npsc', '신문스크랩자료'); return false;">
+										신문스크랩자료
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_npsh">
+									<a href="#none" onclick="fnSelectSearchItem('npsh', '신한민보'); return false;">
+										신한민보
+									</a>
+								</li>
+							
+						
+					
+						
+							
+						
+							
+								<li id="detail_search_item_li_ykc">
+									<a href="#none" onclick="fnSelectSearchItem('ykc', '유길준 자료 DB'); return false;">
+										유길준 자료 DB
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_wj">
+									<a href="#none" onclick="fnSelectSearchItem('wj', '일본군 ‘위안부’·전쟁범죄 자료집'); return false;">
+										일본군 ‘위안부’·전쟁범죄 자료집
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_ia">
+									<a href="#none" onclick="fnSelectSearchItem('ia', '일제감시대상인물카드'); return false;">
+										일제감시대상인물카드
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_gsdc">
+									<a href="#none" onclick="fnSelectSearchItem('gsdc', '일제강점기 경성지방법원 기록 해제'); return false;">
+										일제강점기 경성지방법원 기록 해제
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_smlb">
+									<a href="#none" onclick="fnSelectSearchItem('smlb', '일제시기 희귀자료'); return false;">
+										일제시기 희귀자료
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_su">
+									<a href="#none" onclick="fnSelectSearchItem('su', '일제침략하한국36년사'); return false;">
+										일제침략하한국36년사
+									</a>
+								</li>
+							
+						
+					
+						
+							
+								<li id="detail_search_item_li_gbdh">
+									<a href="#none" onclick="fnSelectSearchItem('gbdh', '조선·대한제국 관보'); return false;">
+										조선·대한제국 관보
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_jssy">
+									<a href="#none" onclick="fnSelectSearchItem('jssy', '조선소요사건관계서류'); return false;">
+										조선소요사건관계서류
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_npjs">
+									<a href="#none" onclick="fnSelectSearchItem('npjs', '조선시보'); return false;">
+										조선시보
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_npjj">
+									<a href="#none" onclick="fnSelectSearchItem('npjj', '조선중앙일보'); return false;">
+										조선중앙일보
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_gb">
+									<a href="#none" onclick="fnSelectSearchItem('gb', '조선총독부 관보'); return false;">
+										조선총독부 관보
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_jh">
+									<a href="#none" onclick="fnSelectSearchItem('jh', '주한일본공사관기록·통감부문서'); return false;">
+										주한일본공사관기록·통감부문서
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_npja">
+									<a href="#none" onclick="fnSelectSearchItem('npja', '중앙일보'); return false;">
+										중앙일보
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_npjo">
+									<a href="#none" onclick="fnSelectSearchItem('npjo', '중외일보'); return false;">
+										중외일보
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_ju">
+									<a href="#none" onclick="fnSelectSearchItem('ju', '중추원조사자료'); return false;">
+										중추원조사자료
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_jw">
+									<a href="#none" onclick="fnSelectSearchItem('jw', '직원록자료'); return false;">
+										직원록자료
+									</a>
+								</li>
+							
+						
+					
+						
+							
+								<li id="detail_search_item_li_gbtg">
+									<a href="#none" onclick="fnSelectSearchItem('gbtg', '통감부 공보'); return false;">
+										통감부 공보
+									</a>
+								</li>
+							
+						
+					
+						
+							
+								<li id="detail_search_item_li_mh">
+									<a href="#none" onclick="fnSelectSearchItem('mh', '한국근대사기초자료집'); return false;">
+										한국근대사기초자료집
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_hk">
+									<a href="#none" onclick="fnSelectSearchItem('hk', '한국근대사자료집성'); return false;">
+										한국근대사자료집성
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_jnm">
+									<a href="#none" onclick="fnSelectSearchItem('jnm', '한국근대지도자료'); return false;">
+										한국근대지도자료
+									</a>
+								</li>
+							
+						
+							
+						
+							
+								<li id="detail_search_item_li_jng">
+									<a href="#none" onclick="fnSelectSearchItem('jng', '한국근대지지자료'); return false;">
+										한국근대지지자료
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_kd">
+									<a href="#none" onclick="fnSelectSearchItem('kd', '한국독립운동사자료'); return false;">
+										한국독립운동사자료
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_sa">
+									<a href="#none" onclick="fnSelectSearchItem('sa', '한국사료총서'); return false;">
+										한국사료총서
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_hdsr">
+									<a href="#none" onclick="fnSelectSearchItem('hdsr', '한민족독립운동사'); return false;">
+										한민족독립운동사
+									</a>
+								</li>
+							
+						
+							
+								<li id="detail_search_item_li_hd">
+									<a href="#none" onclick="fnSelectSearchItem('hd', '한민족독립운동사자료집'); return false;">
+										한민족독립운동사자료집
+									</a>
+								</li>
+							
+						
+					
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- //자료선택 -->
+
+<!-- //layer_popup -->
+
+<div class="dimmed"></div>
+<div class="dimmed-tr"></div>
+
+<script type="text/javascript">
+function getContextPath() {
+	return "";
+}
+
+$(document).ready(function() {
+	var levelId = $("#hoiLevelId").html();
+	
+	if ($(".copyurl").length) {
+		$(".copyurl").attr("data-clipboard-text", "https://db.history.go.kr/id/" + levelId);
+		$(".copyurl").removeAttr("onclick");
+		
+		// URL 복사하기 ClipboardJS 초기화
+		var clipboard_url = new ClipboardJS(".copyurl");
+		clipboard_url.on("success", function(e) {	// 복사가 성공했을 때 실행될 콜백 함수
+			swal("'" + e.text + "' 이 클립보드에 복사됐습니다.\n\nCtrl+V로 붙어넣기 하세요.");
+		});
+		clipboard_url.on("error", function(e) {		// 복사가 실패했을 때 실행될 콜백 함수
+			swal("URL 복사하기에 실패했습니다.");
+		});
+	}
+	
+	if ($(".copyid").length) {
+		$(".copyid").attr("data-clipboard-text", levelId);
+		$(".copyid").removeAttr("onclick");
+		
+		// ID 복사하기 ClipboardJS 초기화
+		var clipboard_id = new ClipboardJS('.copyid');
+		clipboard_id.on("success", function(e) {	// 복사가 성공했을 때 실행될 콜백 함수
+			swal("'" + e.text + "' 이 클립보드에 복사됐습니다.\n\nCtrl+V로 붙어넣기 하세요.");
+		});
+		clipboard_id.on("error", function(e) {		// 복사가 실패했을 때 실행될 콜백 함수
+			swal("ID 복사하기에 실패했습니다.");
+		});
+	}
+});
+</script>
+</body>
+</html>

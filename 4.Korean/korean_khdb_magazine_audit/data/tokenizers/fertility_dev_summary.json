@@ -1,0 +1,71 @@
+{
+  "metric": "tokenizer_fertility_on_dev",
+  "definition": {
+    "tokens_per_sample": "total_tokens / dev_line_count",
+    "tokens_per_surface_char": "total_tokens / non-space chars in the evaluated representation",
+    "tokens_per_original_source_char": "total_tokens / non-space chars in mixed-script dev source"
+  },
+  "tokenizers_library": "0.22.2",
+  "inputs": {
+    "mixed_tokenizer": "4.Korean/korean_khdb_magazine_audit/data/tokenizers/korean_mixed_bpe_32k.json",
+    "hangulized_tokenizer": "4.Korean/korean_khdb_magazine_audit/data/tokenizers/korean_hangulized_bpe_32k.json",
+    "dev_mixed": "4.Korean/korean_khdb_magazine_audit/data/corpus/final_aligned/splits/seed42_90_10/dev.mixed_chunks_nospace.txt",
+    "dev_hangulized": "4.Korean/korean_khdb_magazine_audit/data/corpus/final_aligned/splits/seed42_90_10/dev.hangulized_chunks_nospace.txt"
+  },
+  "line_alignment_check_passed": true,
+  "no_space_check_passed": true,
+  "results": [
+    {
+      "corpus": "mixed",
+      "tokenizer": "4.Korean/korean_khdb_magazine_audit/data/tokenizers/korean_mixed_bpe_32k.json",
+      "vocab_size": 32000,
+      "line_count": 1381,
+      "total_tokens": 454864,
+      "total_surface_chars": 790127,
+      "total_original_source_chars": 790127,
+      "total_surface_bytes": 2307154,
+      "tokens_per_sample": 329.3729181752353,
+      "tokens_per_surface_char": 0.5756846684140651,
+      "tokens_per_original_source_char": 0.5756846684140651,
+      "chars_per_token": 1.737062066903514,
+      "bytes_per_token": 5.072184213303317,
+      "mean_tokens_per_line": 329.3729181752353,
+      "median_tokens_per_line": 333,
+      "max_tokens_per_line": 632,
+      "total_unk_tokens": 248,
+      "unk_tokens_per_10k_original_source_chars": 3.1387359247310878,
+      "lines_with_unk": 151
+    },
+    {
+      "corpus": "hangulized",
+      "tokenizer": "4.Korean/korean_khdb_magazine_audit/data/tokenizers/korean_hangulized_bpe_32k.json",
+      "vocab_size": 32000,
+      "line_count": 1381,
+      "total_tokens": 405902,
+      "total_surface_chars": 789733,
+      "total_original_source_chars": 790127,
+      "total_surface_bytes": 2295874,
+      "tokens_per_sample": 293.91889934829834,
+      "tokens_per_surface_char": 0.5139737101020219,
+      "tokens_per_original_source_char": 0.5137174150484669,
+      "chars_per_token": 1.9456248059876522,
+      "bytes_per_token": 5.656227365226089,
+      "mean_tokens_per_line": 293.91889934829834,
+      "median_tokens_per_line": 299,
+      "max_tokens_per_line": 506,
+      "total_unk_tokens": 79,
+      "unk_tokens_per_10k_original_source_chars": 0.99983926634579,
+      "lines_with_unk": 55
+    }
+  ],
+  "comparison": {
+    "absolute_fertility_reduction": 0.06196725336559816,
+    "relative_fertility_reduction_percent": 10.764096521157967,
+    "total_token_reduction": 48962
+  },
+  "outputs": {
+    "summary": "4.Korean/korean_khdb_magazine_audit/data/tokenizers/fertility_dev_summary.json",
+    "csv": "4.Korean/korean_khdb_magazine_audit/data/tokenizers/fertility_dev_results.csv",
+    "report": "4.Korean/korean_khdb_magazine_audit/results/reports/tokenizer_dev_fertility_report.md"
+  }
+}

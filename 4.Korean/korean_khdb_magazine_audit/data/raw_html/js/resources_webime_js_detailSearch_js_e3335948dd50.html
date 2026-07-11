@@ -1,0 +1,1787 @@
+
+//////////////////////////////////////////////////////////////////////////
+// 이미지 관련
+function MM_swapImgRestore() { //v3.0
+  var i,x,a=document.MM_sr; for(i=0;a&&i<a.length&&(x=a[i])&&x.oSrc;i++) x.src=x.oSrc;
+}
+
+function MM_preloadImages() { //v3.0
+  var d=document; if(d.images){ if(!d.MM_p) d.MM_p=new Array();
+    var i,j=d.MM_p.length,a=MM_preloadImages.arguments; for(i=0; i<a.length; i++)
+    if (a[i].indexOf("#")!=0){ d.MM_p[j]=new Image; d.MM_p[j++].src=a[i];}}
+}
+
+function MM_findObj(n, d) { //v4.01
+	var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+	d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+	if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+	for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+	if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_swapImage() { //v3.0
+  var i,j=0,x,a=MM_swapImage.arguments; document.MM_sr=new Array; for(i=0;i<(a.length-2);i+=3)
+   if ((x=MM_findObj(a[i]))!=null){document.MM_sr[j++]=x; if(!x.oSrc) x.oSrc=x.src; x.src=a[i+2];}
+}
+
+function MM_showHLayers() { //v3.0
+	var i,p,v,obj,args=MM_showHLayers.arguments;
+	for (i=0; i<(args.length-2); i+=3) if ((obj=MM_findObj(args[i]))!=null) { v=args[i+2];
+	if (obj.style) { obj=obj.style; v=(v=='show')?'visible':(v='hide')?'hidden':v; }
+		obj.visibility=v; }
+}
+
+function MM_showHideLayers() { //v3.0
+  var i,p,v,obj,args=MM_showHideLayers.arguments;
+  for (i=0; i<(args.length-2); i+=3) if ((obj=MM_findObj(args[i]))!=null) { v=args[i+2];
+    if (obj.style) { 
+		 obj=obj.style; v=(v=='show')?'visible':(v='hide')?'hidden':v; }
+    obj.visibility=v;
+	}
+}
+
+function MM_showHideLayers2() { //jquery
+var i,p,v,obj,args=MM_showHideLayers2.arguments;
+for (i=0; i<(args.length-1); i+=2){
+v=args[i+1];
+if (v=='show') $("#"+args[i]).show();
+else $("#"+args[i]).hide();
+}
+}
+
+function MM_openBrWindow(theURL,winName,features) { //v2.0
+	var a = window.open(theURL,winName,features);
+	a.focus() ;
+}
+
+function MM_nbGroup(event, grpName) { //v6.0
+  var i,img,nbArr,args=MM_nbGroup.arguments;
+  if (event == "init" && args.length > 2) {
+    if ((img = MM_findObj(args[2])) != null && !img.MM_init) {
+      img.MM_init = true; img.MM_up = args[3]; img.MM_dn = img.src;
+      if ((nbArr = document[grpName]) == null) nbArr = document[grpName] = new Array();
+      nbArr[nbArr.length] = img;
+      for (i=4; i < args.length-1; i+=2) if ((img = MM_findObj(args[i])) != null) {
+        if (!img.MM_up) img.MM_up = img.src;
+        img.src = img.MM_dn = args[i+1];
+        nbArr[nbArr.length] = img;
+    } }
+  } else if (event == "over") {
+    document.MM_nbOver = nbArr = new Array();
+    for (i=1; i < args.length-1; i+=3) if ((img = MM_findObj(args[i])) != null) {
+      if (!img.MM_up) img.MM_up = img.src;
+      img.src = (img.MM_dn && args[i+2]) ? args[i+2] : ((args[i+1])? args[i+1] : img.MM_up);
+      nbArr[nbArr.length] = img;
+    }
+  } else if (event == "out" ) {
+    for (i=0; i < document.MM_nbOver.length; i++) {
+      img = document.MM_nbOver[i]; img.src = (img.MM_dn) ? img.MM_dn : img.MM_up; }
+  } else if (event == "down") {
+    nbArr = document[grpName];
+    if (nbArr)
+      for (i=0; i < nbArr.length; i++) { img=nbArr[i]; img.src = img.MM_up; img.MM_dn = 0; }
+    document[grpName] = nbArr = new Array();
+    for (i=2; i < args.length-1; i+=2) if ((img = MM_findObj(args[i])) != null) {
+      if (!img.MM_up) img.MM_up = img.src;
+      img.src = img.MM_dn = (args[i+1])? args[i+1] : img.MM_up;
+      nbArr[nbArr.length] = img;
+  } }
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+function wi_handle_event_callback(e,ed) {
+
+	if(e.type=="keydown" || e.type=="keypress")
+	{
+		var key = e.keyCode;
+		if ( key == 13 ) {
+			//debuglog("keydown_handler:e.type="+e.type+":" + key);
+			getSelectWord();
+			return e.preventDefault();
+		}
+		else
+		{
+			/*
+			if (e.ctrlKey &&  (e.charCode == 118 || e.keyCode == 86) ) {
+				//debuglog("paste:" + ed.editorId);
+				tinyMCE.execInstanceCommand(ed.editorId, "mcePasteText", true);
+				tinyMCE.execCommand("mceAddUndoLevel");
+				e.preventDefault();
+				return tinymce.dom.Event.cancel(e);;
+			}
+			*/
+		}
+	}
+}
+
+function unicodeToHex(unicode)
+{
+	hex = new Array("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "A", "B", "C", "D", "E", "F");
+	
+	count = unicode.length;
+	var	str = new String();
+	var	i;
+	var	s;
+	var	ch;
+	
+	for (i = 0; i < count; i++)
+	{
+		ch = unicode.charCodeAt(i);
+		s = hex[(ch >> 12) & 0x0F];
+		s += hex[(ch >> 8) & 0x0F];
+		s += hex[(ch >> 4) & 0x0F];
+		s += hex[(ch & 0x0F)];
+		
+		str += s;	
+	}
+
+	return str;
+}
+///////////////////////////////////
+function isActiveX( obj )
+{
+	try
+	{
+		if ( obj != undefined && obj.readyState != undefined && obj.readyState == 4 && obj.utf16 != undefined )
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	} catch ( err )
+	{
+		return false;
+	}
+}
+
+function findActiveX( imename )
+{
+	var objname = "_IME_" + imename;
+	var imeobj = document.getElementById( objname );
+	if ( imeobj != undefined )
+	{
+		try
+		{
+			if ( imeobj != undefined && imeobj.readyState != undefined && imeobj.readyState == 4 && imeobj.utf16 != undefined )
+			{
+				return imeobj;
+			}
+			else
+			{
+				return null;
+			}
+		} catch ( err )
+		{
+			return null;
+		}
+	}
+	return null;
+}
+
+function isWysiwygEdit( imename )
+{
+	try
+	{
+		if ( window.tinyMCE != undefined && tinyMCE.get(imename) != undefined )
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	} catch ( err )
+	{
+		console.log(err);
+		return false;
+	}
+}
+
+function getImevar( imename )
+{
+	var imeobj = findActiveX( imename );
+	if ( imeobj != null )
+	{
+		return imeobj.utf16;
+	}
+	else 
+	{
+		if ( isWysiwygEdit( imename ) )
+		{
+			return Wime.getText( imename ); 
+		}
+		else
+		{
+			var imeobj = document.getElementById( imename );
+			if(imeobj != null) {
+				return imeobj.value;
+			} else {
+				return '';
+			}
+		}
+	}
+}
+
+function setImevar( imename, val, url ) {
+	return Wime.setText( imename, val, url ); 
+}
+
+function OpenHanjaInput2()
+{
+	lastInput = $("body").data("lastFocus");
+	if(lastInput != undefined){
+		lid = lastInput.attr("id");
+	}else{
+		lid = "inputTitle";
+	}
+	
+
+//	var imeobj = findActiveX( imename );
+	var imeobj = findActiveX( lid );
+	if ( imeobj != null )
+	{
+		imeobj.HanjaInput();
+	}
+	else
+	{
+//		var urlwebime = "/cmmn/webime.do?target=" + imename;
+		var urlwebime = "/cmmn/detailWebime.do?target=" + lid;
+		var nw = window.open( urlwebime,"kdbemime","height=500, width=800, scrollbars=yes, menubar=no");
+		if ( nw != null )
+			nw.focus();
+	}
+}
+
+function wime_env_check()
+{
+	if( navigator.userAgent.match(/Android/i) ||
+		navigator.userAgent.match(/webOS/i) ||
+		navigator.userAgent.match(/iPhone/i) ||
+		navigator.userAgent.match(/iPod/i) ||
+		navigator.userAgent.match(/BlackBerry/)
+	){
+		return false;
+	}
+	try {
+	if ( window.tinyMCE == undefined )
+	{
+		return false;
+	}
+
+	if ($.browser.msie)
+	{
+		return false;
+	}
+	if ($.browser.safari)
+	{
+		if ( $.browser.version > "528.18" ) return true;
+		else return false;
+	}
+	if ($.browser.opera)
+	{
+		if ( $.browser.version > "9.80" ) return true;
+		else return false;
+	}
+	if ($.browser.opera)
+	{
+		if ( $.browser.version > "9.80" ) return true;
+		else return false;
+	}
+	}
+	catch ( err ) { return false; }
+
+	//if ( false ) //  wysiwyg ime 강제로 OFF
+	return true;
+}
+
+function installtestIme( name, size, iscap )
+{
+	var ime_innerhtml = "";
+	document.write("<span id='imeinstalltest'></span>");
+
+	if ( iscap )
+		ime_innerhtml += "<OBJECT name='"+name+"' style='LEFT: 0px; WIDTH: "+size+"px; TOP: 0px; HEIGHT: 21px' tabIndex='1' codeBase=/ime/SJWHanjaIM.cab#version=1,0,1,5 classid='CLSID:DAF908C3-649F-4B1E-9BF4-DD5D26ABE87D' VIEWASTEXT>";
+	else
+		ime_innerhtml += "<OBJECT name='"+name+"' style='LEFT: 0px; WIDTH: "+size+"px; TOP: 0px; HEIGHT: 21px' tabIndex='1' codeBase=/ime/SJWHanjaIM.cab#version=1,0,1,5 classid='CLSID:DAF908C3-649F-4B1E-9BF4-DD5D26ABE87D' VIEWASTEXT>";
+
+	ime_innerhtml += "<PARAM NAME='_Version' VALUE='65536'>";
+	ime_innerhtml += "<PARAM NAME='_ExtentX' VALUE='10716'>";
+	ime_innerhtml += "<PARAM NAME='_ExtentY' VALUE='609'>";
+	ime_innerhtml += "<PARAM NAME='_StockProps' VALUE='0'>";
+	ime_innerhtml += "<PARAM NAME='KSCode' VALUE=''>";
+	ime_innerhtml += "<PARAM NAME='FontName' VALUE='새바탕'>";
+	ime_innerhtml += "<PARAM NAME='MaxLength' VALUE='256'>";
+	ime_innerhtml += "<PARAM NAME='BKColor' VALUE='#ffffff'>";
+	ime_innerhtml += "<PARAM NAME='FGColor' VALUE='#000000'>";
+	ime_innerhtml += "<PARAM NAME='FontSize' VALUE='11'>";
+	ime_innerhtml += "<PARAM NAME='HangulOnlyFlag' VALUE='0'>";
+	ime_innerhtml += "<PARAM NAME='VScroll' VALUE='0'>";
+	ime_innerhtml += "<PARAM NAME='CodeView' VALUE='-1'>";
+	ime_innerhtml += "</OBJECT>";
+	imeinstalltest.innerHTML = ime_innerhtml;
+}
+function installIme( imename, size )
+{
+	var ime_innerhtml = "";
+	document.write("<span id='imeinstalltest'></span>");
+	ime_innerhtml += "<OBJECT name='"+imename+"' style='LEFT: 0px; WIDTH: "+size+"px; TOP: 0px; HEIGHT: 21px' tabIndex='1' codeBase=/ime/SJWHanjaIM.cab#version=1,0,1,5 classid='CLSID:DAF908C3-649F-4B1E-9BF4-DD5D26ABE87D' VIEWASTEXT>";
+	ime_innerhtml += "<PARAM NAME='_Version' VALUE='65536'>";
+	ime_innerhtml += "<PARAM NAME='_ExtentX' VALUE='10716'>";
+	ime_innerhtml += "<PARAM NAME='_ExtentY' VALUE='609'>";
+	ime_innerhtml += "<PARAM NAME='_StockProps' VALUE='0'>";
+	ime_innerhtml += "<PARAM NAME='KSCode' VALUE=''>";
+	ime_innerhtml += "<PARAM NAME='FontName' VALUE='새바탕'>";
+	ime_innerhtml += "<PARAM NAME='MaxLength' VALUE='256'>";
+	ime_innerhtml += "<PARAM NAME='BKColor' VALUE='#ffffff'>";
+	ime_innerhtml += "<PARAM NAME='FGColor' VALUE='#000000'>";
+	ime_innerhtml += "<PARAM NAME='FontSize' VALUE='11'>";
+	ime_innerhtml += "<PARAM NAME='HangulOnlyFlag' VALUE='0'>";
+	ime_innerhtml += "<PARAM NAME='VScroll' VALUE='0'>";
+	ime_innerhtml += "<PARAM NAME='CodeView' VALUE='-1'>";
+	ime_innerhtml += "</OBJECT>";
+	imeinstalltest.innerHTML = ime_innerhtml;
+}
+
+var _imeidsuf = "_IME_";
+var _imecontsuf = "_IMEContainer_";
+
+function OnImeErr(obj, imename)
+{
+	SetCookie("activexime_enable","false");
+	var ax_ime_id = _imeidsuf + imename;
+	var ax_ime_cont = _imecontsuf + imename;
+
+	obj.style.width = 0;
+	obj.style.height = 0;
+	$("#"+ax_ime_cont).hide();
+	$("#"+imename).show();
+	Wime.embedIme( { imeid:imename, value:"" } );
+}
+
+function embedIme( imename )
+{
+	SetCookie("activexime_enable","false");
+	var _activexime_enable = GetCookie("activexime_enable");
+
+	if ( wime_env_check() )
+	{
+		Wime.embedIme( { imeid:imename, value:"" } );
+	}
+	else if (_activexime_enable != "false")
+	{
+		var orgobj = $("#" + imename);
+		var _width = orgobj.width();
+		var _height = orgobj.height();
+		var ax_ime_id = _imeidsuf + imename;
+		var ax_ime_cont = _imecontsuf + imename;
+		orgobj.hide();
+		orgobj.after("<span id='" + ax_ime_cont + "'> </span>");
+
+		var ime_innerhtml = "";
+		ime_innerhtml = "<OBJECT name='"+ax_ime_id+"' id='"+ax_ime_id+"' style='width: "+_width+"px; height: "+_height+"px' tabIndex='1' classid='CLSID:DAF908C3-649F-4B1E-9BF4-DD5D26ABE87D' viewastext onerror='OnImeErr(this,\""+imename+"\")'>";
+		ime_innerhtml += "<PARAM NAME='_Version' VALUE='65536'>";
+		ime_innerhtml += "<PARAM NAME='_ExtentX' VALUE='10716'>";
+		ime_innerhtml += "<PARAM NAME='_ExtentY' VALUE='609'>";
+		ime_innerhtml += "<PARAM NAME='_StockProps' VALUE='0'>";
+		ime_innerhtml += "<PARAM NAME='KSCode' VALUE=''>";
+		ime_innerhtml += "<PARAM NAME='FontName' VALUE='새바탕'>";
+		ime_innerhtml += "<PARAM NAME='MaxLength' VALUE='256'>";
+		ime_innerhtml += "<PARAM NAME='BKColor' VALUE='#ffffff'>";
+		ime_innerhtml += "<PARAM NAME='FGColor' VALUE='#000000'>";
+		ime_innerhtml += "<PARAM NAME='FontSize' VALUE='11'>";
+		ime_innerhtml += "<PARAM NAME='HangulOnlyFlag' VALUE='0'>";
+		ime_innerhtml += "<PARAM NAME='VScroll' VALUE='0'>";
+		ime_innerhtml += "<PARAM NAME='CodeView' VALUE='-1'>";
+		ime_innerhtml += "</OBJECT>";
+
+		var imecontobj = document.getElementById( ax_ime_cont );
+		imecontobj.innerHTML = ime_innerhtml;
+	}
+	else
+	{
+		Wime.embedIme( { imeid:imename, value:"" } );
+	}
+}
+
+// javascript 오류를 막기위해 미리정해둠. 
+// 각페이지에서 필요할때(검색어 세팅등) 이름을바꾸지말고 재정의할것.
+function imecallback(ed)
+{
+	try {
+		//ed.setContent( getHtmlFromstr(" "), {format : 'raw'});
+		//ed.setContent("<p>");
+	} catch ( err )
+	{
+	}
+}
+
+function wi_handle_callback(e,ed)
+{
+	if(e.type=="keypress" && e.keyCode==13)
+	{
+		if ( ed.id == "query_ime" )
+		{
+			Search_Kristal();
+		}
+		else if ( ed.id == "query_imeResult" )
+		{
+			Search_InResult();
+		}
+		return e.preventDefault();
+	}
+	else if ( e.type=="keydown" && e.keyCode==120 )
+	{
+		OpenHanjaInput( ed.id );
+	}
+}
+
+
+function embedflash( flname, width, height)  //"+height+"
+{
+	document.write("<object classid='clsid:D27CDB6E-AE6D-11cf-96B8-444553540000' codebase='http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,29,0' width='"+width+"' height='"+height+"'>");
+	document.write("<param name='movie' value='"+flname+"' quality=high >");
+	document.write("<param name='wmode' value='transparent'>");
+	document.write("<param name='quality' value='high'>");
+	document.write("<embed src='"+flname+"' quality='high' pluginspage='http://www.macromedia.com/go/getflashplayer' type='application/x-shockwave-flash' width='"+width+"' height='"+height+"' wmode='transparent'></embed>");
+	document.write("</object>");
+}
+
+function popInstallIme( pagURL )
+{
+
+	var winpop = window.open(pagURL, "SilNotice", "scrollbars=no,width=310,height=600");
+	if( winpop != null )
+	{
+		winpop.moveTo(0,0);
+		winpop.focus();
+	}
+}
+
+function Search_Kristal()
+{
+	var f = document.frmSearch ;
+	f.query.value = getImevar("query_ime");
+	if ( trim(f.query.value) < 1 )
+	{
+		alert( "검색어를 입력하세요." ) ;
+		if ( isWysiwygEdit("query_ime") )
+		{
+			tinyMCE.execCommand("mceFocus", true, "query_ime");
+		}
+		else
+		{
+			f.query_ime.focus() ;
+		}
+		return false;
+	}
+	else
+	{
+		f.target = '_self' ;
+	}
+	f.submit();
+	return true;
+}	
+
+function Search_InResult() {
+
+	try{
+	var inForm = document.InResultForm ;
+	var query_Result = "";
+
+	query_Result = getImevar("query_imeResult");
+
+	if ( trim(query_Result) == 0 )
+	{
+		alert( "검색어를 입력하세요." ) ;
+		Wime.setFocus("query_imeResult");
+		return false;
+	}
+
+	inForm.query_Result.value = query_Result;
+	inForm.M.value = "0";
+
+	inForm.target = '_self' ;
+	inForm.action = 'search_result_list.jsp';
+
+	inForm.submit() ;
+	return true;
+	} catch(err)
+	{
+		console.log(err);
+	}
+}	
+
+function searchRecomn(selT,Query) {
+
+	var f = document.frmSearch ;
+
+	f.M.value = "2";
+	f.selT.value = selT;
+	f.query.value = Query;
+
+	if ( trim(f.query.value) < 1 )
+	{
+		alert( "검색어를 입력하세요." ) ;
+		f.query_ime.focus() ;
+		return ;
+	}
+
+	f.submit() ;
+}	
+
+
+function Search_Detail() {
+
+	var f = document.resForm ;
+
+	if(f==null)
+	{
+		document.location= "../inspection/insp_detail_search.jsp";
+	}
+	else
+	{
+		f.action = "../inspection/insp_detail_search.jsp";
+		f.target = '_self' ;
+		f.submit();
+	}
+}	
+
+function OpenIndexWordWindow(theURL,openT,qT,winName) { //v2.0
+
+	var cateIdx=0;
+	if(openT=="0")
+	{
+		cateIdx=document.frmSearch.selT.selectedIndex;
+		if(cateIdx>=4)
+			cateIdx=0;
+	}
+	else
+	{
+		if(qT=="All")
+			cateIdx=0;
+		else if(qT=="P")
+			cateIdx=1;
+		else if(qT=="A")
+			cateIdx=2;
+		else if(qT=="B")
+			cateIdx=3;
+		else
+			cateIdx=0;
+	}
+
+	var a = window.open(theURL+ "?category="+cateIdx+"&openT="+openT+"&qT="+qT,winName,'width=536, height=700, scrollbars=yes');
+	a.focus();
+}
+
+
+function showReldiv()
+{
+	$("#Reldiv").show();
+}
+
+function hideReldiv()
+{
+	$("#Reldiv").hide();
+}
+
+function relation_pop( sjwid )
+{
+	$.ajax({
+		type: "POST",
+		url: "/inspection/ftest.jsp",
+		data: "id=" + sjwid,
+		async: true,
+		success : function(msg) {
+			$("#Reldiv").html( msg );
+		}
+	});
+	$("#Reldiv").show();
+  
+}
+
+function kyurelation_pop( kyuid )
+{
+	//var url = "http://147.46.103.182/SJWLinker.jsp?mdid=" + kyuid;
+	var url = "http://147.46.103.182/SJWILinker.jsp?filename=" +kyuid;
+	//var url = "http://pms.vacusoft.co.kr/kyuimg/?filename=" +kyuid;
+	a = window.open(url,"sjwkyurelation","width=950, height=700, resizable=1, scrollbars=yes");
+	if ( a != null )
+		a.focus() ;
+}
+
+function itkcrel_pop( mchid )
+{
+	var url = "";
+	if ( mchid.length == 6 )
+	{
+		url = "http://db.itkc.or.kr/itkcdb/text/nodeViewIframe.jsp?bizName=MS&yoId=000&jwId=" + mchid.substr( 0,3 ) + "&moId=" + mchid.substr( 3, 3 ) + "";
+	}
+	else if ( mchid.length == 9 )
+	{
+		url = "http://db.itkc.or.kr/itkcdb/text/nodeViewIframe.jsp?bizName=MS&jwId=" + mchid.substr( 0,3 ) + "&moId=" + mchid.substr( 3, 3 ) + "&daId=" + mchid.substr( 6,3 ) + ""
+	}
+	else if ( mchid.length >= 13 )
+	{
+		//url = "http://db.itkc.or.kr/itkcdb/text/nodeViewIframe.jsp?bizName=MS&jwId=" + mchid.substr( 0,3 ) + "&moId=" + mchid.substr( 3,3 ) + "&daId=" + mchid.substr( 6,3 ) + "&gaLid=" + mchid.substr( 10,3 ) + "";
+		url = "http://db.itkc.or.kr/itkcdb/text/nodeViewIframe.jsp?bizName=MS&NodeId=ms_k001&jwId=" + mchid.substr( 0,3 ) + "&moId=" + mchid.substr( 3,3 ) + "&daId=" + mchid.substr( 6,3 ) + "&ilId=&gaLid=" + mchid.substr( 10 ) + "";
+		//&NodeId=ms_k001&jwId=K01&moId=020&daId=120&ilId=&leId=&gaLid=379
+	}
+
+	var a = window.open(url,"sjwminchurelation");
+	if ( a != null )
+		a.focus() ;
+}
+
+function bibyunsa_pop( bid )
+{
+	var url = "";
+	url = "http://db.history.go.kr/url.jsp?ID=NIKH.DB-" + bid;
+	
+	var a = window.open(url,"sjw_bibyunsa_relation");
+	if ( a != null )
+		a.focus() ;
+}
+
+function sillokrelation_pop( silid )
+{
+	var url = "http://sillok.history.go.kr/inspection/inspection.jsp?mTree=0&id=" + silid;
+	a = window.open(url,"sjwsillokrelation");
+	if ( a != null )
+		a.focus() ;
+}
+
+function kyurelation_pop_old( sjwid ) { //v2.0
+	var url = "../inspection/kyurelation.jsp?sjwid=" + sjwid;
+	a = window.open(url,"sjwkyurelation","width=950, height=700, resizable=1");
+	if ( a != null )
+		a.focus() ;
+}
+
+
+///////////////////////////////////
+// bookmark 관련
+
+function bookmarkjob01( )
+{
+	var _bmurl = document.location.href;
+
+	if ( _bmurl.indexOf("&subcmd") > 0 )
+		_bmurl = _bmurl.substring( 0, _bmurl.indexOf("&subcmd") );
+
+	var _bmurl2 = "";
+	var _bmform = document.bookmarkform;
+
+	if ( eval(_bmform.bm01) )
+	{
+		if ( !eval( _bmform.bm01.length )  )
+		{
+			if ( _bmform.bm01.checked )
+					_bmurl2 += "&bm01=" + _bmform.bm01.value;
+		}
+		else
+		{
+			for( ix = 0; ix < _bmform.bm01.length; ix++ )
+			{
+				if ( _bmform.bm01[ix].checked )
+					_bmurl2 += "&bm01=" + _bmform.bm01[ix].value;
+			}
+		}
+	}
+
+	if ( _bmurl2.indexOf("bm01") >= 0 )
+	{
+		_bmform.method = "POST";
+		_bmform.ourl.value = _bmurl;
+		_bmform.param1.value = _bmurl2;
+		_bmform.action = "./bookmarkproc.jsp";
+		_bmform.submit();
+	}
+	else
+	{
+		alert("항목을 선택후 다시 시도해 주십시요.");
+	}
+	return;
+}
+
+function searchistory01( )
+{
+	var _shurl = document.location.href;
+
+	if ( _shurl.indexOf("&subcmd") > 0 )
+		_shurl = _shurl.substring( 0, _shurl.indexOf("&subcmd") );
+
+	var _shurl2 = "";
+	var _shform = document.searchhistoryform;
+
+	if ( eval(_shform.sh01) )
+	{
+		if ( !eval( _shform.sh01.length )  )
+		{
+			if ( _shform.sh01.checked )
+					_shurl2 += "&sh01=" + escape(_shform.sh01.value);
+		}
+		else
+		{
+			for( ix = 0; ix < _shform.sh01.length; ix++ )
+			{
+				if ( _shform.sh01[ix].checked )
+					_shurl2 += "&sh01=" + escape(_shform.sh01[ix].value);
+			}
+		}
+	}
+	
+	if ( _shurl2.indexOf("sh01") >= 0 )
+	{
+		_shform.method = "POST";
+		_shform.ourl.value = _shurl;
+		_shform.param1.value = _shurl2;
+		_shform.action = "./bookmarkproc.jsp";
+		_shform.submit();
+	}
+	else
+	{
+		alert("항목을 선택후 다시 시도해 주십시요.");
+	}
+	return;
+}
+
+function bookmarkjob02()
+{
+	var _bmurl = document.location.href;
+
+	if ( _bmurl.indexOf("&subcmd") > 0 )
+		_bmurl = _bmurl.substring( 0, _bmurl.indexOf("&subcmd") );
+
+	var _bmurl2 = "&subcmd=bmdel";
+	var _bmform = document.bookmarkform;
+
+	if ( eval(_bmform.bm01) )
+	{
+		if ( !eval( _bmform.bm01.length )  )
+		{
+			if ( _bmform.bm01.checked )
+					_bmurl2 += "&bm01=" + _bmform.bm01.value;
+		}
+		else
+		{
+			for( ix = 0; ix < _bmform.bm01.length; ix++ )
+			{
+				if ( _bmform.bm01[ix].checked )
+					_bmurl2 += "&bm01=" + _bmform.bm01[ix].value;
+			}
+		}
+	}
+	
+	if ( _bmurl2.indexOf("bm01") >= 0 )
+		document.location.href = _bmurl + _bmurl2;
+	return;
+}
+
+function searchistory02()
+{
+	var _shurl = document.location.href;
+
+	if ( _shurl.indexOf("&subcmd") > 0 )
+		_shurl = _shurl.substring( 0, _shurl.indexOf("&subcmd") );
+
+	var _shurl2 = "&subcmd=shdel";
+	var _shform = document.searchhistoryform;
+
+	if ( eval(_shform.sh01) )
+	{
+		if ( !eval( _shform.sh01.length )  )
+		{
+			if ( _shform.sh01.checked )
+					_shurl2 += "&sh01=" + escape(_shform.sh01.value);
+		}
+		else
+		{
+			for( ix = 0; ix < _shform.sh01.length; ix++ )
+			{
+				if ( _shform.sh01[ix].checked )
+					_shurl2 += "&sh01=" + escape(_shform.sh01[ix].value);
+			}
+		}
+	}
+	
+	if ( _shurl2.indexOf("sh01") >= 0 )
+		document.location.href = _shurl + _shurl2;
+	return;
+}
+
+////////////////////////////////////
+function AbsoluteQuickPos()
+{
+	return Math.max( ((document.body.clientWidth) - 974)/2, 0);
+}
+
+function AbsoluteRelPos()
+{
+	return Math.max( 650 +  ((document.body.clientWidth - 860)/2), 650 );
+}
+
+function AbsoluteboxHeight()
+{
+	return (document.body.clientHeight - 240)  ;
+}
+
+function AbsoluteboxHeight2()
+{
+	return (document.body.clientHeight - 300);
+}
+
+var QuickCreated = 0;
+function ActiveTreeMenu(bShow)
+{
+	if(QuickCreated==0)
+	{
+		var child = document.getElementById("quickMenu");
+
+		child.innerHTML = "<iframe name='frame1' src='../tree/deeptree.jsp?mode="
+				+document.quickForm.mode.value+"&sjwid="+document.quickForm.sjwid.value
+				+"' height='100%' width='100%' frameborder='no' scrolling='no' border='1' onload='showfloater(\""+bShow+"\");'/></iframe>";
+
+		QuickCreated = 1;
+		return true;
+	}
+
+	return false;
+}
+
+function showfloater( bShow )
+{
+	if(ActiveTreeMenu(bShow))
+		return;
+
+	if ( bShow != 0 )
+	{
+		//$("#floatMenu2").height( document.body.clientHeight );
+
+		try
+		{
+			window.frame1.showNhide( bShow );
+		}
+		catch(err)
+		{
+			if( err.description )
+				alert( "showfloater:"+err.description );
+			else
+				alert( "showfloater:"+err);
+		}
+
+		$("#floatMenu").hide();
+		$("#floatMenu2").show();
+	}
+	else
+	{
+		$("#floatMenu").show();
+		$("#floatMenu2").hide();
+	}
+}
+
+
+/*
+*/
+footindex=0;
+
+function gofoot()
+{ 
+	var footname = "a.foot";
+	if ( $( footname ).length > 0 )
+	{
+		if ( ($( footname ).length-1) <= footindex  )
+		{
+			$( footname )[footindex].focus();
+			footindex = 0;
+		}
+		else
+		{
+			$( footname )[footindex].focus();
+			footindex++;
+		}
+	}
+} 
+
+/////////////////////////////////////////////////
+//var defaultStyle="FONT-FAMILY: 새바탕, 바탕, 굴림, tahoma, Arial,sans-serif; LINE-HEIGHT: 120%;";
+var defaultStyle="LINE-HEIGHT: 120%;";
+var defaultFont=12;
+var defaultColorFlag="color";
+var defaultFontFamily="nBatang";
+var curFontSize = defaultFont;
+var curColorFlag = defaultColorFlag;
+
+function setClassProperty (strClassName, strSize)
+{
+	var objLastStyleSheet = document.styleSheets[document.styleSheets.length - 1];
+	var strPropVal = "FONT-SIZE:"+strSize +"pt; " + defaultStyle;
+
+	if (document.all) 
+	{
+		//var strSelector = '.' + strClassName;
+		var strSelector = strClassName;
+		objLastStyleSheet.addRule(strSelector, strPropVal);
+	}
+	else if (document.getElementById)
+	{
+		//var strRule = '.' + className + ' { ' + strPropVal + '}';
+		var strRule = strClassName + ' { ' + strPropVal + '}';
+		objLastStyleSheet.insertRule(strRule, objLastStyleSheet.cssRules.length);
+	}
+}
+
+function setClassPropertyColor (strClassName, strColor)
+{
+	var objLastStyleSheet = document.styleSheets[document.styleSheets.length - 1];
+	var strPropVal = "COLOR:"+strColor+"; " + defaultStyle;
+
+	if (document.all) 
+	{
+		//var strSelector = '.' + strClassName;
+		var strSelector = strClassName;
+		objLastStyleSheet.addRule(strSelector, strPropVal);
+	}
+	else if (document.getElementById)
+	{
+		//var strRule = '.' + className + ' { ' + strPropVal + '}';
+		var strRule = strClassName + ' { ' + strPropVal + '}';
+		objLastStyleSheet.insertRule(strRule, objLastStyleSheet.cssRules.length);
+	}
+}
+
+function SetDefaultFont() 
+{
+    var todayDate = new Date();
+    var name = "ArticleFont";
+    var expiredays = -1;
+    var value = defaultFont + "//" + defaultFontFamily;
+    
+    todayDate.setDate( todayDate.getDate() + expiredays );
+    document.cookie = name + "=" + escape(value) + "; path=/;";// expires=" + todayDate.toGMTString() + ";"
+
+    setClassProperty("X_L_ARTICLE", defaultFont+3);
+    setClassProperty("X_ARTICLE", defaultFont);
+    setClassProperty("X_S_ARTICLE", defaultFont-3);
+    document.location.reload();
+}
+
+function SetFont() 
+{
+    var todayDate = new Date();
+    todayDate.setDate( todayDate.getDate() + 365 );
+    document.cookie = "Font = " + escape(curFontSize) + "; path=/; expires=" + todayDate.toGMTString() + ";"           
+}
+
+function initFont()
+{
+	temp = GetArticleFont("ArticleFont").split("//");
+	var fontsize = defaultFont;
+	var colorFlag = defaultColorFlag;
+
+	if (temp != "") 
+	{
+		if(temp[0] != "") 
+		{
+			fontsize = parseInt(temp[0]);
+		}
+		
+		if(temp[2] != "") 
+		{
+			//alert( temp[2] );
+			colorFlag = temp[2];
+			
+		}
+		else
+		{
+			colorFlag = "";
+		}
+		
+	}
+	curFontSize = fontsize;
+	setClassProperty(".font3", curFontSize);		//좌목
+	setClassProperty("a.font3:link", curFontSize);		//좌목
+	setClassProperty("a.font3:active", curFontSize);		//좌목
+	setClassProperty("a.font3:visited", curFontSize);		//좌목
+	setClassProperty("a.font3:hover", curFontSize);		//좌목
+	setClassProperty(".font5", curFontSize);		//날씨
+	setClassProperty(".font6", curFontSize);		//기사제목
+	setClassProperty(".font7", curFontSize+10);		//기사본문
+
+	if ( colorFlag == "color" )
+	{
+		setClassPropertyColor(".btag", "#3A5FCD");
+		setClassPropertyColor(".ctag", "#2E8B57");
+		setClassPropertyColor(".dtag", "#EE7600");
+		setClassPropertyColor(".gtag", "#999988");
+		setClassPropertyColor(".font6", "#6699CC");
+		setClassPropertyColor("a.foot:link", "#FF0000");
+		setClassPropertyColor("a.foot:active", "#FF0000");
+		setClassPropertyColor("a.foot:visited", "#FF0000");
+		setClassPropertyColor("a.foot:hover", "#FF0000");
+	}
+	else
+	{
+		setClassPropertyColor(".btag", "#000000");
+		setClassPropertyColor(".ctag", "#000000");
+		setClassPropertyColor(".dtag", "#000000");
+		setClassPropertyColor(".gtag", "#000000");
+		setClassPropertyColor(".font6", "#000000");
+		setClassPropertyColor("a.foot:link", "#000000");
+		setClassPropertyColor("a.foot:active", "#000000");
+		setClassPropertyColor("a.foot:visited", "#000000");
+		setClassPropertyColor("a.foot:hover", "#000000");
+	}	
+	/////////////////////
+	$("img.newchar").each( function( index ) {
+		var fs = $( this ).parent().css("font-size");
+		$( this ).css( "height", fs ).css( "vertical-align", "text-bottom" );
+	});
+	/////////////////////
+}
+
+function GetArticleFont(name)
+{
+	var nameOfCookie = name + "=";
+	var x = 0;
+
+	while ( x <= document.cookie.length )
+	{
+		var y = (x+nameOfCookie.length);
+		if ( document.cookie.substring( x, y ) == nameOfCookie )
+		{
+			if ( (endOfCookie=document.cookie.indexOf( ";", y )) == -1 )
+			endOfCookie = document.cookie.length;
+
+			return unescape(document.cookie.substring( y, endOfCookie ));
+		}
+		x = document.cookie.indexOf( " ", x ) + 1;
+
+		if ( x == 0 ) break;
+	}
+	return "";
+}
+function SetArticleColor(bcolor) 
+{
+	var todayDate = new Date();
+	var name = "ArticleFont";
+	var expiredays = -1;
+	curColorFlag = bcolor;
+	
+	var value = curFontSize + "//" + defaultFontFamily + "//" + bcolor;
+	todayDate.setDate( todayDate.getDate() + expiredays );
+	document.cookie = name + "=" + escape(value) + "; path=/;";// expires=" + todayDate.toGMTString() + ";";
+
+	if ( bcolor == "color" )
+	{
+		setClassPropertyColor(".btag", "#3A5FCD");
+		setClassPropertyColor(".ctag", "#2E8B57");
+		setClassPropertyColor(".dtag", "#EE7600");
+		setClassPropertyColor(".gtag", "#999988");
+		setClassPropertyColor(".font6", "#6699CC");
+		setClassPropertyColor("a.foot:link", "#FF0000");
+		setClassPropertyColor("a.foot:active", "#FF0000");
+		setClassPropertyColor("a.foot:visited", "#FF0000");
+		setClassPropertyColor("a.foot:hover", "#FF0000");
+	}
+	else
+	{
+		setClassPropertyColor(".btag", "#000000");
+		setClassPropertyColor(".ctag", "#000000");
+		setClassPropertyColor(".dtag", "#000000");
+		setClassPropertyColor(".gtag", "#000000");
+		setClassPropertyColor(".font6", "#000000");
+		setClassPropertyColor("a.foot:link", "#000000");
+		setClassPropertyColor("a.foot:active", "#000000");
+		setClassPropertyColor("a.foot:visited", "#000000");
+		setClassPropertyColor("a.foot:hover", "#000000");
+	}
+}
+function SetArticleFont(fontSize, fontFamily) 
+{
+	var todayDate = new Date();
+	var name = "ArticleFont";
+	var expiredays = -1;
+	var value = fontSize + "//" + fontFamily + "//" + curColorFlag;
+	todayDate.setDate( todayDate.getDate() + expiredays );
+	document.cookie = name + "=" + escape(value) + "; path=/;";// expires=" + todayDate.toGMTString() + ";";
+
+	setClassProperty(".font3", fontSize);	//좌목
+	setClassProperty("a.font3:link", fontSize);		//좌목
+	setClassProperty("a.font3:active", fontSize);		//좌목
+	setClassProperty("a.font3:visited", fontSize);		//좌목
+	setClassProperty("a.font3:hover", fontSize);		//좌목
+	setClassProperty(".font5", fontSize);	//날씨
+	setClassProperty(".font6", fontSize);	//기사제목
+	setClassProperty(".font7", fontSize+10);		//기사본문
+}
+function SetPlusFont() 
+{
+    if (curFontSize <= 30) {
+        curFontSize += 2;
+        SetArticleFont(curFontSize, defaultFontFamily);
+        SetArticleFont(curFontSize, defaultFontFamily);
+    }
+}
+function SetMinusFont() 
+{
+    if (curFontSize >= 11) {
+        curFontSize -= 2;
+        SetArticleFont(curFontSize, defaultFontFamily); 
+        SetArticleFont(curFontSize, defaultFontFamily);
+    }
+}
+function SetBWFont() 
+{
+	SetArticleColor( "bw" );
+}
+function SetColorFont() 
+{
+	SetArticleColor( "color" );
+}
+//////////////////////////////////
+
+function getCookieVal (offset) {
+   var endstr = document.cookie.indexOf (";", offset);
+   if (endstr == -1) endstr = document.cookie.length;
+   return unescape(document.cookie.substring(offset, endstr));
+}
+
+function GetCookie (name) {
+   var arg = name + "=";
+   var alen = arg.length;
+   var clen = document.cookie.length;
+   var i = 0;
+   while (i < clen) { //while open
+      var j = i + alen;
+      if (document.cookie.substring(i, j) == arg)
+         return getCookieVal (j);
+      i = document.cookie.indexOf(" ", i) + 1;
+      if (i == 0) break; 
+   } //while close
+	return "";
+}
+
+function SetCookie (name, value) {
+   var argv = SetCookie.arguments;
+   var argc = SetCookie.arguments.length;
+   var expires = (2 < argc) ? argv[2] : null;
+   var path = (3 < argc) ? argv[3] : null;
+   var domain = (4 < argc) ? argv[4] : null;
+   var secure = (5 < argc) ? argv[5] : false;
+   document.cookie = name + "=" + escape(value) +
+      ((expires == null) ? "" : ("; expires=" + expires.toGMTString())) +
+      ((path == null) ? "" : ("; path=" + path)) +
+      ((domain == null) ? "" : ("; domain=" + domain)) +
+      ((secure == true) ? "; secure" : "");
+}
+
+function SetCookieVal() {
+   pathname = location.pathname;
+   var myDomain = pathname.substring(0, pathname.lastIndexOf('/')) +'/';
+   ExpDate.setTime(ExpDate.getTime() + 1000*60*60);
+   SetCookie('MyCookie', 'Hello Cookie!', ExpDate, myDomain);
+}
+
+////
+//	왕대,서기,연호,책수의 기간설정
+////
+
+function uid_check( mode, param, _selval )
+{
+	var target;
+	var data = "";
+
+	var selval = "def";
+	if ( _selval != undefined )
+		selval = _selval;
+
+	switch( param )
+	{
+		case "s1":
+			data = "mode=" + mode + "&param=s1";
+			target = "kingname1";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode,"s3");
+				}
+			});
+			break;
+		case "s3":
+			data = "mode=" + mode + "&param=s3&nodeid=" + $("#s1").val();
+			target = "kingyear1";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+				}
+			});
+			break;
+		case "s2":
+			data = "mode=" + mode + "&param=s2";
+			target = "kingname2";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode,"s4");
+				}
+			});
+			break;
+		case "s4":
+			data = "mode=" + mode + "&param=s4&nodeid=" + $("#s2").val();
+			target = "kingyear2";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+				}
+			});
+			break;
+		case "a1":
+			data = "mode=" + mode + "&param=a1";
+			target = "kingname1";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "a3");
+				}
+			});
+			break;
+		case "a3":
+			data = "mode=" + mode + "&param=a3&nodeid=" + $("#a1").val();
+			target = "kingyear1";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "a5");
+				}
+			});
+			break;
+		case "a5":
+			data = "mode=" + mode + "&param=a5&nodeid=" + $("#a3").val();
+			target = "kingmonth1";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "a7");
+				}
+			});
+			break;
+		case "a7":
+			data = "mode=" + mode + "&param=a7&nodeid=" + $("#a5").val();
+			target = "kingday1";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+				}
+			});
+			break;
+
+
+		case "a2":
+			data = "mode=" + mode + "&param=a2";
+			target = "kingname2";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "a4");
+				}
+			});
+			break;
+		case "a4":
+			data = "mode=" + mode + "&param=a4&nodeid=" + $("#a2").val();
+			target = "kingyear2";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "a6");
+				}
+			});
+			break;
+		case "a6":
+			data = "mode=" + mode + "&param=a6&nodeid=" + $("#a4").val();
+			target = "kingmonth2";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "a8");
+				}
+			});
+			break;
+		case "a8":
+			data = "mode=" + mode + "&param=a8&nodeid=" + $("#a6").val();
+			target = "kingday2";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+				}
+			});
+			break;
+		case "b1":
+			data = "mode=" + mode + "&param=b1";
+			target = "adyear1";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "b3");
+				}
+			});
+			break;
+		case "b3":
+			data = "mode=" + mode + "&param=b3&nodeid=" + $("#b1").val();
+			target = "admonth1";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "b5");
+				}
+			});
+			break;
+		case "b5":
+			data = "mode=" + mode + "&param=b5&nodeid=" + $("#b3").val();
+			target = "adday1";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+				}
+			});
+			break;
+		case "b2":
+			data = "mode=" + mode + "&param=b2";
+			target = "adyear2";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "b4");
+				}
+			});
+			break;
+		case "b4":
+			data = "mode=" + mode + "&param=b4&nodeid=" + $("#b2").val();
+			target = "admonth2";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "b6");
+				}
+			});
+			break;
+		case "b6":
+			data = "mode=" + mode + "&param=b6&nodeid=" + $("#b4").val();
+			target = "adday2";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+				}
+			});
+			break;
+		case "c1":
+			data = "mode=" + mode + "&param=c1";
+			target = "chnname1";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "c3");
+				}
+			});
+			break;
+		case "c3":
+			data = "mode=" + mode + "&param=c3&nodeid=" + $("#c1").val();
+			target = "chnyear1";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "c5");
+				}
+			});
+			break;
+		case "c5":
+			data = "mode=" + mode + "&param=c5&nodeid=" + $("#c3").val();
+			target = "chnmonth1";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "c7");
+				}
+			});
+			break;
+		case "c7":
+			data = "mode=" + mode + "&param=c7&nodeid=" + $("#c5").val();
+			target = "chnday1";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+				}
+			});
+			break;
+		case "c2":
+			data = "mode=" + mode + "&param=c2";
+			target = "chnname2";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "c4");
+				}
+			});
+			break;
+		case "c4":
+			data = "mode=" + mode + "&param=c4&nodeid=" + $("#c2").val();
+			target = "chnyear2";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "c6");
+				}
+			});
+			break;
+		case "c6":
+			data = "mode=" + mode + "&param=c6&nodeid=" + $("#c4").val();
+			target = "chnmonth2";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "c8");
+				}
+			});
+			break;
+		case "c8":
+			data = "mode=" + mode + "&param=c8&nodeid=" + $("#c6").val();
+			target = "chnday2";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+				}
+			});
+			break;
+		case "d1":
+			data = "mode=" + mode + "&param=d1";
+			target = "bookNum1";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "d3");
+				}
+			});
+			break;
+		case "d3":
+			data = "mode=" + mode + "&param=d3&nodeid=" + $("#d1").val();
+			target = "bkingname1";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "d5");
+				}
+			});
+			break;
+		case "d5":
+			data = "mode=" + mode + "&param=d5&nodeid=" + $("#d3").val();
+			target = "bkingmonth1";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "d7");
+				}
+			});
+			break;
+		case "d7":
+			data = "mode=" + mode + "&param=d7&nodeid=" + $("#d5").val();
+			target = "bkingday1";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "d9");
+				}
+			});
+			break;
+		case "d2":
+			data = "mode=" + mode + "&param=d2";
+			target = "bookNum2";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "d4");
+				}
+			});
+			break;
+		case "d4":
+			data = "mode=" + mode + "&param=d4&nodeid=" + $("#d2").val();
+			target = "bkingname2";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "d6");
+				}
+			});
+			break;
+		case "d6":
+			data = "mode=" + mode + "&param=d6&nodeid=" + $("#d4").val();
+			target = "bkingmonth2";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "d8");
+				}
+			});
+			break;
+		case "d8":
+			data = "mode=" + mode + "&param=d8&nodeid=" + $("#d6").val();
+			target = "bkingday2";
+			$.ajax({
+				type: "GET",
+				async: false,
+				url: "get_era2.jsp",
+				data: data,
+				success: function(msg)
+				{
+					$("#"+target).html( $.trim(msg) );
+					uid_check(mode, "d10");
+				}
+			});
+			break;
+	}
+}
+
+function getScrollXY() {
+  var scrOfX = 0, scrOfY = 0;
+  if( typeof( window.pageYOffset ) == 'number' ) {
+    //Netscape compliant
+    scrOfY = window.pageYOffset;
+    scrOfX = window.pageXOffset;
+  } else if( document.body && ( document.body.scrollLeft || document.body.scrollTop ) ) {
+    //DOM compliant
+    scrOfY = document.body.scrollTop;
+    scrOfX = document.body.scrollLeft;
+  } else if( document.documentElement && ( document.documentElement.scrollLeft || document.documentElement.scrollTop ) ) {
+    //IE6 standards compliant mode
+    scrOfY = document.documentElement.scrollTop;
+    scrOfX = document.documentElement.scrollLeft;
+  }
+  return [ scrOfX, scrOfY ];
+}
+
+function alertSize() {
+  var myWidth = 0, myHeight = 0;
+  if( typeof( window.innerWidth ) == 'number' ) {
+    //Non-IE
+    myWidth = window.innerWidth;
+    myHeight = window.innerHeight;
+  } else if( document.documentElement && ( document.documentElement.clientWidth || document.documentElement.clientHeight ) ) {
+    //IE 6+ in 'standards compliant mode'
+    myWidth = document.documentElement.clientWidth;
+    myHeight = document.documentElement.clientHeight;
+  } else if( document.body && ( document.body.clientWidth || document.body.clientHeight ) ) {
+    //IE 4 compatible
+    myWidth = document.body.clientWidth;
+    myHeight = document.body.clientHeight;
+  }
+  window.alert( 'Width = ' + myWidth );
+  window.alert( 'Height = ' + myHeight );
+}
+
+
+function getClientHeight()
+{
+	var myHeight = 0;
+	if( typeof( window.innerWidth ) == 'number' )
+	{	//Non-IE
+		myHeight = window.innerHeight;
+	} else if( top.document.documentElement && ( top.document.documentElement.clientWidth || top.document.documentElement.clientHeight ) )
+	{	//IE 6+ in 'standards compliant mode'
+		myHeight = top.document.documentElement.clientHeight;
+	} else if( top.document.body && ( top.document.body.clientWidth || top.document.body.clientHeight ) )
+	{	//IE 4 compatible
+		myHeight = top.document.body.clientHeight;
+	}
+
+	return myHeight;
+}
+
+function ismobile()
+{
+	var mobileKeyWords = new Array('iPhone', 'iPod', 'BlackBerry', 'Android', 'Windows CE', 'LG', 'MOT', 'SAMSUNG', 'SonyEricsson');
+	for (var word in mobileKeyWords){
+	    if (navigator.userAgent.match(mobileKeyWords[word]) != null){
+	        location.href = "/";
+	        break;
+	    }
+	}
+}
+function popupHelp()
+{
+	var nw = window.open( '/top/top_help.jsp','sjwhelp','width=830,height=550');
+	if ( nw != null )
+		nw.focus();
+}
+function popupEng()
+{
+	var nw = window.open( '/eng/eng01.jsp','sjweng','direction=1,location=1,menubar=1,scrollbars=1,status=1,toolbar=1,resizable=1');
+	if ( nw != null )
+		nw.focus();
+}

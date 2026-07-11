@@ -1,0 +1,564 @@
+
+/****************************************************************************************************/
+
+// startsWith (특정 문자로 시작하는지 확인)
+if (!String.prototype.startsWith) {
+	String.prototype.startsWith = function(str) {
+		if (this.length < str.length) {
+			return false;
+		}
+		return this.indexOf(str) == 0;
+	}
+}
+// endsWith (특정 문자로 끝나는지 확인)
+if (!String.prototype.endsWith) {
+	String.prototype.endsWith = function(str) {
+		if (this.length < str.length) {
+			return false;
+		}
+		return this.lastIndexOf(str) + str.length == this.length;
+	}
+}
+
+// 빈값 체크
+function isEmpty(value) {
+	if (value === null) return true;
+	if (typeof value === 'undefined') return true;
+	if (typeof value === 'string' && value === '') return true;
+	if (Array.isArray(value) && value.length < 1) return true;
+	if (typeof value === 'object' && value.constructor.name === 'Object' && Object.keys(value).length < 1 && Object.getOwnPropertyNames(value) < 1) return true;
+	if (typeof value === 'object' && value.constructor.name === 'String' && Object.keys(value).length < 1) return true;
+	return false;
+}
+
+/****************************************************************************************************/
+
+// 이미지뷰어 팝업창
+function fnImageViewerPopup(levelId, begin) {
+	var popupUrl = "/common/imageViewer.do";
+	if (levelId && begin) {
+		popupUrl += "?levelId=" + levelId + "&begin=" + begin;
+	} else if (levelId) {
+		popupUrl += "?levelId=" + levelId;
+	}
+	window.open(popupUrl, "_blank", "width=1000,height=720,top=100,left=300,scrollbars=yes,resizable=yes");
+}
+
+// 이미지뷰어 팝업창 - 단일페이지 : 동학농민혁명자료총서(prd)
+function fnImageViewerPage(levelId, fileName) {
+	if (levelId && fileName) {
+		window.open("/common/imageViewerPage.do?levelId=" + levelId + "&fileName=" + fileName,
+				"_blank", "width=1000,height=720,top=100,left=300,scrollbars=yes,resizable=yes");
+    }
+}
+
+// 이미지뷰어 팝업창 - RDB 아이템 : 일제감시대상인물카드(ia), 사진유리필름자료(fl)
+function fnImageViewerRdbPopup(levelId) {
+	var popupUrl = "/common/imageViewerRdb.do?levelId=" + levelId;
+	window.open(popupUrl, "_blank", "width=1000,height=720,top=100,left=300,scrollbars=yes,resizable=yes");
+}
+
+// 이미지뷰어 팝업창 : 직원록자료(jw)
+function fnImageViewerJwPopup(levelId, organCode) {
+	var popupUrl = "/common/imageViewerJw.do";
+	if (levelId && organCode) {
+		popupUrl += "?levelId=" + levelId + "&organCode=" + organCode;
+	} else if (organCode) {
+		popupUrl += "?organCode=" + organCode;
+	} else if (levelId) {
+		popupUrl += "?levelId=" + levelId;
+	}
+	window.open(popupUrl, "_blank", "width=1000,height=720,top=100,left=300,scrollbars=yes,resizable=yes");
+}
+
+// 이미지뷰어 팝업창 : 고려시대 금석문·문자자료(gsko)
+function fnGskoImageViewerPopup(levelId, begin) {
+	var popupUrl = "/common/gskoImageViewer.do";
+	if (levelId && begin) {
+		popupUrl += "?levelId=" + levelId + "&begin=" + begin;
+	} else if (levelId) {
+		popupUrl += "?levelId=" + levelId;
+	}
+	window.open(popupUrl, "_blank", "width=1000,height=720,top=100,left=300,scrollbars=yes,resizable=yes");
+}
+
+// 이미지뷰어 팝업창 - 고서 -> 사용안함.
+function fnImageOldBookViewerPopup(levelId, page) {
+	var popupUrl = "/ancient/oldBookViewer.do?levelId=" + levelId + "&page=" + page;
+	window.open(popupUrl, "_blank", "width=1000,height=720,top=100,left=300,scrollbars=yes,resizable=yes");
+}
+
+// 이미지뷰어 팝업창 - 교감주
+function goImageViewerAnnotation(levelId, fileName) {
+	if (levelId && fileName) {
+		window.open("/common/imageViewerAnnotation.do?levelId=" + levelId + "&fileName=" + fileName,
+				"_blank", "width=815,height=600,top=100,left=250,scrollbars=yes,resizable=yes");
+    }
+}
+
+/****************************************************************************************************/
+
+// 비교보기 (고려/근대 외 공통)
+function commonGoCompareViewer(levelId, type) {
+	if (levelId) {
+		window.open('/common/compareViewer.do?levelId=' + levelId + '&type=' + type,
+				'commonCompareViewer', 'width=1180,height=700,top=100,left=0,scrollbars=yes,resizable=yes');
+	}
+}
+
+// 비교보기 (고려)
+function goCompareViewer(levelId) {
+	if (levelId) {
+		// 고려시대 금석문·문자자료(gsko), 고려관련 일본자료(jpkr)
+		if (levelId.indexOf("gsko") == 0 || levelId.indexOf("jpkr") == 0) {
+			window.open('/goryeo/gskoCompareViewer.do?levelId=' + levelId,
+					'goryeoCompareViewer', 'width=1180,height=700,top=100,left=0,scrollbars=yes,resizable=yes');
+		} else {
+			window.open('/goryeo/compareViewer.do?levelId=' + levelId,
+					'goryeoCompareViewer', 'width=1180,height=700,top=100,left=0,scrollbars=yes,resizable=yes');
+		}
+	}
+}
+
+// 비교보기 (근대)
+function modernGoCompareViewer(levelId) {
+	if (levelId) {
+		// 주한일본공사관기록·통감부문서(jh), 고종시대사(gj), 사료 고종시대사(sk), 동학농민혁명자료총서(prd)
+		if (levelId.startsWith("jh") || levelId.startsWith("gj") || levelId.startsWith("sk") || levelId.startsWith("prd")) {
+			window.open('/common/compareViewer.do?levelId=' + levelId + '&type=joseon',
+					'commonCompareViewer', 'width=1180,height=700,top=100,left=0,scrollbars=yes,resizable=yes');
+		} else {
+			window.open('/modern/compareViewer.do?levelId=' + levelId,
+					'modernCompareViewer', 'width=1180,height=700,top=100,left=0,scrollbars=yes,resizable=yes');
+		}
+	}
+}
+
+// 세로보기 -> 사용안함.
+function goVerticalViewer(levelId) {
+	if (levelId) {
+		window.open('/common/verticalViewer.do?levelId=' + levelId,
+				'verticalViewer', 'width=800,height=700,top=100,left=0,scrollbars=yes,resizable=no');
+	}
+}
+// 비교보기 - 세로 ? : 한국고대금석문(gskh)
+function goCompareVerticalViewer(levelId, oneLevelId, otherLevelId, type) {
+	if (levelId && oneLevelId && otherLevelId) {
+		window.open('/common/compareVerticalViewer.do?levelId=' + levelId + '&oneLevelId=' + oneLevelId + '&otherLevelId=' + otherLevelId + '&type=' + type,
+				'compareVerticalViewer', 'width=1400,height=700,top=100,left=0,scrollbars=yes,resizable=no');
+	}
+}
+
+/****************************************************************************************************/
+
+// 서지 팝업
+function fn_seoji(levelId, era) {
+	var url = "/" + era + "/getSeojiPopup.do?levelId=" + levelId;
+	window.open(url, "_blank", "width=825,height=630,top=20,left=50,scrollbars=no,resizable=no");
+}
+
+// 해제 팝업 -> 사용안함.
+function fn_haejae(levelId, era) {
+	var url =  "/" + era + "/getHaejaePopup.do?levelId=" + levelId;
+	window.open(url, "_blank", "width=825,height=630,top=20,left=50,scrollbars=no,resizable=no");
+}
+
+// 메타정보 팝업
+function goFront(levelId, frontTitle, elName, elType, era) {
+	if (!elType) {
+		elType = frontTitle;
+	}
+	window.open('/common/front.do?levelId=' + levelId + '&frontTitle=' + encodeURI(frontTitle) + '&elName=' + elName + '&elType=' + encodeURI(elType) + '&era=' + era,
+			'_blank',
+			'width=815,height=500,top=100,left=250,scrollbars=yes,resizable=yes');
+}
+
+// 팝업 호출 -> 사용안함.
+function callPopup(levelId, frontTitle, elName, elType, era) {
+	if (!elType) {
+		elType = frontTitle;
+	}
+	window.open('/diachronic/callPopup.do?levelId=' + levelId + '&frontTitle=' + encodeURI(frontTitle) + '&elName=' + elName + '&elType=' + encodeURI(elType) + '&era=' + era,
+			'_blank',
+			'width=815,height=500,top=100,left=250,scrollbars=yes,resizable=yes');
+}
+
+// 해설 목록 팝업 : 주제별연표(ch)
+function goExplanation(levelId, frontTitle, elName, elType, annotationId, era) {
+	if (!elType) {
+		elType = frontTitle;
+	}
+	window.open('/common/front.do?levelId=' + levelId + '&frontTitle=' + encodeURI(frontTitle) + '&elName=' + elName + '&elType=' + encodeURI(elType) + '&era=' + era + '#' + annotationId,
+			'_blank',
+			'width=815,height=500,top=100,left=250,scrollbars=yes,resizable=yes');
+}
+
+// 팝업 페이지 열기
+function openPopupPage(type, data) {
+	//console.log(data);
+	var dataArr = data.split("/");
+	var href = dataArr[2];
+	var parameter = dataArr[dataArr.length - 1];
+	var systemIdParameter = parameter.split("=")[1];
+	var SystemIdArr = systemIdParameter.split("|");
+	
+	// 원문 -> 사용안함.
+	if (type == 'wonMoon') {
+		dataArr[dataArr.length - 1] = dataArr[dataArr.length - 1].replace(SystemIdArr[1], "").replace("|", "");
+		var url = dataArr.join("/");
+		var option = "width=1000,height=800,top=100,left=200";
+		window.open(url, "원문 팝업", option);
+	}
+	// 전자사료관 -> 사용안함.
+	else if (type == 'junjaSaryo') {
+		var url = 'http://' + href + "/id/" + SystemIdArr[1];
+		window.open(url, '_blank');
+	}
+	// 지리정보 : 한국근대지도자료(jnm)
+	else if (type == 'jiriInfo') {
+		var url = data;
+		window.open(url, '_blank');
+	}
+}
+
+// 규장각원본 팝업 : 비변사등록(bb)
+function goKyujanggak(levelId, levelText) {
+	if (levelId && levelText) {
+		var idArray = levelId.split("_");
+		var vol_no = "0" + idArray[1].replace('r', '');
+		
+		var textArray = levelText.split("-");
+		var page_no = textArray[0];
+		
+		var url = "https://kyudb.snu.ac.kr/pf01/rendererImg.do?";
+		var param = "item_cd=VBS&book_cd=GK15044_00&vol_no=" + vol_no + "&page_no=" + page_no;
+		window.open(url + param, 'Kyujanggak', 'width=1250,height=800,top=100,left=0,scrollbars=yes,resizable=no');
+	}
+} 
+
+// 규장각이미지 -> 사용안함.
+function goLawKyujanggak(dateOcccured) {
+	if (dateOcccured) {
+		var ymdArray = dateOcccured.split("-");
+		var year = ymdArray[0];
+		var mon = ymdArray[1];
+		var day = ymdArray[2];
+		var l;
+		if (day.length > 2) {
+			l = day.substring(2);
+			day = day.substring(0, 2);
+		}
+		
+		//var url = "http://147.46.103.182/VBSLinker.jsp?";
+		var url = "https://kyu.snu.ac.kr/VBSLinker.jsp?";
+		var param = "year=" + year + "&month=" + mon + "&day=" + day + "&l=" + l;
+		window.open(url + param, 'LawKyujanggak', 'width=1160,height=700,top=100,left=0,scrollbars=yes,resizable=no');
+	}
+}
+
+/****************************************************************************************************/
+
+// 공통 아이템레벨 다운로드
+function commonDownloadFileList(obj) {
+	const host = location.origin + "/downloadItemLevel.do";
+	const params = new URLSearchParams(obj).toString();	// Map 객체를 바로 URL 파라미터 형식으로 변환 (인코딩까지 자동으로 해줌)
+	location.href = `${host}?${params}`;
+}
+
+/*// 고려 아이템레벨 다운로드 -> 사용안함.
+function downloadFileList(obj) {
+	let param = "";
+	let i = 1;
+	let amp = "&";
+	for (let key of obj.keys()) {
+		if (i == obj.size) amp = "";
+		param += key + "=" + obj.get(key) + amp;
+		i++;
+	}
+
+	let path = "";
+	if ("gsko" == obj.get("itemId")) {	// 고려시대 금석문·문자자료(gsko)
+		path = "/goryeo/downloadItemLevelGsko.do";
+	} else {
+		path = "/goryeo/downloadItemLevel.do";
+	}
+	host = location.origin + path;
+
+	location.href = host + "?" + param;
+}*/
+
+// 근대 아이템레벨 다운로드
+function modernDownloadFile(itemId, parentId, types, itemType) {
+	const host = location.origin + "/downloadItemLevel.do";
+	
+	if (itemType === 'RDB') {
+		location.href = host + "?" + $("#downlaodForm").serialize() + "&itemId=" + itemId;
+	}
+	// 조선총독부 관보(gb), 조선·대한제국 관보(gbdh), 통감부 공보(gbtg)
+	else if (itemId === "gb" || itemId === "gbdh" || itemId === "gbtg") {
+		location.href = host + "?" + $("#downlaodForm").serialize();
+	} else {
+		let map = new Map();
+		map.set("itemId", itemId);
+		map.set("parentId", parentId);
+		map.set("types", types);
+		if ($("#allYn").length && $("#allYn").val() === "Y") {
+			map.set("allYn", "Y");
+		}
+		map.set("orderColumn", "LEVEL_ID");
+		
+		const params = new URLSearchParams(map).toString();	// Map 객체를 바로 URL 파라미터 형식으로 변환 (인코딩까지 자동으로 해줌)
+		location.href = `${host}?${params}`;
+	}
+}
+
+// 현대 아이템레벨 다운로드 -> 사용안함.
+function contempDownloadFileList(obj) {
+	let param = "";
+	let i = 1;
+	let amp = "&";
+	for (let key of obj.keys()) {
+		if (i == obj.size) amp = "";
+		param += key + "=" + obj.get(key) + amp;
+		i++;
+	}
+	
+	let path = "/contemp/downloadItemLevel.do";
+	host = location.origin + path;
+	
+	location.href = host + "?" + param;
+}
+
+/****************************************************************************************************/
+
+// 윈도우 새창으로 호출
+function fn_linkUrl(linkUrl) {
+	const openNewWindow = window.open("about:blank");
+	if (openNewWindow) {
+		openNewWindow.location.href = linkUrl;
+	} else {
+		alert("팝업이 차단되었습니다. 브라우저 설정을 확인해 주세요.");
+	}
+}
+
+// 페이지 redirect
+function redirectToPage(obj) {
+	const host = location.origin + location.pathname;
+	const params = new URLSearchParams(obj).toString();	// Map 객체를 바로 URL 파라미터 형식으로 변환 (인코딩까지 자동으로 해줌)
+	location.href = `${host}?${params}`;
+}
+
+// 페이지 이동
+function goToPage(pathname, obj) {
+	const host = location.origin + pathname;
+	const params = new URLSearchParams(obj).toString();	// Map 객체를 바로 URL 파라미터 형식으로 변환 (인코딩까지 자동으로 해줌)
+	location.href = `${host}?${params}`;
+}
+
+/****************************************************************************************************/
+
+//##글씨크게/작게------------------------------------------------------------
+// Specify affected tags. Add or remove from list:
+var targets = new Array('div', 'span', 'td', 'tr', 'li', 'ul', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'input', 'em', 'a');
+// Specify spectrum of different font sizes:
+var sizes = new Array('9pt', '10pt', '11pt', '12pt', '14pt', '16pt', '18pt', '21pt', '24pt', '28pt');
+var startSize = 4;
+function ts(target, inc) {
+	if (!document.getElementById) {
+		return;
+	}
+	var d = document, cEl = null, size = startSize, i, j, cTags;
+	size += inc;
+	if (size < 0) {	// 폰트 크기를 0 이하로 내릴 수 없게 설정
+		size = 0;
+	}
+	if (size > sizes.length) {	//폰트 크기를 6 이상으로 올릴 수 없게 설정
+		size = sizes.length;
+	}
+	startSize = size;
+	if (!(cEl = d.getElementById(target))) {
+		cEl = d.getElementsByTagName(target)[0];
+	}
+	if (cEl) {
+		cEl.style.fontSize = sizes[size];
+		for (i = 0; i < targets.length; i++) {
+			cTags = cEl.getElementsByTagName(targets[i]);	// getElementsByTagName을 사용하면 배열로 받아짐
+			for (j = 0; j < cTags.length; j++) {
+				cTags[j].style.fontSize = sizes[size];
+			}
+		}
+	}
+}
+//##글씨크게/작게------------------------------------------------------------
+
+/****************************************************************************************************/
+
+/**
+ * 기타 검색조건 추가
+ *
+ * @param formObject  jQuery object
+ * @param type        search target field
+ * @param keyword     search keyword
+ * @param conjunction AND | OR | (OR | )OR | (AND | )AND
+ */
+function appendSearchConditionSet(formObject, type, keyword, conjunction) {
+	var searchKeywordType = $("<input type='hidden' name='etcKeywordType'></input>");				// 검색대상필드
+	var searchKeyword = $("<input type='hidden' name='etcKeyword'></input>");						// 키워드
+	var searchKeywordConjunction = $("<input type='hidden' name='etcKeywordConjunction'></input>");	// 접속사(AND, OR, ...)
+
+	searchKeywordType.val(type);
+
+	if (keyword.indexOf("\"") == 0 && keyword.lastIndexOf("\"") == keyword.length - 1) {
+		keyword = "$|@" + keyword.substring(1, keyword.length - 1) + "$|@";
+	} else if (keyword.indexOf("&#034;") == 0 && keyword.lastIndexOf("&#034;") == keyword.length - 6) {
+		keyword = "$|@" + keyword.substring(6, keyword.length - 6) + "$|@";
+	}
+	searchKeyword.val(keyword );
+
+	searchKeywordConjunction.val(conjunction);
+
+	formObject.append(searchKeywordType);
+	formObject.append(searchKeyword);
+	formObject.append(searchKeywordConjunction);
+}
+
+/**
+ * 기타 검색조건 삭제
+ *
+ * @param formObject
+ */
+function removeAllSearchConditionSet(formObject) {
+	formObject.find("input[name='etcKeywordType']").remove();
+	formObject.find("input[name='etcKeyword']").remove();
+	formObject.find("input[name='etcKeywordConjunction']").remove();
+}
+
+/**
+ * 통합검색과 상세검색에서 입력되는 검색키워드에 적용
+ * 특수문자를 공백으로 대치하여 반환
+ *
+ * @param keyword
+ */
+function removeSpecialChar(keyword) {
+	//var specialChar = /[~\#$^*\=+:;?<,.>']/g;
+	var specialChar = /,/g;
+	var retKeyword = keyword;
+	if (specialChar.test(keyword)) {
+		retKeyword = keyword.replace(specialChar, " ");
+		alert("검색에서 사용할 수 없는 문자가 포함되어있습니다.\r\n키워드:'" + keyword + "'(은)는 '" + retKeyword + "'(으)로 대치됩니다.");
+	}
+	return retKeyword;
+}
+
+function getImevarHTML(imename, url) {
+	var imeobj = findActiveX(imename);
+	if (imeobj != null)	{
+		return imeobj.utf16;
+	} else {
+		if (isWysiwygEdit(imename)) {
+			return Wime.getHTMLText(imename, url);
+		} else {
+			var imeobj = document.getElementById(imename);
+			return imeobj.value;
+		}
+	}
+}
+
+/**
+ * 검색 날짜 설정
+ *
+ * @param year
+ * @param mon
+ * @param day
+ * @param defYear
+ * @param defMonDay
+ * @returns
+ */
+function searchFormatDate(year, mon, day, defYear, defMonDay) {
+	var retDate = "";
+
+	var bc = "";
+	if (year.length > 0 && year.startsWith("-")) {
+		bc = "-";
+		year = year.substring(1);
+	} else if (year.length > 0 && year.length < 4) {
+		for (var i = year.length; i < 4; i++) {
+			year = "0" + year;
+		}
+	} else if (year.length <= 0) {
+		year = defYear;
+	}
+	year = bc + year;
+
+	if (mon.length == 1) {
+		mon = "0" + mon;
+	} else if (mon.length <= 0) {
+		mon = defMonDay.substring(0, 2);
+	}
+
+	if (day.length == 1) {
+		day = "00" + day;
+	} else if (day.length == 2) {
+		day = "0" + day;
+	} else if (day.length <= 0) {
+		day = defMonDay;
+	}
+
+	retDate = year;
+	if (mon != "") {
+		retDate += "-" + mon;
+	}
+	if (day != "") {
+		retDate += "-" + day;
+	}
+
+	return retDate;
+}
+
+/****************************************************************************************************/
+
+// scroll bar 이동
+function fn_ScrollToId(objId, itemId) {
+	// console.log('objId 1=== >' , objId);
+	// console.log('objId 3=== >' , "#"+objId);
+	// console.log('objId 4=== >' , objId.indexOf("$"));
+	
+	if(""!= objId && null != objId){
+		if(objId.indexOf("$") == -1){
+			if(undefined != $("#" + objId).offset()){
+				// console.log('objId 2=== > ' , $("#" + objId).offset());
+				// console.log('objId 6=== > ' , $("#" + objId).offset().top);
+				// console.log('objId 7=== > ' , $("#"+itemId.trim()+"MenuDiv").scrollTop() +  ($("#" + objId).offset().top - $("#"+itemId.trim()+"MenuDiv").offset().top));
+				$('html, body').animate({
+			        scrollTop: $("#"+itemId.trim()+"MenuDiv").scrollTop() +  ($("#" + objId).offset().top - $("#"+itemId.trim()+"MenuDiv").offset().top)
+			    }, 1000);
+			}
+		}
+	}
+}
+
+/****************************************************************************************************/
+
+//Url 또는 ID 복사하기
+function copyClipBoard(clipboardData) {
+	var IE = (document.all) ? true : false;
+	if (IE) {
+		window.clipboardData.setData('Text', clipboardData);
+		alert("'" + clipboardData + "' 이 클립보드에 복사됐습니다.\n\nCtrl+V로 붙어넣기 하세요");
+	} else {
+		temp = prompt("이 글에 대한 정보입니다. Ctrl+C를 눌러 클립보드로 복사하시고,\n\nCtrl+v로 붙어넣기 하세요 ", clipboardData);
+	}
+}
+/*// URL 복사하기
+function fnCopyUrl(hoiLevelId) {
+	var levelId = hoiLevelId || $("#hoiLevelId").text();
+	var url = '${serverUrl}/id/' + levelId;
+	copyClipBoard(url);
+}*/
+//ID 복사하기
+function fnCopyId(hoiLevelId) {
+	var levelId = hoiLevelId || $("#hoiLevelId").text();
+	copyClipBoard(levelId);
+}
+
+/****************************************************************************************************/

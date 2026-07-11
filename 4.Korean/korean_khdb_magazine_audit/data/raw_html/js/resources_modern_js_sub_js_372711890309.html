@@ -1,0 +1,224 @@
+//news_detail
+$(function() {
+    //본문 이미지선택
+    $('.section-read .gallery-wrap .list .item img').on('click', function() {
+        $(this).parent().addClass('selected').siblings().removeClass('selected');
+        $('.section-read .gallery-wrap .view .view-img figure img').attr('src', $(this).attr('src'));
+    });
+});
+
+//book_category
+//$(function(){
+    //전체열기
+    //$('.bc-content .control-btn-wrap .btn-allopen').on('click', function(){
+    //   $('.bc-content .list-wrap li').addClass('selected');
+    //});
+    //전체닫기
+    //$('.bc-content .control-btn-wrap .btn-allclose').on('click', function(){
+    //    $('.bc-content .list-wrap li').removeClass('selected');
+    //});
+    //메뉴확장 221116
+	//$('.bc-content .list-wrap li .cate .txt, .bc-content .list-wrap li .cate .ico').on('click', function(){
+    //    $(this).parent().parent().toggleClass('selected').siblings().removeClass('selected').find('li').removeClass('selected');
+    //});
+//});
+
+// gazette
+$(function() {
+	// 탭콘텐츠토글
+	$('.con-section .cmn-tabmenu .item a').on('click', function() {
+		$(this).parent().addClass('selected').siblings().removeClass('selected');
+		$('.con-section .search-wrap .tab-cont').eq($(this).parent().index()).addClass('active').siblings().removeClass('active');
+		$('.con-section .result-wrap .tab-cont').eq($(this).parent().index()).addClass('active').siblings().removeClass('active');
+	});
+});
+
+$(function() {
+	// 확대보기, 축소보기 버튼
+	$('.result-wrap .btn-toggle').click(function () {
+		var text = $(this).find('span').text();
+		$(this).toggleClass('change').find('span').text(
+			text == "축소보기" ? "확대보기" : "축소보기"
+		);
+		$(this).parent().next().slideToggle('fast');
+	});
+});
+
+$(document).ready(function() {
+	var startLevel = $("#startLevel").val();
+	if (!startLevel) {
+		startLevel = 1;
+	} else {
+		startLevel = startLevel * 1;
+	}
+	//console.log("startLevel=" + startLevel);
+	
+	var selectedId = $("#selectedId").val();
+	if (selectedId) {
+		var level = $("#level").val();
+		if (level) {
+			level = level * 1;
+			
+			if (startLevel === 1) {
+				var selected1Id = $("#selected1Id").val();
+				if (selected1Id) {
+					if (level > 1) {
+						// 자식 아이템레벨 목록 가져오기
+						fnGetChildItemLevelList(selected1Id, 2, "ul-" + selected1Id, "");
+						$("#selected1Id").val("");
+					}
+					// selected value의 level이 1인경우 한번 클릭 이벤트 만 실행
+					else if (level == 1) {
+						fnGetChildItemLevelList(selected1Id, 1, "ul-" + selected1Id, "click");
+						$("#selected1Id").val("");
+					}
+				}
+			} else if (startLevel === 2) {
+				var selected2Id = $("#selected2Id").val();
+				if (selected2Id) {
+					if (level > 2) {
+						// 자식 아이템레벨 목록 가져오기
+						fnGetChildItemLevelList(selected2Id, 3, "ul-" + selected2Id, "");
+						$("#selected1Id").val("");
+						$("#selected2Id").val("");
+					}
+					// selected value의 level이 1인경우 한번 클릭 이벤트 만 실행
+					else if (level == 2) {
+						fnGetChildItemLevelList(selected2Id, 2, "ul-" + selected2Id, "click");
+						$("#selected2Id").val("");
+						$("#selected2Id").val("");
+					}
+				}
+			}
+		}
+	}
+	
+	// 아이템레벨 목차 클릭 이벤트 (상세페이지  하위 트리, 목차리스트 사이드바 하위트리 )  //사이드 바 .nd-snb  || 메인화면 리스트  .bc-content
+	$(document).on("click", ".page-content-wrap .nd-box .nd-snb .nd-snb-content .snb-list li .cate, .bc-content ul.list-wrap li .cate div.txt, span.ico", function() {
+		let	$cate = ($(".bc-content").length > 0) ? $(this).parent() : $(this);
+		
+		let isLeaf = $cate.data("leaf");
+		if (isLeaf == "1") {
+			let moveUrl = $cate.find("a").attr("href");
+			location.href = moveUrl;
+		} else {
+			let $childList = $cate.siblings("ul").children("li");
+			if ($childList.length == 0) {
+				let levelId = $cate.data("id");
+				let parentUlId = "ul-" + levelId;
+				let level = $cate.data("level") * 1 + 1;
+				if (typeof levelId =='undefined') return;
+				// 자식 아이템레벨 목록 가져오기
+				fnGetChildItemLevelList(levelId, level, parentUlId ,'click');
+			} else {
+				$cate.parent().toggleClass('selected').siblings().removeClass('selected').find('li').removeClass('selected');
+				
+				let selectedId = $cate.data("id");
+				
+				//leftMenuDiv ScrollTop 세팅
+				if (typeof $("#leftMenuDiv").offset() !='undefined') {
+					$("#leftMenuDiv").animate({
+						scrollTop: $("#leftMenuDiv").scrollTop() + ($("#div-" + $.escapeSelector(selectedId)).offset().top - $("#leftMenuDiv").offset().top)
+					});
+				}
+				
+				//list $(".bc-content")
+				if (typeof $(".bc-content").offset() !='undefined') {
+					$("html, body").animate({
+						scrollTop: $(".bc-content").scrollTop() + ($("#div-" + $.escapeSelector(selectedId)).offset().top - $(".bc-content").offset().top)
+					});
+				}
+			}
+		}
+	});
+	
+	// [title 옆 이미지 클릭시 상세보기화면으로 이동 ]
+	//$(".page-content-wrap .nd-box .nd-snb .nd-snb-content .snb-list li .cate .ico-view").on("click",function() {
+		//console.log('a');
+		//console.log($(this).prop("a"));
+	//});
+});
+
+// 자식 아이템레벨 목록 가져오기 (ajax)
+function fnGetChildItemLevelList(parentId, level, parentUlId, type) {
+	//console.log("parentId=" + parentId + ", level=" + level + ", parentUlId=" + parentUlId + ", type=" + type);
+
+	$("ul[id='" + parentUlId + "']").empty();
+	
+	//sideNav 여부
+	let sideNavYn = ($('.bc-content').length >= 1) ? false : true;
+	
+	var selectedId = $("#selectedId").val();
+
+	$.ajax({
+		url: '/modern/getChildItemLevelListAjax.do',
+		type: "get",
+		data: {
+			"parentId": parentId,
+			"level": level,
+			"sideNavYn" : sideNavYn
+		},
+		dataType: "html",
+		success: function(data) {
+			$("ul[id='" + parentUlId + "']").html(data);
+			$('[data-id="' + parentId + '"').parent().toggleClass("selected").siblings().removeClass("selected");
+
+			if (selectedId) {
+				var selected2Id = $("#selected2Id").val();
+				var selected3Id = $("#selected3Id").val();
+				var selected4Id = $("#selected4Id").val();
+				var selected5Id = $("#selected5Id").val();
+				var selected6Id = $("#selected6Id").val();
+				var selected7Id = $("#selected7Id").val();
+				if (level == 2 && selected2Id && selected2Id != selectedId) {
+					fnGetChildItemLevelList(selected2Id, 3, "ul-" + selected2Id);
+					$("#selected2Id").val("");
+				} else if (level == 3 && selected3Id && selected3Id != selectedId) {
+					fnGetChildItemLevelList(selected3Id, 4, "ul-" + selected3Id);
+					$("#selected3Id").val("");
+				} else if (level == 4 && selected4Id && selected4Id != selectedId) {
+					fnGetChildItemLevelList(selected4Id, 5, "ul-" + selected4Id);
+					$("#selected4Id").val("");
+				} else if (level == 5 && selected5Id && selected5Id != selectedId) {
+					fnGetChildItemLevelList(selected5Id, 6, "ul-" + selected5Id);
+					$("#selected5Id").val("");
+				} else if (level == 6 && selected6Id && selected6Id != selectedId) {
+					fnGetChildItemLevelList(selected6Id, 7, "ul-" + selected6Id);
+					$("#selected6Id").val("");
+				} else if (level == 7 && selected7Id) {
+					$("#selected7Id").val("");
+				}
+
+				if ($('[data-id="' + selectedId + '"').length > 0 && type !== 'click') {
+					level++;
+					$("#selectedId").val("");
+					
+					fnGetChildItemLevelList(selectedId, level, "ul-" + selectedId, 'click');
+				}
+			}
+
+			//leftMenuDiv ScrollTop 세팅
+			if (typeof $("#leftMenuDiv").offset() != 'undefined' && type === 'click') {
+				$("#leftMenuDiv").animate({
+					scrollTop: $("#leftMenuDiv").scrollTop() + ($("#div-" + $.escapeSelector(parentId)).offset().top - $("#leftMenuDiv").offset().top * 2)
+				});
+			}
+
+			//list $(".bc-content") document load 로 접근이 아닌 div 클릭 하위 조회 이벤트일시
+			if (typeof $(".bc-content").offset() != 'undefined' && type === 'click' && !isEmpty($("#div-" + $.escapeSelector(parentId)).offset())) {
+				$("html, body").animate({
+					scrollTop: $(".bc-content").scrollTop() + ($("#div-" + $.escapeSelector(parentId)).offset().top - $(".bc-content").offset().top)
+				});
+			}
+			
+			//동적으로 생긴 dom 이벤트 적용 [title 옆 이미지 클릭시 상세보기화면으로 이동 ]
+			$(".page-content-wrap .nd-box .nd-snb .nd-snb-content .snb-list li .cate .ico-view").on("click", function() {
+				event.stopPropagation();
+				location.href = $(this).attr("href");
+			});
+		},
+		error: function(xhr, status, error) {
+			alert("자식 아이템레벨 목록 가져오기 error!");
+		}
+	});
+}
